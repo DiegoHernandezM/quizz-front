@@ -34,14 +34,14 @@ function SignIn() {
     <React.Fragment>
       <Brand />
       <Wrapper>
-        <Helmet title="Sign In" />
-        <BigAvatar alt="Lucy" src="/static/img/avatars/avatar-1.jpg" />
+        <Helmet title="Iniciar sesión" />
+        <BigAvatar alt="Lucy" src="/static/img/avatars/avatar.png" />
 
         <Typography component="h1" variant="h4" align="center" gutterBottom>
-          Welcome back, Lucy!
+          Bienvenido de vuelta!
         </Typography>
         <Typography component="h2" variant="body1" align="center">
-          Sign in to your account to continue
+          Ingresa tus credenciales
         </Typography>
 
         <SignInComponent />

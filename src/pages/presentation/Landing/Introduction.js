@@ -165,7 +165,7 @@ function Introduction() {
               </Grid>
               <Box my={6}>
                 <Button
-                  href="#demos"
+                  href="/auth/sign-up"
                   variant="contained"
                   color="secondary"
                   size="large"

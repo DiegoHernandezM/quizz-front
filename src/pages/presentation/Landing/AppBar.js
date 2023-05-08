@@ -53,8 +53,7 @@ const AppBarComponent = () => (
                   ml={2}
                   color="inherit"
                   component={Link}
-                  to="/login"
-                  target="_blank"
+                  to="/auth/sign-in"
                 >
                   Iniciar sesión
                 </Button>

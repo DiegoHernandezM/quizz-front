@@ -40,7 +40,7 @@ function JoinUs() {
             <Spacer mb={4} />
 
             <Button
-              href="#"
+              href="/auth/sign-up"
               variant="contained"
               color="primary"
               size="large"

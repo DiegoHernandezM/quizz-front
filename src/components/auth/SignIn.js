@@ -62,10 +62,6 @@ function SignIn() {
         values,
       }) => (
         <form noValidate onSubmit={handleSubmit}>
-          <Alert mt={3} mb={3} severity="info">
-            Use <strong>demo@bootlab.io</strong> and{" "}
-            <strong>unsafepassword</strong> to sign in
-          </Alert>
           {errors.submit && (
             <Alert mt={2} mb={3} severity="warning">
               {errors.submit}
@@ -95,10 +91,6 @@ function SignIn() {
             onChange={handleChange}
             my={2}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
           <Button
             type="submit"
             fullWidth
@@ -106,7 +98,7 @@ function SignIn() {
             color="primary"
             disabled={isSubmitting}
           >
-            Sign in
+            Ingresar
           </Button>
           <Button
             component={Link}
@@ -114,7 +106,7 @@ function SignIn() {
             fullWidth
             color="primary"
           >
-            Forgot password
+            Olvide mi contraseña
           </Button>
         </form>
       )}

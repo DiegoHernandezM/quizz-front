@@ -27,13 +27,13 @@ function SignUp() {
     <React.Fragment>
       <Brand />
       <Wrapper>
-        <Helmet title="Sign Up" />
+        <Helmet title="Registro" />
 
         <Typography component="h1" variant="h4" align="center" gutterBottom>
-          Get started
+          Ingresa tus datos
         </Typography>
         <Typography component="h2" variant="body1" align="center">
-          Start creating the best possible user experience for you customers
+          Explicacion de costos de y uso de app
         </Typography>
 
         <SignUpComponent />

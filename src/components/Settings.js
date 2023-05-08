@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
-import { Link } from "react-router-dom";
 
 import { green, grey, indigo } from "@mui/material/colors";
 import { Palette as PaletteIcon } from "@mui/icons-material";
@@ -124,14 +123,7 @@ function Demo({ title, themeVariant }) {
 function Demos() {
   return (
     <Wrapper>
-      <Heading>Select a demo</Heading>
-
-      <Box px={4} my={3}>
-        <Alert icon={false} severity="info">
-          <strong>Hello!</strong> Select your style below. Choose the ones that
-          best fits your needs.
-        </Alert>
-      </Box>
+      <Heading>Selecciona una paleta de colores</Heading>
 
       <Box px={4} my={3}>
         <Grid container spacing={3}>
@@ -144,30 +136,6 @@ function Demos() {
         </Grid>
       </Box>
 
-      <Box my={3} mx={4}>
-        <Button
-          component={Link}
-          to="/documentation/welcome"
-          variant="outlined"
-          size="large"
-          target="_blank"
-          fullWidth={true}
-        >
-          Documentation
-        </Button>
-      </Box>
-      <Box my={3} mx={4}>
-        <Button
-          href="https://mui.com/store/items/mira-pro-react-material-admin-dashboard/"
-          variant="contained"
-          color="primary"
-          size="large"
-          target="_blank"
-          fullWidth={true}
-        >
-          Get Mira Pro
-        </Button>
-      </Box>
     </Wrapper>
   );
 }

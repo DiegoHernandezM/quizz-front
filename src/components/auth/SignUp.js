@@ -83,7 +83,7 @@ function SignUp() {
           <TextField
             type="text"
             name="firstName"
-            label="First name"
+            label="Nombre Completo"
             value={values.firstName}
             error={Boolean(touched.firstName && errors.firstName)}
             fullWidth
@@ -95,7 +95,7 @@ function SignUp() {
           <TextField
             type="text"
             name="lastName"
-            label="Last name"
+            label="Escuela de procedencia"
             value={values.lastName}
             error={Boolean(touched.lastName && errors.lastName)}
             fullWidth
@@ -107,7 +107,7 @@ function SignUp() {
           <TextField
             type="email"
             name="email"
-            label="Email address"
+            label="Email"
             value={values.email}
             error={Boolean(touched.email && errors.email)}
             fullWidth
@@ -119,7 +119,7 @@ function SignUp() {
           <TextField
             type="password"
             name="password"
-            label="Password"
+            label="Contraseña"
             value={values.password}
             error={Boolean(touched.password && errors.password)}
             fullWidth
@@ -131,7 +131,7 @@ function SignUp() {
           <TextField
             type="password"
             name="confirmPassword"
-            label="Confirm password"
+            label="Confirma tu contraseña"
             value={values.confirmPassword}
             error={Boolean(touched.confirmPassword && errors.confirmPassword)}
             fullWidth
@@ -147,7 +147,7 @@ function SignUp() {
             color="primary"
             disabled={isSubmitting}
           >
-            Sign up
+            Registrarse y boton de paypal
           </Button>
         </form>
       )}

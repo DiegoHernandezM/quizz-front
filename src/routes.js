@@ -133,17 +133,9 @@ const routes = [
     ),
     children: [
       {
-        path: "default",
-        element: <Default />,
-      },
-      {
-        path: "analytics",
+        path: "",
         element: <Analytics />,
-      },
-      {
-        path: "saas",
-        element: <SaaS />,
-      },
+      }
     ],
   },
   {
@@ -494,7 +486,7 @@ const routes = [
     children: [
       {
         path: "",
-        element: <ProtectedPage />,
+        element: <Analytics />,
       },
     ],
   },
