@@ -20,20 +20,6 @@ const pagesSection = [
     href: "/dashboard",
     icon: Sliders,
     title: "Dashboard",
-    children: [
-      {
-        href: "/dashboard/default",
-        title: "Default",
-      },
-      {
-        href: "/dashboard/analytics",
-        title: "Analytics",
-      },
-      {
-        href: "/dashboard/saas",
-        title: "SaaS",
-      },
-    ],
   },
   {
     href: "/pages",
@@ -305,17 +291,9 @@ const docsSection = [
 
 const navItems = [
   {
-    title: "Pages",
+    title: "APP",
     pages: pagesSection,
-  },
-  {
-    title: "Elements",
-    pages: elementsSection,
-  },
-  {
-    title: "Mira Pro",
-    pages: docsSection,
-  },
+  }
 ];
 
 export default navItems;

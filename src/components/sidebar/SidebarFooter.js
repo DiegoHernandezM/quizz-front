@@ -61,14 +61,6 @@ const SidebarFooter = ({ ...rest }) => {
             )}
           </FooterBadge>
         </Grid>
-        <Grid item>
-          {!!user && (
-            <FooterText variant="body2">{user.displayName}</FooterText>
-          )}
-          {/* Demo data */}
-          {!user && <FooterText variant="body2">Lucy Lavender</FooterText>}
-          <FooterSubText variant="caption">UX Designer</FooterSubText>
-        </Grid>
       </Grid>
     </Footer>
   );

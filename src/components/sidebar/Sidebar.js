@@ -7,7 +7,6 @@ import { green } from "@mui/material/colors";
 import { Box, Chip, Drawer as MuiDrawer, ListItemButton } from "@mui/material";
 
 import { ReactComponent as Logo } from "../../vendor/logo.svg";
-import Footer from "./SidebarFooter";
 import SidebarNav from "./SidebarNav";
 
 const Drawer = styled(MuiDrawer)`
@@ -67,14 +66,13 @@ const BrandChip = styled(Chip)`
 const Sidebar = ({ items, showFooter = true, ...rest }) => {
   return (
     <Drawer variant="permanent" {...rest}>
-      <Brand component={NavLink} to="/">
+      <Brand component={NavLink} to="/dashboard">
         <BrandIcon />{" "}
         <Box ml={1}>
-          Mira <BrandChip label="PRO" />
+          Aviación
         </Box>
       </Brand>
       <SidebarNav items={items} />
-      {!!showFooter && <Footer />}
     </Drawer>
   );
 };

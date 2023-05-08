@@ -37,9 +37,13 @@ function NavbarUserDropdown() {
     navigate("/auth/sign-in");
   };
 
+  const handleProfile = async () => {
+    navigate("/pages/profile");
+  };
+
   return (
     <React.Fragment>
-      <Tooltip title="Account">
+      <Tooltip title="Sesión">
         <IconButton
           aria-owns={Boolean(anchorMenu) ? "menu-appbar" : undefined}
           aria-haspopup="true"
@@ -56,7 +60,7 @@ function NavbarUserDropdown() {
         open={Boolean(anchorMenu)}
         onClose={closeMenu}
       >
-        <MenuItem onClick={closeMenu}>Perfil</MenuItem>
+        <MenuItem onClick={handleProfile}>Perfil</MenuItem>
         <MenuItem onClick={handleSignOut}>Cerrar sesión</MenuItem>
       </Menu>
     </React.Fragment>

@@ -28,22 +28,15 @@ function Analytics() {
 
   return (
     <React.Fragment>
-      <Helmet title="Analytics Dashboard" />
+      <Helmet title="Dashboard" />
       <Grid justifyContent="space-between" container spacing={6}>
         <Grid item>
           <Typography variant="h3" gutterBottom>
-            Analytics Dashboard
+            Dashboard
           </Typography>
           <Typography variant="subtitle1">
-            {t("Welcome back")}, Lucy! {t("We've missed you")}.{" "}
-            <span role="img" aria-label="Waving Hand Sign">
-              👋
-            </span>
+            {t("Bienvenido de vuelta")}
           </Typography>
-        </Grid>
-
-        <Grid item>
-          <Actions />
         </Grid>
       </Grid>
 
