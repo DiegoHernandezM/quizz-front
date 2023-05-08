@@ -35,22 +35,17 @@ function JoinUs() {
         <Grid container alignItems="center" justifyContent="center">
           <Grid item xs={12} md={6} lg={6} xl={6}>
             <Typography variant="h2" gutterBottom>
-              Start building with Mira today
+              Comienza a aprender
             </Typography>
-            <Subtitle variant="h5" gutterBottom>
-              Stop wasting time building your application from scratch. Mira Pro
-              is fast, extendable and fully customizable.
-            </Subtitle>
             <Spacer mb={4} />
 
             <Button
-              href="https://mui.com/store/items/mira-pro-react-material-admin-dashboard/"
+              href="#"
               variant="contained"
               color="primary"
               size="large"
-              target="_blank"
             >
-              Get Mira Pro
+              Inscribete
             </Button>
           </Grid>
         </Grid>

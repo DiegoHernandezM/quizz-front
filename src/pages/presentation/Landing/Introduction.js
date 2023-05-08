@@ -72,7 +72,7 @@ const ImageWrapper = styled.div`
     content: " ";
     z-index: 1;
     display: block;
-    width: 100%;
+    width: 50%;
     height: 75px;
     pointer-events: none;
   }
@@ -145,17 +145,21 @@ function Introduction() {
         <Grid container alignItems="center" justifyContent="center" spacing={4}>
           <Grid item xs={12} sm={9} md={8} lg={8}>
             <Content>
-              <Version variant="body2">v4.3.0</Version>
+              <Version variant="body2">v1.0.0</Version>
               <Title variant="h1" gutterBottom>
-                The simplest and fastest way to build your next{" "}
-                <span>Material UI</span> dashboard or app.
+                Introducción y breve explicación de la app{" "}
+                <span>Nombre de la empresa</span> descripción.
               </Title>
               <Grid container justifyContent="center" spacing={4}>
                 <Grid item xs={12} lg={10}>
                   <Subtitle color="textSecondary">
-                    Mira comes with hundreds of UI elements, forms, tables,
-                    charts, pages and icons that helps you to create your web
-                    apps or applications faster.
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                  Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                  when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                  It has survived not only five centuries, but also the leap into electronic typesetting,
+                  remaining essentially unchanged. 
+                  It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+                  and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                   </Subtitle>
                 </Grid>
               </Grid>
@@ -167,13 +171,13 @@ function Introduction() {
                   size="large"
                 >
                   <Visibility />
-                  Live Demo
+                  Inscribete
                   <ArrowForward />
                 </Button>
               </Box>
 
               <Typography variant="body2" color="textSecondary">
-                Available for:
+                Compatible con:
               </Typography>
               <div
                 className={`animate__animated ${
@@ -182,32 +186,25 @@ function Introduction() {
                 style={{ opacity: triggerAnimation ? 1 : 0 }}
               >
                 <Box my={3}>
-                  <Tooltip title="JavaScript">
+                  <Tooltip title="Chrome">
                     <BrandIcon
-                      alt="JavaScript"
-                      src="/static/img/brands/javascript.svg"
+                      alt="Chrome"
+                      src="/static/img/brands/chrome.png"
                       style={{ width: "40px" }}
                     />
                   </Tooltip>
-                  <Tooltip title="TypeScript">
+                  <Tooltip title="Android">
                     <BrandIcon
-                      alt="TypeScript"
-                      src="/static/img/brands/typescript.svg"
+                      alt="Android"
+                      src="/static/img/brands/android.png"
                       style={{ width: "40px", background: "#FFF" }}
                     />
                   </Tooltip>
-                  <Tooltip title="Figma">
+                  <Tooltip title="Apple">
                     <BrandIcon
-                      alt="Figma"
-                      src="/static/img/brands/figma.svg"
+                      alt="Apple"
+                      src="/static/img/brands/appleinc.png"
                       style={{ width: "22px" }}
-                    />
-                  </Tooltip>
-                  <Tooltip title="Sketch">
-                    <BrandIcon
-                      alt="Sketch"
-                      src="/static/img/brands/sketch.svg"
-                      style={{ width: "34px" }}
                     />
                   </Tooltip>
                 </Box>
@@ -216,20 +213,18 @@ function Introduction() {
           </Grid>
         </Grid>
         <Grid container alignItems="center" justifyContent="center" spacing={4}>
-          <Grid item xs={12} sm={10} md={9} lg={9}>
+          <Grid item xs={12} sm={10} md={6} lg={6}>
             <div
               className={`animate__animated ${
                 triggerAnimation ? "animate__perspective" : ""
               }`}
               style={{ opacity: triggerAnimation ? 1 : 0 }}
             >
-              <ImageWrapper>
-                <NavLink to="/dashboard/analytics" target="_blank">
+              <ImageWrapper style={{ alignItems:'center' }}>
                   <Image
-                    alt="Mira - React Admin Template"
-                    src={`/static/img/screenshots/dashboard-analytics-large.jpg`}
+                    alt="App de aviacion"
+                    src={`/static/img/screenshots/temp-app.png`}
                   />
-                </NavLink>
               </ImageWrapper>
             </div>
           </Grid>

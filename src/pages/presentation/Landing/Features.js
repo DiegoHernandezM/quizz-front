@@ -76,10 +76,10 @@ function Features() {
     <Wrapper py={20}>
       <Container>
         <TypographyOverline variant="body2" gutterBottom>
-          Features
+          Ventajas
         </TypographyOverline>
         <Typography variant="h2" component="h3" gutterBottom>
-          Developers love Mira Pro
+          Descripcion de ventajas
         </Typography>
         <Box mb={8} />
         <Grid container spacing={6}>
@@ -114,20 +114,7 @@ function Features() {
             description="Designers, we've got you covered. Sketch & Figma files are available in the Standard Plus and Extended License."
           />
         </Grid>
-
-        <Box mt={4}>
-          <Button
-            component={NavLink}
-            to="/documentation/welcome"
-            variant="contained"
-            color="secondary"
-            size="large"
-            target="_blank"
-          >
-            Open Documentation
-            <ArrowForward />
-          </Button>
-        </Box>
+      
       </Container>
     </Wrapper>
   );

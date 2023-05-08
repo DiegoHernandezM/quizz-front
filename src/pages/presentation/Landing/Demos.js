@@ -88,30 +88,13 @@ function Demos() {
   return (
     <Wrapper pt={16} pb={20} id="demos">
       <Container>
-        <TypographyOverline variant="body2" gutterBottom>
-          Demos
-        </TypographyOverline>
         <Typography variant="h2" component="h3" gutterBottom>
-          Choose from 50+ pages and 6 different color schemes
+          Más informacion acerca del contenido
         </Typography>
         <Typography variant="subtitle1" color="textSecondary" gutterBottom>
-          The package includes 50+ prebuilt pages, 6 theme variants and 3
-          prebuilt dashboards.
+          Breve explicacion de las materias a considerar
         </Typography>
         <Box mb={8} />
-
-        <Grid container spacing={10}>
-          <Variant
-            theme={THEMES.DEFAULT}
-            title="Default variant"
-            img="default"
-          />
-          <Variant theme={THEMES.BLUE} title="Blue variant" img="blue" />
-          <Variant theme={THEMES.DARK} title="Dark variant" img="dark" isNew />
-          <Variant theme={THEMES.GREEN} title="Green variant" img="green" />
-          <Variant theme={THEMES.INDIGO} title="Indigo variant" img="indigo" />
-          <Variant theme={THEMES.LIGHT} title="Light variant" img="light" />
-        </Grid>
       </Container>
     </Wrapper>
   );
