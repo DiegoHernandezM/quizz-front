@@ -15,6 +15,7 @@ import "./mocks";
 
 import "animate.css/animate.min.css";
 import { AuthProvider } from "./contexts/JWTContext";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -22,9 +23,15 @@ const root = createRoot(container);
 root.render(
   <BrowserRouter>
     <ThemeProvider>
-      <AuthProvider>
-      <App />
-      </AuthProvider>
+      <PayPalScriptProvider
+        options={{
+          "client-id" : "AckKPDcE6Ek3XiS47nrVGVbVtTGYKI-kz_L7Z4v49OD0ULg-9K2E8nV1poohm1cTTntML-8ZyxwVYD6F"
+        }}
+      >
+        <AuthProvider>
+        <App />
+        </AuthProvider>
+      </PayPalScriptProvider>
     </ThemeProvider>
   </BrowserRouter>
 );

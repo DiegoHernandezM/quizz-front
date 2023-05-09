@@ -10,6 +10,7 @@ import {
   TextField as MuiTextField,
 } from "@mui/material";
 import { spacing } from "@mui/system";
+import PayPalButton from "../paypal/PayPalButton";
 
 import useAuth from "../../hooks/useAuth";
 
@@ -140,15 +141,7 @@ function SignUp() {
             onChange={handleChange}
             my={3}
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            disabled={isSubmitting}
-          >
-            Registrarse y boton de paypal
-          </Button>
+          <PayPalButton totalValue="0.1" invoice="suscription" />
         </form>
       )}
     </Formik>
