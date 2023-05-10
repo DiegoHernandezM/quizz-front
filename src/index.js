@@ -20,14 +20,15 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 const container = document.getElementById("root");
 const root = createRoot(container);
 
+const initialOptions = {
+  "client-id": "AckKPDcE6Ek3XiS47nrVGVbVtTGYKI-kz_L7Z4v49OD0ULg-9K2E8nV1poohm1cTTntML-8ZyxwVYD6F",
+  currency: "MXN",
+};
+
 root.render(
   <BrowserRouter>
     <ThemeProvider>
-      <PayPalScriptProvider
-        options={{
-          "client-id" : "AckKPDcE6Ek3XiS47nrVGVbVtTGYKI-kz_L7Z4v49OD0ULg-9K2E8nV1poohm1cTTntML-8ZyxwVYD6F"
-        }}
-      >
+      <PayPalScriptProvider options={initialOptions}>
         <AuthProvider>
         <App />
         </AuthProvider>

@@ -4,9 +4,12 @@ import { PayPalButtons } from "@paypal/react-paypal-js";
 
 PayPalButton.popTypes = {
     totalValue: PropTypes.String,
-    invoice: PropTypes.String
+    invoice: PropTypes.String,
+    valueForm: PropTypes.object,
+    handleCallBack: PropTypes.func
 }
-export default function PayPalButton({totalValue, invoice}) {
+export default function PayPalButton({totalValue, invoice, valueForm, handleCallBack}) {
+  const  values = {...valueForm};
   return (
     <PayPalButtons
       createOrder={(data, actions) => {
@@ -23,7 +26,7 @@ export default function PayPalButton({totalValue, invoice}) {
       }}
       onApprove={ async (data, actions) => {
          const order = await actions.order?.capture();
-         console.log("order", order);
+         handleCallBack(values, order);
       }}
     />
   )

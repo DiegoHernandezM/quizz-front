@@ -22,6 +22,11 @@ const Wrapper = styled(Paper)`
   }
 `;
 
+const createUser = (values, order) => {
+  console.log("entro");
+  console.log(values, order);
+};
+
 function SignUp() {
   return (
     <React.Fragment>
@@ -33,10 +38,10 @@ function SignUp() {
           Ingresa tus datos
         </Typography>
         <Typography component="h2" variant="body1" align="center">
-          Explicacion de costos de y uso de app
+          Explicacion de costos y uso de app
         </Typography>
 
-        <SignUpComponent />
+        <SignUpComponent handleCallBack={createUser} />
       </Wrapper>
     </React.Fragment>
   );

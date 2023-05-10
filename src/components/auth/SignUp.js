@@ -1,151 +1,113 @@
-import React from "react";
+import React, { useState, useReducer } from "react";
+import { PayPalButtons } from "@paypal/react-paypal-js";
+import { PropTypes } from "prop-types";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
-import * as Yup from "yup";
-import { Formik } from "formik";
+import * as yup from "yup";
+import { useFormik } from "formik";
 
 import {
   Alert as MuiAlert,
   Button,
-  TextField as MuiTextField,
+  TextField as MuiTextField
 } from "@mui/material";
 import { spacing } from "@mui/system";
-import PayPalButton from "../paypal/PayPalButton";
 
 import useAuth from "../../hooks/useAuth";
 
 const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
+const initialValues = {
+  fullName: "",
+  email: "",
+  password: "",
+  school: "",
+  type: 2
+};
 
-function SignUp() {
-  const navigate = useNavigate();
-  const { signUp } = useAuth();
-
-  return (
-    <Formik
-      initialValues={{
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        submit: false,
-      }}
-      validationSchema={Yup.object().shape({
-        firstName: Yup.string().max(255).required("First name is required"),
-        lastName: Yup.string().max(255).required("Last name is required"),
-        email: Yup.string()
-          .email("Must be a valid email")
-          .max(255)
-          .required("Email is required"),
-        password: Yup.string()
-          .min(12, "Must be at least 12 characters")
-          .max(255)
-          .required("Required"),
-        confirmPassword: Yup.string().oneOf(
-          [Yup.ref("password"), null],
-          "Passwords must match"
-        ),
-      })}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-        try {
-          signUp(
-            values.email,
-            values.password,
-            values.firstName,
-            values.lastName
-          );
-          navigate("/auth/sign-in");
-        } catch (error) {
-          const message = error.message || "Something went wrong";
-
-          setStatus({ success: false });
-          setErrors({ submit: message });
-          setSubmitting(false);
-        }
-      }}
-    >
-      {({
-        errors,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        isSubmitting,
-        touched,
-        values,
-      }) => (
-        <form noValidate onSubmit={handleSubmit}>
-          {errors.submit && (
-            <Alert mt={2} mb={1} severity="warning">
-              {errors.submit}
-            </Alert>
-          )}
-          <TextField
-            type="text"
-            name="firstName"
-            label="Nombre Completo"
-            value={values.firstName}
-            error={Boolean(touched.firstName && errors.firstName)}
-            fullWidth
-            helperText={touched.firstName && errors.firstName}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={3}
-          />
-          <TextField
-            type="text"
-            name="lastName"
-            label="Escuela de procedencia"
-            value={values.lastName}
-            error={Boolean(touched.lastName && errors.lastName)}
-            fullWidth
-            helperText={touched.lastName && errors.lastName}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={3}
-          />
-          <TextField
-            type="email"
-            name="email"
-            label="Email"
-            value={values.email}
-            error={Boolean(touched.email && errors.email)}
-            fullWidth
-            helperText={touched.email && errors.email}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={3}
-          />
-          <TextField
-            type="password"
-            name="password"
-            label="Contraseña"
-            value={values.password}
-            error={Boolean(touched.password && errors.password)}
-            fullWidth
-            helperText={touched.password && errors.password}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={3}
-          />
-          <TextField
-            type="password"
-            name="confirmPassword"
-            label="Confirma tu contraseña"
-            value={values.confirmPassword}
-            error={Boolean(touched.confirmPassword && errors.confirmPassword)}
-            fullWidth
-            helperText={touched.confirmPassword && errors.confirmPassword}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={3}
-          />
-          <PayPalButton totalValue="0.1" invoice="suscription" />
-        </form>
-      )}
-    </Formik>
-  );
+SignUp.propTypes = {
+  handleCallBack: PropTypes.func
 }
 
-export default SignUp;
+export default function SignUp({ handleCallBack }) {
+  const navigate = useNavigate();
+  const { signUp } = useAuth();
+  const [values, setValues] = useState(initialValues);
+
+  
+
+  const handleChange = (e) => {
+    setValues({...values,  [e.target.name]: e.target.value });
+  };
+
+  const hancleApprove = (order) => {
+    console.log('approve' ,values);
+    handleCallBack(values, order);
+  };
+
+  return (
+    <>
+      <TextField
+        type="text"
+        name="fullName"
+        label="Nombre Completo"
+        value={values.fullName}
+        fullWidth
+        onChange={handleChange}
+        my={3}
+      />
+      <TextField
+        type="text"
+        name="school"
+        label="Escuela de procedencia"
+        value={values.school}
+        fullWidth
+        onChange={handleChange}
+        my={3}
+      />
+      <TextField
+        type="email"
+        name="email"
+        label="Email"
+        value={values.email}
+        fullWidth
+        onChange={handleChange}
+        my={3}
+      />
+      <TextField
+        type="password"
+        name="password"
+        label="Contraseña"
+        value={values.password}
+        fullWidth
+        onChange={handleChange}
+        my={3}
+      />
+      <Button onClick={() => console.log(values)}>
+        click
+      </Button>
+      <PayPalButtons
+        createOrder={(data, actions) => {
+          return actions.order.create({
+            purchase_units: [
+              {
+                description: "suscription",
+                amount: {
+                    value: "0.1",
+                },
+              },
+            ],
+          })
+        }}
+        onApprove={(data, actions) => {
+          return actions.order.capture().then((details) => {
+              console.log(values);
+              const name = details.payer.name.given_name;
+              alert(`Transaction completed by ${name}`);
+          });
+      }}
+      />
+    </>
+  );
+}
