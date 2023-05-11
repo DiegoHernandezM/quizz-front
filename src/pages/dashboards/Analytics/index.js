@@ -11,13 +11,10 @@ import {
 import { green, red } from "@mui/material/colors";
 import { spacing } from "@mui/system";
 
-import Actions from "./Actions";
 import BarChart from "./BarChart";
 import DoughnutChart from "./DoughnutChart";
-import LanguagesTable from "./LanguagesTable";
 import Stats from "./Stats";
 import Table from "./Table";
-import WorldMap from "./WorldMap";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -90,18 +87,10 @@ function Analytics() {
       </Grid>
 
       <Grid container spacing={6}>
-        <Grid item xs={12} lg={8}>
-          <WorldMap />
-        </Grid>
         <Grid item xs={12} lg={4}>
           <DoughnutChart />
         </Grid>
-      </Grid>
-      <Grid container spacing={6}>
-        <Grid item xs={12} lg={4}>
-          <LanguagesTable />
-        </Grid>
-        <Grid item xs={12} lg={8}>
+          <Grid item xs={12} lg={8}>
           <Table />
         </Grid>
       </Grid>

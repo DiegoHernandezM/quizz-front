@@ -25,14 +25,14 @@ const pagesSection = [
     title: "Cuestionarios"
   },
   {
-    href: "/projects",
-    icon: UserMinus,
-    title: "Usuarios"
-  },
-  {
     href: "/tasks",
     icon: Settings,
     title: "Administracion App"
+  },
+  {
+    href: "/users",
+    icon: Users,
+    title: "Usuarios",
   },
   {
     href: "/auth",
