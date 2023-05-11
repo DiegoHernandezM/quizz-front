@@ -21,7 +21,8 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 
 const initialOptions = {
-  "client-id": "AckKPDcE6Ek3XiS47nrVGVbVtTGYKI-kz_L7Z4v49OD0ULg-9K2E8nV1poohm1cTTntML-8ZyxwVYD6F",
+  "client-id":
+    "AbhmG5DCb8R8ellA-bS0BvTqdDArpCYiNSGCCA2PFQUeLkzjBLmQSexRtq9dHIDKjj6jAI64m7US0ATu",
   currency: "MXN",
 };
 
@@ -30,7 +31,7 @@ root.render(
     <ThemeProvider>
       <PayPalScriptProvider options={initialOptions}>
         <AuthProvider>
-        <App />
+          <App />
         </AuthProvider>
       </PayPalScriptProvider>
     </ThemeProvider>

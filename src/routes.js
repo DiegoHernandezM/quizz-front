@@ -87,6 +87,7 @@ import ProtectedPage from "./pages/protected/ProtectedPage";
 // Dashboard components
 const Default = async(() => import("./pages/dashboards/Default"));
 const Analytics = async(() => import("./pages/dashboards/Analytics"));
+const Questions = async(() => import("./pages/dashboards/Questions"));
 const SaaS = async(() => import("./pages/dashboards/SaaS"));
 
 // Form components
@@ -114,9 +115,7 @@ const VectorMaps = async(() => import("./pages/maps/VectorMaps"));
 const routes = [
   {
     path: "/",
-    element: (
-      <PresentationLayout />
-    ),
+    element: <PresentationLayout />,
     children: [
       {
         path: "",
@@ -135,7 +134,11 @@ const routes = [
       {
         path: "",
         element: <Analytics />,
-      }
+      },
+      {
+        path: "questions",
+        element: <Questions />,
+      },
     ],
   },
   {
