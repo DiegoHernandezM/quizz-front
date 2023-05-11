@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 import {
@@ -40,7 +40,6 @@ function SignUp() {
 
   const handleCreateUser = (values) => {
     dispatch(createUser(values));
-    console.log("entro");
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -54,29 +53,29 @@ function SignUp() {
     return skipped.has(step);
   };
 
-  const steps = [
-    {
-      label: "Completa tu información personal",
-      content: <SignUpComponent handleCallBack={handleCreateUser} />,
-    },
-    {
-      label: "Realiza el pago para tener acceso a la APP",
-      content: (
-        <PayPalButton
-          totalValue="0.1"
-          invoice="pago parra accesar a la app"
-          customId={user?.id}
-        />
-      ),
-    },
-  ];
+  const createOrder = useCallback((data, actions) => {
+    return actions.order
+        .create({
+            purchase_units: [
+                {
+                  reference_id: user.id,
+                  description: "Pago para tener acceso a la APP",
+                  amount: {
+                      value: "0.1",
+                  },
+                },
+            ],
+        })
+        .then((orderID) => {
+            return orderID;
+        });
+}, [user]);
 
   return (
     <React.Fragment>
       <Brand />
       <Wrapper>
         <Helmet title="Registro" />
-
         <Typography component="h1" variant="h4" align="center" gutterBottom>
           Ingresa tus datos
         </Typography>
@@ -85,22 +84,26 @@ function SignUp() {
         </Typography>
 
         <Stepper activeStep={activeStep} orientation="vertical">
-          {steps.map((step, index) => (
-            <Step key={index}>
-              <StepLabel
-                optional={
-                  index === 2 ? (
-                    <Typography variant="caption">Last step</Typography>
-                  ) : null
-                }
-              >
-                {step.label}
+          <Step key={1}>
+              <StepLabel>
+                Completa tu información personal
               </StepLabel>
               <StepContent>
-                <Box sx={{ mb: 2, sm: 2, lg: 2 }}>{step.content}</Box>
+                <Box sx={{ mb: 2, sm: 2, lg: 2 }}>
+                  <SignUpComponent handleCallBack={handleCreateUser} />
+                </Box>
               </StepContent>
-            </Step>
-          ))}
+          </Step>
+          <Step key={2}>
+              <StepLabel>
+                Realiza el pago para tener acceso a la APP
+              </StepLabel>
+              <StepContent>
+                <Box sx={{ mb: 2, sm: 2, lg: 2 }}>
+                  <PayPalButton createO={createOrder}/>
+                </Box>
+              </StepContent>
+          </Step>
         </Stepper>
       </Wrapper>
     </React.Fragment>

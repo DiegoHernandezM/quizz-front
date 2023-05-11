@@ -12,8 +12,7 @@ const slice = createSlice({
   initialState,
   reducers: {
     setUser(state, payload) {
-      console.log(payload);
-      state.user = payload?.data.user;
+      state.user = payload.payload.user;
     },
     hasError(state, payload) {
       console.log(payload);

@@ -7,31 +7,20 @@ import useAuth from "../../hooks/useAuth";
 import { Box } from "@mui/material";
 
 PayPalButton.popTypes = {
-    totalValue: PropTypes.String,
-    invoice: PropTypes.String,
-    customId: PropTypes.Number
+    createO: PropTypes.func
 }
-export default function PayPalButton({totalValue, invoice, customId}) {
+export default function PayPalButton({ createO }) {
   const navigate = useNavigate();
   const { signUp } = useAuth();
+
   return (
-    <Box style={{ width: '30px' }}>
+    <Box style={{ width: '50px!important' }}>
       <PayPalButtons
-        createOrder={(data, actions) => {
-          return actions.order.create({
-            purchase_units: [
-              {
-                description: invoice,
-                custom_id: customId,
-                amount: {
-                    value: totalValue,
-                },
-              },
-            ],
-          })
-        }}
+        forceReRender={createO}
+        createOrder={createO}
         onApprove={ async (data, actions) => {
           const order = await actions.order?.capture();
+          console.log(order);
           navigate("/auth/sign-in");
         }}
       />
