@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
-import { 
+import {
   Paper,
   Stepper,
   Step,
@@ -9,10 +9,10 @@ import {
   Typography,
   StepContent,
   Box,
-  Button
- } from "@mui/material";
-import { useDispatch, useSelector } from 'react-redux';
-import { createUser } from '../../redux/slices/users';
+  Button,
+} from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { createUser } from "../../redux/slices/users";
 import { ReactComponent as Logo } from "../../vendor/logo.svg";
 import SignUpComponent from "../../components/auth/SignUp";
 import PayPalButton from "../../components/paypal/PayPalButton";
@@ -37,8 +37,10 @@ function SignUp() {
   const { user } = useSelector((state) => state.users);
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
-  
+
   const handleCreateUser = (values) => {
+    dispatch(createUser(values));
+    console.log("entro");
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -46,7 +48,6 @@ function SignUp() {
     }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
-    dispatch(createUser(values));
   };
 
   const isStepSkipped = (step) => {
@@ -55,12 +56,18 @@ function SignUp() {
 
   const steps = [
     {
-      label: 'Completa tu información personal',
-      content: <SignUpComponent handleCallBack={handleCreateUser} />
+      label: "Completa tu información personal",
+      content: <SignUpComponent handleCallBack={handleCreateUser} />,
     },
     {
-      label: 'Realiza el pago para tener acceso a la APP',
-      content: <PayPalButton totalValue="0.1" invoice="pago parra accesar a la app" customId={user?.id} />
+      label: "Realiza el pago para tener acceso a la APP",
+      content: (
+        <PayPalButton
+          totalValue="0.1"
+          invoice="pago parra accesar a la app"
+          customId={user?.id}
+        />
+      ),
     },
   ];
 
@@ -78,25 +85,23 @@ function SignUp() {
         </Typography>
 
         <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map((step, index) => (
-          <Step key={index}>
-            <StepLabel
-              optional={
-                index === 2 ? (
-                  <Typography variant="caption">Last step</Typography>
-                ) : null
-              }
-            >
-              {step.label}
-            </StepLabel>
-            <StepContent>
-              <Box sx={{ mb: 2, sm: 2, lg: 2 }}>
-                {step.content}
-              </Box>
-            </StepContent>
-          </Step>
-        ))}
-      </Stepper>
+          {steps.map((step, index) => (
+            <Step key={index}>
+              <StepLabel
+                optional={
+                  index === 2 ? (
+                    <Typography variant="caption">Last step</Typography>
+                  ) : null
+                }
+              >
+                {step.label}
+              </StepLabel>
+              <StepContent>
+                <Box sx={{ mb: 2, sm: 2, lg: 2 }}>{step.content}</Box>
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
       </Wrapper>
     </React.Fragment>
   );

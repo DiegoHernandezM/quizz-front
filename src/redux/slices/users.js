@@ -1,34 +1,42 @@
-import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
   users: [],
-  user: {}
+  user: {},
+  error: null,
 };
 
 const slice = createSlice({
-  name: 'users',
+  name: "users",
   initialState,
   reducers: {
     setUser(state, payload) {
-      state.user = payload?.data.user;
-    }
-  }
+      console.log(payload);
+      // state.user = payload?.data.user;
+    },
+    hasError(state, payload) {
+      console.log(payload);
+    },
+  },
 });
 
-export const { reducer } = slice;
-
-export default slice;
+export default slice.reducer;
 
 export function createUser(values) {
-  return async dispatch => {
-    const response = await axios.post('/api/user/create', {
-      name: values.fullName,
-      school: values.school,
-      password: values.password,
-      email: values.email,
-      type: values.type
-    });
-    dispatch(slice.actions.setUser(response.data));
+  return async (dispatch) => {
+    console.log("entro en createUser");
+    try {
+      const response = await axios.post(`http://quizz.test/api/user/create`, {
+        name: values.fullName,
+        school: values.school,
+        password: values.password,
+        email: values.email,
+        type: values.type,
+      });
+      dispatch(slice.actions.setUser(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
   };
 }
