@@ -1,18 +1,16 @@
 import {
   BookOpen,
-  Briefcase,
-  Calendar,
   CheckSquare,
-  CreditCard,
   Grid,
   Heart,
-  Layout,
   List,
   Map,
-  ShoppingCart,
   PieChart,
   Sliders,
   Users,
+  UserMinus,
+  CheckCircle,
+  Settings
 } from "react-feather";
 
 const pagesSection = [
@@ -22,68 +20,19 @@ const pagesSection = [
     title: "Dashboard",
   },
   {
-    href: "/pages",
-    icon: Layout,
-    title: "Pages",
-    children: [
-      {
-        href: "/pages/profile",
-        title: "Profile",
-      },
-      {
-        href: "/pages/settings",
-        title: "Settings",
-      },
-      {
-        href: "/pages/pricing",
-        title: "Pricing",
-      },
-      {
-        href: "/pages/chat",
-        title: "Chat",
-      },
-      {
-        href: "/pages/blank",
-        title: "Blank Page",
-      },
-    ],
+    href: "/projects",
+    icon: CheckSquare,
+    title: "Cuestionarios"
   },
   {
     href: "/projects",
-    icon: Briefcase,
-    title: "Projects",
-    badge: "8",
-  },
-  {
-    href: "/orders",
-    icon: ShoppingCart,
-    title: "Orders",
-  },
-  {
-    href: "/invoices",
-    icon: CreditCard,
-    title: "Invoices",
-    children: [
-      {
-        href: "/invoices",
-        title: "List",
-      },
-      {
-        href: "/invoices/detail",
-        title: "Detail",
-      },
-    ],
+    icon: UserMinus,
+    title: "Usuarios"
   },
   {
     href: "/tasks",
-    icon: CheckSquare,
-    title: "Tasks",
-    badge: "17",
-  },
-  {
-    href: "/calendar",
-    icon: Calendar,
-    title: "Calendar",
+    icon: Settings,
+    title: "Administracion App"
   },
   {
     href: "/auth",

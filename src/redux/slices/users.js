@@ -2,7 +2,6 @@ import { createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const initialState = {
-  users: [],
   user: {}
 };
 
@@ -11,14 +10,12 @@ const slice = createSlice({
   initialState,
   reducers: {
     setUser(state, payload) {
-      state.user = payload?.data.user;
+      state.user = payload.data.user;
     }
   }
 });
 
-export const { reducer } = slice;
-
-export default slice;
+export default slice.reducer;
 
 export function createUser(values) {
   return async dispatch => {
