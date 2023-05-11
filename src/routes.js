@@ -55,6 +55,9 @@ import Settings from "./pages/pages/Settings";
 import Projects from "./pages/pages/Projects";
 import Chat from "./pages/pages/Chat";
 
+// Users
+import Users from "./pages/pages/Users";
+
 // Table components
 import SimpleTable from "./pages/tables/SimpleTable";
 import AdvancedTable from "./pages/tables/AdvancedTable";
@@ -114,9 +117,7 @@ const VectorMaps = async(() => import("./pages/maps/VectorMaps"));
 const routes = [
   {
     path: "/",
-    element: (
-      <PresentationLayout />
-    ),
+    element: <PresentationLayout />,
     children: [
       {
         path: "",
@@ -135,7 +136,7 @@ const routes = [
       {
         path: "",
         element: <Analytics />,
-      }
+      },
     ],
   },
   {
@@ -215,6 +216,16 @@ const routes = [
       {
         path: "",
         element: <Calendar />,
+      },
+    ],
+  },
+  {
+    path: "users",
+    element: <DashboardLayout />,
+    children: [
+      {
+        path: "",
+        element: <Users />,
       },
     ],
   },

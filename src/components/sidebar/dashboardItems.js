@@ -86,6 +86,11 @@ const pagesSection = [
     title: "Calendar",
   },
   {
+    href: "/users",
+    icon: Users,
+    title: "Users",
+  },
+  {
     href: "/auth",
     icon: Users,
     title: "Auth",
