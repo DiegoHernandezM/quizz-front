@@ -15,7 +15,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { createUser } from "../../redux/slices/users";
 import { ReactComponent as Logo } from "../../vendor/logo.svg";
 import SignUpComponent from "../../components/auth/SignUp";
-import PayPalButton from "../../components/paypal/PayPalButton";
+import { PayPalButtons } from "@paypal/react-paypal-js";
+import { useNavigate } from "react-router-dom";
 
 const Brand = styled(Logo)`
   fill: ${(props) => props.theme.palette.primary.main};
@@ -33,10 +34,14 @@ const Wrapper = styled(Paper)`
 `;
 
 function SignUp() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.users);
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
+  const amount = "0.1";
+  const description = "Pago para accesar a la APP";
+  const style = {"layout":"vertical", "height":33};
 
   const handleCreateUser = (values) => {
     dispatch(createUser(values));
@@ -52,24 +57,6 @@ function SignUp() {
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
-
-  const createOrder = useCallback((data, actions) => {
-    return actions.order
-        .create({
-            purchase_units: [
-                {
-                  reference_id: user.id,
-                  description: "Pago para tener acceso a la APP",
-                  amount: {
-                      value: "0.1",
-                  },
-                },
-            ],
-        })
-        .then((orderID) => {
-            return orderID;
-        });
-}, [user]);
 
   return (
     <React.Fragment>
@@ -98,10 +85,34 @@ function SignUp() {
               <StepLabel>
                 Realiza el pago para tener acceso a la APP
               </StepLabel>
-              <StepContent>
-                <Box sx={{ mb: 2, sm: 2, lg: 2 }}>
-                  <PayPalButton createO={createOrder}/>
-                </Box>
+              <StepContent style={{ width:"300px" }}>
+                <PayPalButtons
+                  style={style}
+                  forceReRender={[user.id]}
+                  createOrder={(data, actions) => {
+                    return actions.order
+                        .create({
+                            purchase_units: [
+                                {
+                                  reference_id: user.id,
+                                  description: description,
+                                  amount: {
+                                      value: amount,
+                                  },
+                                },
+                            ],
+                        })
+                        .then((orderId) => {
+                            // Your code here after create the order
+                            return orderId;
+                        });
+                  }}
+                  onApprove={ async (data, actions) => {
+                    const order = await actions.order?.capture();
+                    console.log(order);
+                    navigate("/auth/sign-in");
+                  }}
+                />
               </StepContent>
           </Step>
         </Stepper>

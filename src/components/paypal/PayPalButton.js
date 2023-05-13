@@ -16,7 +16,7 @@ export default function PayPalButton({ createO }) {
   return (
     <Box style={{ width: '50px!important' }}>
       <PayPalButtons
-        forceReRender={createO}
+        forceReRender={[createO.reference_id]}
         createOrder={createO}
         onApprove={ async (data, actions) => {
           const order = await actions.order?.capture();
