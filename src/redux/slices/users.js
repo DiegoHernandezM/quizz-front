@@ -14,6 +14,9 @@ const slice = createSlice({
     setUser(state, payload) {
       state.user = payload.payload.user;
     },
+    setUsers(state, payload) {
+      state.users = payload.payload;
+    },
     hasError(state, payload) {
       console.log(payload);
     },
@@ -34,6 +37,18 @@ export function createUser(values) {
         type: values.type,
       });
       dispatch(slice.actions.setUser(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function allUsers() {
+  return async (dispatch) => {
+    console.log("entro en all users");
+    try {
+      const response = await axios.get(`http://quizz.test/api/user/all`);
+      dispatch(slice.actions.setUsers(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

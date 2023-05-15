@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
@@ -26,6 +26,8 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { allUsers } from "../../redux/slices/users";
 import { green, orange, red } from "@mui/material/colors";
 import {
   Add as AddIcon,
@@ -58,64 +60,6 @@ const ToolbarTitle = styled.div`
   min-width: 150px;
 `;
 
-function createData(id, product, date, total, status, method) {
-  console.log(id, product, date, total, status, method);
-  return { id, product, date, total, status, method };
-}
-
-const rows = [
-  createData(
-    "000253",
-    "Salt & Pepper Grinder",
-    "2023-01-02",
-    "$32,00",
-    0,
-    "Visa"
-  ),
-  createData("000254", "Backpack", "2023-01-04", "$130,00", 0, "PayPal"),
-  createData(
-    "000255",
-    "Pocket Speaker",
-    "2023-01-04",
-    "$80,00",
-    2,
-    "Mastercard"
-  ),
-  createData("000256", "Glass Teapot", "2023-01-08", "$45,00", 0, "Visa"),
-  createData(
-    "000257",
-    "Unbreakable Water Bottle",
-    "2023-01-09",
-    "$40,00",
-    0,
-    "PayPal"
-  ),
-  createData("000258", "Spoon Saver", "2023-01-14", "$15,00", 0, "Mastercard"),
-  createData("000259", "Hip Flash", "2023-01-16", "$25,00", 1, "Visa"),
-  createData("000260", "Woven Slippers", "2023-01-22", "$20,00", 0, "PayPal"),
-  createData("000261", "Womens Watch", "2023-01-22", "$65,00", 2, "Visa"),
-  createData(
-    "000262",
-    "Over-Ear Headphones",
-    "2023-01-23",
-    "$210,00",
-    0,
-    "Mastercard"
-  ),
-  createData("000258", "Spoon Saver", "2023-01-14", "$15,00", 0, "Mastercard"),
-  createData("000259", "Hip Flash", "2023-01-16", "$25,00", 1, "Visa"),
-  createData("000260", "Woven Slippers", "2023-01-22", "$20,00", 0, "PayPal"),
-  createData("000261", "Womens Watch", "2023-01-22", "$65,00", 2, "Visa"),
-  createData(
-    "000262",
-    "Over-Ear Headphones",
-    "2023-01-23",
-    "$210,00",
-    0,
-    "Mastercard"
-  )
-];
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -146,13 +90,12 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: "id", alignment: "right", label: "Order ID" },
-  { id: "product", alignment: "left", label: "Product" },
-  { id: "date", alignment: "left", label: "Date" },
-  { id: "total", alignment: "right", label: "Total" },
-  { id: "status", alignment: "left", label: "Status" },
-  { id: "method", alignment: "left", label: "Payment Method" },
-  { id: "actions", alignment: "right", label: "Actions" },
+  { id: "name", alignment: "left", label: "Nombre" },
+  { id: "email", alignment: "left", label: "Email" },
+  { id: "school", alignment: "right", label: "Escuela" },
+  { id: "type_id", alignment: "left", label: "Tipo" },
+  { id: "expires_at", alignment: "left", label: "Expira" },
+  { id: "actions", alignment: "right", label: "Acciones" },
 ];
 
 const EnhancedTableHead = (props) => {
@@ -209,7 +152,7 @@ const EnhancedTableToolbar = (props) => {
       <ToolbarTitle>
         {numSelected > 0 ? (
           <Typography color="inherit" variant="subtitle1">
-            {numSelected} selected
+            {numSelected} Seleccionado(s)
           </Typography>
         ) : (
           <Typography variant="h6" id="tableTitle">
@@ -238,11 +181,17 @@ const EnhancedTableToolbar = (props) => {
 };
 
 function EnhancedTable() {
+  const dispatch = useDispatch();
+  const { users } = useSelector((state) => state.users);
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("customer");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+   useEffect(() => {
+     dispatch(allUsers());
+   }, [dispatch]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -252,7 +201,7 @@ function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
+      const newSelecteds = users.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -291,7 +240,7 @@ function EnhancedTable() {
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
 
   return (
     <div>
@@ -309,10 +258,10 @@ function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={users.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(users, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -335,40 +284,11 @@ function EnhancedTable() {
                         />
                       </TableCell>
 
-                      <TableCell align="right">#{row.id}</TableCell>
-                      <TableCell align="left">{row.product}</TableCell>
-                      <TableCell align="left">{row.date}</TableCell>
-                      <TableCell align="right">{row.total}</TableCell>
-                      <TableCell>
-                        {row.status === 0 && (
-                          <Chip
-                            size="small"
-                            mr={1}
-                            mb={1}
-                            label="Shipped"
-                            shipped={+true}
-                          />
-                        )}
-                        {row.status === 1 && (
-                          <Chip
-                            size="small"
-                            mr={1}
-                            mb={1}
-                            label="Processing"
-                            processing={+true}
-                          />
-                        )}
-                        {row.status === 2 && (
-                          <Chip
-                            size="small"
-                            mr={1}
-                            mb={1}
-                            label="Cancelled"
-                            cancelled={+true}
-                          />
-                        )}
-                      </TableCell>
-                      <TableCell align="left">{row.method}</TableCell>
+                      <TableCell align="left">{row.name}</TableCell>
+                      <TableCell align="left">{row.email}</TableCell>
+                      <TableCell align="right">{row.school}</TableCell>
+                      <TableCell align="left">{row.type_id === 1 ? 'Admin' : 'Estudiante'}</TableCell>
+                      <TableCell align="left">{row.expires_at}</TableCell>
                       <TableCell padding="none" align="right">
                         <Box mr={2}>
                           <IconButton aria-label="delete" size="large">
@@ -393,7 +313,7 @@ function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={users.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
