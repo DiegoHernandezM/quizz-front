@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from 'react-router-dom';
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 
@@ -30,6 +31,7 @@ const BigAvatar = styled(Avatar)`
 `;
 
 function SignIn() {
+  const { token } = useParams();
   return (
     <React.Fragment>
       <Brand />
@@ -44,7 +46,7 @@ function SignIn() {
           Ingresa tus credenciales
         </Typography>
 
-        <SignInComponent />
+        <SignInComponent token={token}/>
       </Wrapper>
     </React.Fragment>
   );

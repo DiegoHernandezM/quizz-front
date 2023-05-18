@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer } from "react";
 
-import axios from "../utils/axios";
+import axios from "axios";
 import { isValidToken, setSession } from "../utils/jwt";
 
 // Note: If you're trying to connect JWT to your own backend, don't forget
@@ -26,10 +26,11 @@ const JWTReducer = (state, action) => {
         user: action.payload.user,
       };
     case SIGN_IN:
+      const { user } = action.payload;
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.user,
+        user,
       };
     case SIGN_OUT:
       return {
@@ -59,11 +60,11 @@ function AuthProvider({ children }) {
     const initialize = async () => {
       try {
         const accessToken = window.localStorage.getItem("accessToken");
-
         if (accessToken && isValidToken(accessToken)) {
+          console.log(accessToken);
           setSession(accessToken);
 
-          const response = await axios.get("/api/auth/my-account");
+          const response = await axios.get("http://quizz.test/api/user");
           const { user } = response.data;
 
           console.log(user);
@@ -76,6 +77,7 @@ function AuthProvider({ children }) {
             },
           });
         } else {
+          console.log("no token");
           dispatch({
             type: INITIALIZE,
             payload: {
@@ -100,15 +102,14 @@ function AuthProvider({ children }) {
   }, []);
 
   const signIn = async (email, password) => {
-    const response = await axios.post("/api/auth/sign-in", {
-      email,
+    const response = await axios.post(`http://quizz.test/api/login`, {
+      username: email,
       password,
     });
-    const { accessToken, user } = response.data;
-
-    setSession(accessToken);
+    const { access_token, user } = response.data;
+    setSession(access_token);
     dispatch({
-      type: SIGN_IN,
+      type: "SIGN_IN",
       payload: {
         user,
       },

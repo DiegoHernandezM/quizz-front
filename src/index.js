@@ -10,9 +10,6 @@ import App from "./App";
 import reportWebVitals from "./utils/reportWebVitals";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
-// Note: Remove the following line if you want to disable the API mocks.
-import "./mocks";
-
 import "animate.css/animate.min.css";
 import { AuthProvider } from "./contexts/JWTContext";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
@@ -27,15 +24,15 @@ const initialOptions = {
 };
 
 root.render(
-  <BrowserRouter>
-    <ThemeProvider>
-      <PayPalScriptProvider options={initialOptions}>
-        <AuthProvider>
+  <AuthProvider>
+    <BrowserRouter>
+      <ThemeProvider>
+        <PayPalScriptProvider options={initialOptions}>
           <App />
-        </AuthProvider>
-      </PayPalScriptProvider>
-    </ThemeProvider>
-  </BrowserRouter>
+        </PayPalScriptProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  </AuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

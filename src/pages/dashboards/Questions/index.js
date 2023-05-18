@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-// import { UploadSingleFile } from "../../../components/UploadSingleFile";
+import { useDispatch, useSelector } from "react-redux";
+import { getQuestionsCatalogue } from "../../../redux/slices/questions";
+import { UploadSingleFile } from "../../../components/UploadSingleFile";
 
 import {
   Button,
@@ -15,7 +17,7 @@ import {
   Paper as MuiPaper,
   Typography,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, esES } from "@mui/x-data-grid";
 import { spacing } from "@mui/system";
 
 const Card = styled(MuiCard)(spacing);
@@ -31,48 +33,57 @@ const Paper = styled(MuiPaper)(spacing);
 const columns = [
   { field: "id", headerName: "ID", width: 150 },
   {
-    field: "firstName",
-    headerName: "First name",
+    field: "question",
+    headerName: "Pregunta",
     width: 200,
     editable: true,
   },
   {
-    field: "lastName",
-    headerName: "Last name",
+    field: "points",
+    headerName: "Puntos",
     width: 200,
     editable: true,
   },
   {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 150,
+    field: "a",
+    headerName: "Respuesta A",
+    width: 100,
     editable: true,
   },
   {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 250,
-    valueGetter: (params) =>
-      `${params.row.firstName || ""} ${params.row.id || ""}`,
+    field: "b",
+    headerName: "Respuesta B",
+    width: 100,
+    editable: true,
   },
-];
-
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
+  {
+    field: "c",
+    headerName: "Respuesta C",
+    width: 100,
+    editable: true,
+  },
+  {
+    field: "answer",
+    headerName: "Respuesta Correcta",
+    width: 100,
+    editable: true,
+  },
+  {
+    field: "explanation",
+    headerName: "Justificación",
+    width: 100,
+    editable: true,
+  },
 ];
 
 function QuestionsContent() {
+  const dispatch = useDispatch();
+  const { questionsCatalogue } = useSelector((state) => state.questions);
+
+  useEffect(() => {
+    dispatch(getQuestionsCatalogue());
+  }, []);
+
   return (
     <Card mb={6}>
       <CardContent pb={1}>
@@ -90,8 +101,9 @@ function QuestionsContent() {
             initialState={{
               pagination: { paginationModel: { page: 0, pageSize: 5 } },
             }}
+            localeText={esES.components.MuiDataGrid.defaultProps.localeText}
             pageSizeOptions={[5, 10, 25]}
-            rows={rows}
+            rows={questionsCatalogue ?? []}
             columns={columns}
             checkboxSelection
           />
@@ -119,15 +131,15 @@ function QuestionsPage() {
       <Divider my={6} />
 
       <QuestionsContent />
-      {/* <Card sx={{ marginTop: "20px" }}>
-        <CardHeader title="Cargar desde layout..." />
+      <Card sx={{ marginTop: "20px" }}>
+        <CardHeader title="Cargar desde plantilla..." />
         <CardContent>
           <UploadSingleFile
             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-            requirements="Recuerda que debes incluir LOCAL, TIENDA, SKU, PIEZAS y PPK en la primer hoja"
+            requirements="Recuerda que debes incluir en los nombres de las columnas ID, MATERIA/CATEGORIA, PUNTOS, PREGUNTA, RESPUESTA, ANSWER A, ANSWER B, ANSWER C y JUSTIFICACION en la primer hoja"
           />
         </CardContent>
-      </Card> */}
+      </Card>
     </React.Fragment>
   );
 }

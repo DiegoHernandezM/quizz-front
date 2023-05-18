@@ -10,7 +10,7 @@ import {
   Users,
   UserMinus,
   CheckCircle,
-  Settings
+  Settings,
 } from "react-feather";
 
 const pagesSection = [
@@ -20,14 +20,14 @@ const pagesSection = [
     title: "Dashboard",
   },
   {
-    href: "/projects",
+    href: "/dashboard/questions",
     icon: CheckSquare,
-    title: "Cuestionarios"
+    title: "Cuestionarios",
   },
   {
     href: "/tasks",
     icon: Settings,
-    title: "Administracion App"
+    title: "Administracion App",
   },
   {
     href: "/users",
@@ -242,7 +242,7 @@ const navItems = [
   {
     title: "APP",
     pages: pagesSection,
-  }
+  },
 ];
 
 export default navItems;
