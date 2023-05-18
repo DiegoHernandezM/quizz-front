@@ -91,6 +91,7 @@ import ProtectedPage from "./pages/protected/ProtectedPage";
 const Default = async(() => import("./pages/dashboards/Default"));
 const Analytics = async(() => import("./pages/dashboards/Analytics"));
 const Questions = async(() => import("./pages/dashboards/Questions"));
+const Subjects = async(() => import("./pages/dashboards/Subjects"));
 const SaaS = async(() => import("./pages/dashboards/SaaS"));
 
 // Form components
@@ -141,6 +142,10 @@ const routes = [
       {
         path: "questions",
         element: <Questions />,
+      },
+      {
+        path: "subjects",
+        element: <Subjects />,
       },
     ],
   },
