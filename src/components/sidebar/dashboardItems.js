@@ -8,9 +8,7 @@ import {
   PieChart,
   Sliders,
   Users,
-  UserMinus,
-  CheckCircle,
-  Settings,
+  Settings
 } from "react-feather";
 
 const pagesSection = [
@@ -18,6 +16,11 @@ const pagesSection = [
     href: "/dashboard",
     icon: Sliders,
     title: "Dashboard",
+  },
+  {
+    href: "/dashboard/subjects",
+    icon: BookOpen,
+    title: "Materias",
   },
   {
     href: "/dashboard/questions",

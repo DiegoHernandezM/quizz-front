@@ -59,7 +59,6 @@ const ToolbarTitle = styled.div`
 `;
 
 function createData(id, product, date, total, status, method) {
-  console.log(id, product, date, total, status, method);
   return { id, product, date, total, status, method };
 }
 
