@@ -103,7 +103,7 @@ function QuestionsContent() {
             }}
             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
             pageSizeOptions={[5, 10, 25]}
-            rows={questionsCatalogue}
+            rows={questionsCatalogue ?? []}
             columns={columns}
             checkboxSelection
           />

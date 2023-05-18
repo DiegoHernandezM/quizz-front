@@ -60,11 +60,11 @@ function AuthProvider({ children }) {
     const initialize = async () => {
       try {
         const accessToken = window.localStorage.getItem("accessToken");
-
         if (accessToken && isValidToken(accessToken)) {
+          console.log(accessToken);
           setSession(accessToken);
 
-          const response = await axios.get("/api/auth/my-account");
+          const response = await axios.get("http://quizz.test/api/user");
           const { user } = response.data;
 
           console.log(user);
@@ -77,6 +77,7 @@ function AuthProvider({ children }) {
             },
           });
         } else {
+          console.log("no token");
           dispatch({
             type: INITIALIZE,
             payload: {
@@ -103,18 +104,17 @@ function AuthProvider({ children }) {
   const signIn = async (email, password) => {
     const response = await axios.post(`http://quizz.test/api/login`, {
       username: email,
-      password
+      password,
     });
     const { access_token, user } = response.data;
     setSession(access_token);
     dispatch({
-      type: 'SIGN_IN',
+      type: "SIGN_IN",
       payload: {
-        user
-      }
+        user,
+      },
     });
   };
-
 
   const signOut = async () => {
     setSession(null);

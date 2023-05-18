@@ -16,7 +16,7 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
-  
+
 const initialOptions = {
   "client-id":
     "AbhmG5DCb8R8ellA-bS0BvTqdDArpCYiNSGCCA2PFQUeLkzjBLmQSexRtq9dHIDKjj6jAI64m7US0ATu",
@@ -24,15 +24,15 @@ const initialOptions = {
 };
 
 root.render(
-  <BrowserRouter>
-    <ThemeProvider>
-      <PayPalScriptProvider options={initialOptions}>
-        <AuthProvider>
+  <AuthProvider>
+    <BrowserRouter>
+      <ThemeProvider>
+        <PayPalScriptProvider options={initialOptions}>
           <App />
-        </AuthProvider>
-      </PayPalScriptProvider>
-    </ThemeProvider>
-  </BrowserRouter>
+        </PayPalScriptProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  </AuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

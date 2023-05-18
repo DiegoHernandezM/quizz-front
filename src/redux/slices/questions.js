@@ -12,7 +12,7 @@ const slice = createSlice({
   initialState,
   reducers: {
     setCatalogue(state, payload) {
-      state.questionsCatalogue = payload.payload;
+      state.questionsCatalogue = payload.payload.data;
       state.isLoading = false;
     },
     hasError(state, payload) {
