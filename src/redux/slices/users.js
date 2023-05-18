@@ -69,12 +69,12 @@ export function createUser(values) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.post(`http://quizz.test/api/user/create`, {
-        name: values.fullName,
+        name: values.name,
         school: values.school,
-        password: values.password,
         email: values.email,
-        type: values.type,
-        expires_at: values.expires_at
+        type_id: values.type_id,
+        expires_at: values.expires_at,
+        password: null
       });
       dispatch(slice.actions.endLoading())
       return Promise.resolve(response);
@@ -85,16 +85,15 @@ export function createUser(values) {
   };
 }
 
-export function updateUser(values) {
+export function updateUser(id, values) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(`http://quizz.test/api/user/update`, {
-        name: values.fullName,
+      const response = await axios.post(`http://quizz.test/api/user/update/${id}`, {
+        name: values.name,
         school: values.school,
-        password: values.password,
         email: values.email,
-        type: values.type,
+        type_id: values.type_id,
         expires_at: values.expires_at,
       });
       dispatch(slice.actions.endLoading());

@@ -1,5 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import moment from "moment";
 // material
@@ -14,13 +14,11 @@ import {
   Typography,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import { DatePicker } from "@mui/lab";
-
 import * as yup from "yup";
 import { useFormik } from "formik";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import esLocale from "date-fns/locale/es";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 // ----------------------------------------------------------------------
 
@@ -35,16 +33,17 @@ UserForm.propTypes = {
 };
 
 const validationSchema = yup.object({
-  name: yup.string("Name").required("El nombre es requerido"),
-  email: yup.string("Email").required("El email es requerido"),
-  school: yup.string("Fecha").required("La escuela es requerida"),
-  expires_at: yup.string("Expira").required("El campo expira es requerido"),
+  name: yup.string("Nombre").required("El nombre es requerido"),
+  email: yup
+    .string("Email")
+    .email("Ingresa una direccion valida")
+    .required("El email es requerido"),
 });
 
 const TYPE = [
-  { value: "", label: "SELECCIONE" },
-  { value: "admin", label: "Administrador" },
-  { value: "student", label: "Estudiante" },
+  { id: 0, value: "", label: "SELECCIONE" },
+  { id: 1, value: "admin", label: "Administrador" },
+  { id: 3, value: "student", label: "Estudiante" },
 ];
 
 export default function UserForm({
@@ -56,14 +55,14 @@ export default function UserForm({
   updateUser,
   loading,
 }) {
-
+  const [hidden, setHidden] = useState(false);
   const formik = useFormik({
     initialValues: {
       id: 0,
       name: "",
       email: "",
       school: "",
-      type: 0,
+      type_id: 0,
       expires_at: moment().format("YYYY-MM-DD"),
     },
     validationSchema,
@@ -71,24 +70,33 @@ export default function UserForm({
       if (!update) {
         parentCallback(values);
       } else {
-        updateUser(values);
+        updateUser(user.id, values);
       }
       resetForm(formik.initialValues);
     },
   });
 
   useEffect(() => {
-    formik.setFieldValue("id", user.id ?? formik.initialValues.id);
-    formik.setFieldValue("name", user.name ?? formik.initialValues.name);
-    formik.setFieldValue("email", user.email ?? formik.initialValues.email);
-    formik.setFieldValue("school", user.school ?? formik.initialValues.school);
+    formik.setFieldValue("id", update ? user.id : formik.initialValues.id);
+    formik.setFieldValue(
+      "name",
+      update ? user.name : formik.initialValues.name
+    );
+    formik.setFieldValue(
+      "email",
+      update ? user.email : formik.initialValues.email
+    );
+    formik.setFieldValue(
+      "school",
+      update ? user.school : formik.initialValues.school
+    );
     formik.setFieldValue(
       "type_id",
-      user.type_id ?? formik.initialValues.type_id
+      update ? user.type_id : formik.initialValues.type_id
     );
     formik.setFieldValue(
       "expires_at",
-      user.expires_at ?? formik.initialValues.expires_at
+      update ? user.expires_at : formik.initialValues.expires_at
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [update, user]);
@@ -118,7 +126,7 @@ export default function UserForm({
                   marginBottom: "30px",
                 }}
               >
-                {update ? "Detalle" : "Editar"}
+                {update ? "Editar" : "Nuevo usuario"}
               </Typography>
               <Button
                 variant="contained"
@@ -153,6 +161,36 @@ export default function UserForm({
               style={{ marginLeft: "10px", marginTop: "10px", width: "95%" }}
             >
               <TextField
+                id="type_id"
+                name="type_id"
+                label="Tipo de usuario"
+                disabled={update}
+                onChange={(e, value) => {
+                  formik.setFieldValue("type_id", value.props.value);
+                  if (value.props.value === 1 || value.props.value === 0) {
+                    setHidden(true);
+                  } else {
+                    setHidden(false);
+                  }
+                }}
+                value={formik.values.type_id || ""}
+                error={formik.touched.type_id && Boolean(formik.errors.type_id)}
+                helperText={formik.touched.type_id && formik.errors.type_id}
+                select
+                fullWidth
+                size="small"
+              >
+                {TYPE.map((option) => (
+                  <MenuItem key={option.value} value={option.id}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </FormControl>
+            <FormControl
+              style={{ marginLeft: "10px", marginTop: "10px", width: "95%" }}
+            >
+              <TextField
                 id="name"
                 name="name"
                 label="Nombre"
@@ -179,67 +217,67 @@ export default function UserForm({
                 size="small"
               />
             </FormControl>
-            <FormControl
-              style={{ marginLeft: "10px", marginTop: "10px", width: "95%" }}
-            >
-              <TextField
-                id="school"
-                name="school"
-                label="Escuela"
-                value={formik.values.school || ""}
-                onChange={formik.handleChange}
-                error={formik.touched.school && Boolean(formik.errors.school)}
-                fullWidth
-                helperText={formik.touched.school && formik.errors.school}
-                size="small"
-              />
-            </FormControl>
-            <FormControl
-              style={{ marginLeft: "10px", marginTop: "10px", width: "95%" }}
-            >
-              <TextField
-                id="type_id"
-                name="type_id"
-                label="Tipo de usuario"
-                onChange={(e, value) => {
-                  formik.setFieldValue("type_id", value.props.value);
-                }}
-                value={formik.values.type_id || ""}
-                error={formik.touched.type_id && Boolean(formik.errors.type_id)}
-                helperText={formik.touched.type_id && formik.errors.type_id}
-                select
-                fullWidth
-                size="small"
-              >
-                {TYPE.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </FormControl>
-            <FormControl
-              style={{ marginLeft: "10px", marginTop: "10px", width: "95%" }}
-            >
-              <DatePicker
-                label="Expira"
-                minDate={new Date(moment().subtract(1, "days"))}
-                renderInput={(params) => (
+            {user.type_id === 1 ? (
+              ""
+            ) : (
+              <div hidden={hidden}>
+                <FormControl
+                  style={{
+                    marginLeft: "10px",
+                    marginTop: "10px",
+                    width: "95%",
+                  }}
+                >
                   <TextField
-                    {...params}
+                    id="school"
+                    name="school"
+                    label="Escuela"
+                    value={formik.values.school || ""}
+                    onChange={formik.handleChange}
+                    error={
+                      formik.touched.school && Boolean(formik.errors.school)
+                    }
+                    fullWidth
+                    helperText={formik.touched.school && formik.errors.school}
                     size="small"
-                    helperText={formik.touched.expires_at && formik.errors.expires_at}
-                    error={formik.touched.expires_at && Boolean(formik.errors.expires_at)}
                   />
-                )}
-                id="expires_at"
-                name="expires_at"
-                value={moment(formik.values.expires_at)}
-                onChange={(value) => {
-                  formik.setFieldValue("expires_at", value);
-                }}
-              />
-            </FormControl>
+                </FormControl>
+                <FormControl
+                  style={{
+                    marginLeft: "10px",
+                    marginTop: "10px",
+                    width: "95%",
+                  }}
+                >
+                  <DatePicker
+                    label="Expira"
+                    minDate={new Date(moment().subtract(1, "days"))}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        size="small"
+                        helperText={
+                          formik.touched.expires_at && formik.errors.expires_at
+                        }
+                        error={
+                          formik.touched.expires_at &&
+                          Boolean(formik.errors.expires_at)
+                        }
+                      />
+                    )}
+                    id="expires_at"
+                    name="expires_at"
+                    value={
+                      new Date(formik.values.expires_at) ||
+                      new Date(moment.now())
+                    }
+                    onChange={(value) => {
+                      formik.setFieldValue("expires_at", value);
+                    }}
+                  />
+                </FormControl>
+              </div>
+            )}
           </form>
         </Box>
       </LocalizationProvider>

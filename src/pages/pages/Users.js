@@ -1,42 +1,23 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
 
 import {
-  Box,
   Breadcrumbs,
   Button,
   Card,
-  Checkbox,
-  Chip as MuiChip,
   Divider as MuiDivider,
   Grid,
   Link,
-  Paper as MuiPaper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TableSortLabel,
-  Toolbar,
   Tooltip,
   Typography,
 } from "@mui/material";
+import { spacing } from "@mui/system";
 import { DataGrid, esES } from "@mui/x-data-grid";
 import { Add as AddIcon } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
-import {
-  CheckOutlined,
-  AccessTimeOutlined,
-  CancelOutlined,
-} from "@mui/icons-material";
 import RestoreFromTrashIcon from "@mui/icons-material/RestoreFromTrash";
-import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUsers,
@@ -48,13 +29,7 @@ import {
   clearDataUser,
 } from "../../redux/slices/users";
 import Page from "../components/Page";
-// import { PATH_DASHBOARD } from "../../routes/paths";
-// import HeaderBreadcrumbs from "../../components/HeaderBreadcrumbs";
-// import useSettings from "../../hooks/useSettings";
-import { QuickSearch } from "../components/tables";
 import UserForm from "../components/user/UserForm";
-//import PetitionForm from "../../components/petition/PetitionForm";
-import useAuth from "../../hooks/useAuth";
 import SnackAlert from "../components/general/SnackAlert";
 import DialogConfirm from "../components/general/DialogConfirm";
 
@@ -66,13 +41,15 @@ const filters = {
   },
 };
 
+const Divider = styled(MuiDivider)(spacing);
+
 function escapeRegExp(value) {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
 function Users() {
   const dispatch = useDispatch();
-  const { users, user, error, loading } = useSelector((state) => state.users);
+  const { users, user, loading } = useSelector((state) => state.users);
   const [openForm, setOpenForm] = useState(false);
   const [pageSize, setPageSize] = useState(10);
   const [searchText, setSearchText] = useState("");
@@ -81,7 +58,6 @@ function Users() {
   const [message, setMessage] = useState("");
   const [modeUpdate, setModeUpdate] = useState(false);
   const [rows, setRows] = useState([]);
-  const { userAuth } = useAuth();
   const [userId, setUserId] = useState(0);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [modeRestore, setModeRestore] = useState(false);
@@ -110,6 +86,8 @@ function Users() {
       renderHeader: (p) => (
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
+      renderCell: (params) =>
+        params.row.school === null ? 'Sin dato' : params.row.school,
     },
     {
       field: "type_id",
@@ -119,7 +97,7 @@ function Users() {
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
       renderCell: (params) =>
-        params.row.type_id === 1 ? "Admin" : "Estudiante",
+        params.row.type_id === 1 ? 'Admin' : 'Estudiante',
     },
     {
       field: "expires_at",
@@ -128,6 +106,8 @@ function Users() {
       renderHeader: (p) => (
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
+      renderCell: (params) =>
+        params.row.expires_at === null ?  'Sin dato' : params.row.expires_at,
     },
     {
       field: "action",
@@ -190,8 +170,6 @@ function Users() {
 
   const requestSearch = (searchValue) => {
     setSearchText(searchValue);
-    console.log(searchValue);
-    console.log(users);
     const searchRegex = new RegExp(escapeRegExp(searchValue), "i");
     const filteredRows = users.filter((row) =>
       Object.keys(row).some((field) => searchRegex.test(row[field]))
@@ -209,9 +187,9 @@ function Users() {
     setOpenForm(true);
   };
 
-  const handleUpdate = (values) => {
+  const handleUpdate = (id, values) => {
     setOpenForm(false);
-    dispatch(updateU(values));
+    dispatch(updateU(id, values));
   };
 
   const handleCloseConfirm = () => {
@@ -266,10 +244,10 @@ function Users() {
         });
   }
 
-  function updateU(values) {
+  function updateU(id, values) {
     return (dispatch) =>
       new Promise((resolve) => {
-        resolve(dispatch(updateUser(values)));
+        resolve(dispatch(updateUser(id, values)));
       })
         .then((response) => {
           dispatch(getUsers());
@@ -332,104 +310,110 @@ function Users() {
         });
   }
 
-  // start <------->
   return (
-    <Page title="Usuarios">
-      <Grid justifyContent="space-between" container spacing={10}>
-        <Grid item>
-          <Typography variant="h3" gutterBottom display="inline">
-            Usuarios
-          </Typography>
+    <React.Fragment>
+      <Page title="Usuarios">
+        <Grid justifyContent="space-between" container spacing={10}>
+          <Grid item>
+            <Typography variant="h3" gutterBottom display="inline">
+              Usuarios
+            </Typography>
 
-          <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-            <Link component={NavLink} to="/dashboard">
-              Dashboard
-            </Link>
-            <Typography>Usuarios</Typography>
-          </Breadcrumbs>
+            <Breadcrumbs aria-label="Breadcrumb" mt={2}>
+              <Link component={NavLink} to="/dashboard">
+                Dashboard
+              </Link>
+              <Typography>Usuarios</Typography>
+            </Breadcrumbs>
+          </Grid>
+          <Grid item>
+            <div>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleOpenForm}
+              >
+                <AddIcon />
+                Nuevo usuario
+              </Button>
+            </div>
+          </Grid>
         </Grid>
-        <Grid item>
-          <div>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleOpenForm}
-            >
-              <AddIcon />
-              Nuevo usuario
-            </Button>
-          </div>
-        </Grid>
-      </Grid>
-      <SnackAlert
-        message={message}
-        type={typeMessage}
-        open={openMessage}
-        close={handleCloseMessage}
-      />
-      <Card>
-        <div style={{ height: 600, width: "100%" }}>
-          <div style={{ display: "flex", height: "100%" }}>
-            <div style={{ flexGrow: 1 }}>
-              <DataGrid
-                components={{
-                  Toolbar: QuickSearch,
-                }}
-                loading={loading}
-                localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-                rows={rows.length > 0 ? rows : users}
-                columns={columns}
-                rowHeight={40}
-                componentsProps={{
-                  hideFooterPagination: false,
-                  toolbar: {
+        <Divider my={6} />
+        <SnackAlert
+          message={message}
+          type={typeMessage}
+          open={openMessage}
+          close={handleCloseMessage}
+        />
+        <Card>
+          <div style={{ height: 600, width: "100%" }}>
+            <div style={{ display: "flex", height: "100%" }}>
+              <div style={{ flexGrow: 1 }}>
+                <DataGrid
+                  components={{
+                    Toolbar: '' // QuickSearch,
+                  }}
+                  loading={loading}
+                  localeText={
+                    esES.components.MuiDataGrid.defaultProps.localeText
+                  }
+                  rows={rows.length > 0 ? rows : users}
+                  columns={columns}
+                  rowHeight={40}
+                  componentsProps={{
                     hideFooterPagination: false,
-                    export: false,
-                    columns: true,
-                    density: true,
-                    search: true,
-                    customExport: false,
-                    value: searchText,
-                    onChange: (event) => requestSearch(event.target.value),
-                    clearSearch: () => requestSearch(""),
-                  },
-                }}
-                onRowDoubleClick={(params) => {
-                  dispatch(getUser(params.row.id));
-                  setModeUpdate(true);
-                  setOpenForm(true);
-                }}
-                pageSize={pageSize}
-                onPageSizeChange={(newPageSize) => {
-                  setPageSize(newPageSize);
-                }}
-                rowsPerPageOptions={[10, 20, 50, 100]}
-              />
+                    toolbar: {
+                      hideFooterPagination: false,
+                      export: false,
+                      columns: true,
+                      density: true,
+                      search: true,
+                      customExport: false,
+                      value: searchText,
+                      onChange: (event) => requestSearch(event.target.value),
+                      clearSearch: () => requestSearch(""),
+                    },
+                  }}
+                  onRowDoubleClick={(params) => {
+                    dispatch(getUser(params.row.id));
+                    setModeUpdate(true);
+                    setOpenForm(true);
+                  }}
+                  pageSize={pageSize}
+                  onPageSizeChange={(newPageSize) => {
+                    setPageSize(newPageSize);
+                  }}
+                  rowsPerPageOptions={[10, 20, 50, 100]}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </Card>
-      <UserForm
-        open={openForm}
-        close={handleCloseForm}
-        parentCallback={handleCallbackForm}
-        user={user}
-        update={modeUpdate}
-        updateUser={handleUpdate}
-        loading={loading}
-      />
-      <DialogConfirm
-        open={openConfirm}
-        close={handleCloseConfirm}
-        title={modeRestore === false ? "Eliminar Usuario" : "Recuperar Usuario"}
-        body={
-          modeRestore === false
-            ? "Desea eliminar este usuario"
-            : "Desea recuperar este usuario"
-        }
-        agree={handleCloseAccept}
-      />
-    </Page>
+          <UserForm
+            open={openForm}
+            close={handleCloseForm}
+            parentCallback={handleCallbackForm}
+            user={user}
+            update={modeUpdate}
+            updateUser={handleUpdate}
+            loading={loading}
+          />
+        </Card>
+        <DialogConfirm
+          open={openConfirm}
+          close={handleCloseConfirm}
+          title={
+            modeRestore === false ? "Eliminar Usuario" : "Recuperar Usuario"
+          }
+          body={
+            modeRestore === false
+              ? "Desea eliminar este usuario"
+              : "Desea recuperar este usuario"
+          }
+          agree={handleCloseAccept}
+        />
+      </Page>
+    </React.Fragment>
   );
 }
 
