@@ -10,9 +10,6 @@ import App from "./App";
 import reportWebVitals from "./utils/reportWebVitals";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
-// Note: Remove the following line if you want to disable the API mocks.
-import "./mocks";
-
 import "animate.css/animate.min.css";
 import { AuthProvider } from "./contexts/JWTContext";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";

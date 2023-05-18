@@ -41,13 +41,7 @@ UploadSingleFile.propTypes = {
   sx: PropTypes.object,
 };
 
-export default function UploadSingleFile({
-  error,
-  file,
-  sx,
-  requirements,
-  ...other
-}) {
+export function UploadSingleFile({ error, file, sx, requirements, ...other }) {
   const {
     getRootProps,
     getInputProps,
