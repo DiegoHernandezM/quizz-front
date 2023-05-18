@@ -16,7 +16,7 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
-
+  
 const initialOptions = {
   "client-id":
     "AbhmG5DCb8R8ellA-bS0BvTqdDArpCYiNSGCCA2PFQUeLkzjBLmQSexRtq9dHIDKjj6jAI64m7US0ATu",
