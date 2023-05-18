@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
-import { getQuestionsCatalogue } from "../../../redux/slices/questions";
+import {
+  getQuestionsCatalogue,
+  massLoad,
+} from "../../../redux/slices/questions";
 import { UploadSingleFile } from "../../../components/UploadSingleFile";
 
 import {
@@ -31,17 +34,17 @@ const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
 const Paper = styled(MuiPaper)(spacing);
 
 const columns = [
-  { field: "id", headerName: "ID", width: 150 },
+  { field: "id", headerName: "ID", width: 50 },
   {
     field: "question",
     headerName: "Pregunta",
-    width: 200,
+    width: 250,
     editable: true,
   },
   {
     field: "points",
     headerName: "Puntos",
-    width: 200,
+    width: 50,
     editable: true,
   },
   {
@@ -64,7 +67,7 @@ const columns = [
   },
   {
     field: "answer",
-    headerName: "Respuesta Correcta",
+    headerName: "Respuesta",
     width: 100,
     editable: true,
   },
@@ -99,10 +102,10 @@ function QuestionsContent() {
         <div style={{ height: 400, width: "100%" }}>
           <DataGrid
             initialState={{
-              pagination: { paginationModel: { page: 0, pageSize: 5 } },
+              pagination: { paginationModel: { page: 0, pageSize: 50 } },
             }}
             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-            pageSizeOptions={[5, 10, 25]}
+            pageSizeOptions={[50, 100, 200]}
             rows={questionsCatalogue ?? []}
             columns={columns}
             checkboxSelection
@@ -114,6 +117,23 @@ function QuestionsContent() {
 }
 
 function QuestionsPage() {
+  const dispatch = useDispatch();
+  const [file, setFile] = useState(null);
+
+  const handleDropSingleFile = useCallback((acceptedFiles) => {
+    const filex = acceptedFiles[0];
+    if (filex) {
+      setFile(filex);
+    }
+  }, []);
+  useEffect(() => {
+    if (file) {
+      dispatch(massLoad(file)).then(() => {
+        setFile(null);
+        dispatch(getQuestionsCatalogue());
+      });
+    }
+  }, [file]);
   return (
     <React.Fragment>
       <Helmet title="Data Grid" />
@@ -135,6 +155,8 @@ function QuestionsPage() {
         <CardHeader title="Cargar desde plantilla..." />
         <CardContent>
           <UploadSingleFile
+            file={file}
+            onDrop={handleDropSingleFile}
             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
             requirements="Recuerda que debes incluir en los nombres de las columnas ID, MATERIA/CATEGORIA, PUNTOS, PREGUNTA, RESPUESTA, ANSWER A, ANSWER B, ANSWER C y JUSTIFICACION en la primer hoja"
           />

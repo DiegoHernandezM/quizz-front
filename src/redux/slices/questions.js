@@ -35,3 +35,22 @@ export function getQuestionsCatalogue() {
     }
   };
 }
+
+export function massLoad(file) {
+  return async (dispatch) => {
+    try {
+      const formData = new FormData();
+      formData.append("excel", file);
+      const response = await axios.post(
+        `http://quizz.test/api/questions/massload`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+      dispatch(slice.actions.setCatalogue(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
