@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
@@ -7,8 +8,6 @@ import { Formik } from "formik";
 
 import {
   Alert as MuiAlert,
-  Checkbox,
-  FormControlLabel,
   Button,
   TextField as MuiTextField,
 } from "@mui/material";
@@ -20,15 +19,19 @@ const Alert = styled(MuiAlert)(spacing);
 
 const TextField = styled(MuiTextField)(spacing);
 
-function SignIn() {
-  const navigate = useNavigate();
+SignIn.propTypes = {
+  token: PropTypes.any
+};
+
+export default function SignIn({ token }) {
   const { signIn } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <Formik
       initialValues={{
-        email: "demo@bootlab.io",
-        password: "unsafepassword",
+        email: "",
+        password: "",
         submit: false,
       }}
       validationSchema={Yup.object().shape({
@@ -44,6 +47,7 @@ function SignIn() {
 
           navigate("/dashboard");
         } catch (error) {
+          console.log(error);
           const message = error.message || "Something went wrong";
 
           setStatus({ success: false });
@@ -113,5 +117,3 @@ function SignIn() {
     </Formik>
   );
 }
-
-export default SignIn;
