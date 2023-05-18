@@ -32,6 +32,7 @@ import Page from "../components/Page";
 import UserForm from "../components/user/UserForm";
 import SnackAlert from "../components/general/SnackAlert";
 import DialogConfirm from "../components/general/DialogConfirm";
+import QuickSearch from "../tables/QuickSearch";
 
 const filters = {
   pinter: {
@@ -352,7 +353,7 @@ function Users() {
               <div style={{ flexGrow: 1 }}>
                 <DataGrid
                   components={{
-                    Toolbar: '' // QuickSearch,
+                    Toolbar: QuickSearch,
                   }}
                   loading={loading}
                   localeText={
