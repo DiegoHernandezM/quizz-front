@@ -43,8 +43,8 @@ const BrandIcon = styled(Logo)`
   margin-right: ${(props) => props.theme.spacing(2)};
   color: ${(props) => props.theme.sidebar.header.brand.color};
   fill: ${(props) => props.theme.sidebar.header.brand.color};
-  width: 32px;
-  height: 32px;
+  width: 50px;
+  height: 40px;
 `;
 
 const BrandChip = styled(Chip)`
@@ -69,7 +69,7 @@ const Sidebar = ({ items, showFooter = true, ...rest }) => {
       <Brand component={NavLink} to="/dashboard">
         <BrandIcon />{" "}
         <Box ml={1}>
-          Aviación
+          Aviation InSight
         </Box>
       </Brand>
       <SidebarNav items={items} />

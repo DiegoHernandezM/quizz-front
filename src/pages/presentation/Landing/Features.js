@@ -14,6 +14,9 @@ import {
   Figma as FigmaIcon,
   BookOpen as BookOpenIcon,
   PlusCircle as PlusCircleIcon,
+  Book,
+  Search,
+  List,
 } from "react-feather";
 
 const Wrapper = styled.div`
@@ -53,7 +56,7 @@ const ArrowForward = styled(ArrowForwardIcon)`
 
 const Feature = ({ Icon, title, description }) => {
   return (
-    <Grid item xs={12} sm={6} md={4} lg={4}>
+    <Grid item xs={12} sm={6} md={3} lg={3}>
       <FeatureWrapper>
         <FeatureIcon>
           <Icon />
@@ -75,43 +78,30 @@ function Features() {
   return (
     <Wrapper py={20}>
       <Container>
-        <TypographyOverline variant="body2" gutterBottom>
-          Ventajas
-        </TypographyOverline>
         <Typography variant="h2" component="h3" gutterBottom>
-          Descripcion de ventajas
+          En Aviation In Sight podrás realizar lo siguiente:
         </Typography>
-        <Box mb={8} />
-        <Grid container spacing={6}>
+        <Box mb={12} />
+        <Grid container spacing={4}>
           <Feature
-            Icon={CodeIcon}
-            title="Modern Technology Stack"
-            description="Mira is built to make your life easier. Theme provider, build tooling, documentation, and 400+ components. "
+            Icon={Book}
+            title="Estudiar con cuestionarios por materia o tipo examen."
+            description=""
           />
           <Feature
             Icon={PlusCircleIcon}
-            title="Multiple Plugins"
-            description="Various third-party plugins are fully integrated, like Chart.js, FullCalendar, WYSIWYG Editors, Formik and Yup."
+            title="Identificar respuestas correctas."
+            description=""
           />
           <Feature
-            Icon={MailIcon}
-            title="Dev-to-Dev Support"
-            description="Our themes are supported by specialists who provide quick and effective support. Usually an email reply takes <24h."
+            Icon={Search}
+            title="Revisar explicación de ciertos escenarios."
+            description=""
           />
           <Feature
-            Icon={UsersIcon}
-            title="Authentication Examples"
-            description="The package comes with fully working authentication examples, including Firebase, Auth0, AWS Cognito and JWT."
-          />
-          <Feature
-            Icon={BookOpenIcon}
-            title="Detailed Documentation"
-            description="We've written extensive documentation for the plugins and tools we're using, varying from Redux to ESLint."
-          />
-          <Feature
-            Icon={FigmaIcon}
-            title="Figma/Sketch Assets"
-            description="Designers, we've got you covered. Sketch & Figma files are available in the Standard Plus and Extended License."
+            Icon={List}
+            title="Visualizar resultado final y el progreso de tu estudio."
+            description=""
           />
         </Grid>
       

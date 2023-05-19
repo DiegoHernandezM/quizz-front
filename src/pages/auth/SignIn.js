@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 
-import { Avatar, Paper, Typography } from "@mui/material";
+import { Avatar, Paper, Typography, Box } from "@mui/material";
 
 import { ReactComponent as Logo } from "../../vendor/logo.svg";
 import SignInComponent from "../../components/auth/SignIn";
@@ -23,9 +23,10 @@ const Wrapper = styled(Paper)`
   }
 `;
 
-const BigAvatar = styled(Avatar)`
-  width: 92px;
-  height: 92px;
+const BigAvatar = styled(Logo)`
+  fill: ${(props) => props.theme.palette.primary.main};
+  width: 200px;
+  height: 200px;
   text-align: center;
   margin: 0 auto ${(props) => props.theme.spacing(5)};
 `;
@@ -34,10 +35,11 @@ function SignIn() {
   const { token } = useParams();
   return (
     <React.Fragment>
-      <Brand />
       <Wrapper>
         <Helmet title="Iniciar sesión" />
-        <BigAvatar alt="Lucy" src="/static/img/avatars/avatar.png" />
+        <Box align="center">
+          <BigAvatar alt="logo" src="/static/img/avatars/logoAviation.png" align="center"/>  
+        </Box>
 
         <Typography component="h1" variant="h4" align="center" gutterBottom>
           Bienvenido de vuelta!

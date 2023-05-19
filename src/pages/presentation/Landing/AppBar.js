@@ -43,7 +43,7 @@ const AppBarComponent = () => (
             <Grid item>
               <Brand>
                 <BrandIcon />
-                Nombre de app
+                Aviation InSight
               </Brand>
             </Grid>
             <Grid item xs />
