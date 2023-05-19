@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { spacing } from "@mui/system";
 import { Visibility as VisibilityIcon } from "@mui/icons-material";
+import { Download as DownloadIcon } from "@mui/icons-material";
 import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
 
 const Typography = styled(MuiTypography)(spacing);
@@ -114,6 +115,10 @@ const Visibility = styled(VisibilityIcon)`
   margin-right: ${(props) => props.theme.spacing(2)};
 `;
 
+const Download = styled(DownloadIcon)`
+  margin-right: ${(props) => props.theme.spacing(2)};
+`;
+
 const ArrowForward = styled(ArrowForwardIcon)`
   margin-left: ${(props) => props.theme.spacing(2)};
 `;
@@ -132,6 +137,40 @@ const Version = styled(MuiTypography)`
 
 function Introduction() {
   const [triggerAnimation, setTriggerAnimation] = useState(false);
+
+  const [isReadyForInstall, setIsReadyForInstall] = React.useState(false);
+
+  useEffect(() => {
+    window.addEventListener("beforeinstallprompt", (event) => {
+      // Prevent the mini-infobar from appearing on mobile.
+      event.preventDefault();
+      console.log("👍", "beforeinstallprompt", event);
+      // Stash the event so it can be triggered later.
+      window.deferredPrompt = event;
+      // Remove the 'hidden' class from the install button container.
+      setIsReadyForInstall(true);
+    });
+  }, []);
+
+    async function downloadApp() {
+      console.log("👍", "butInstall-clicked");
+      const promptEvent = window.deferredPrompt;
+      if (!promptEvent) {
+        // The deferred prompt isn't available.
+        console.log("oops, no prompt event guardado en window");
+        return;
+      }
+      // Show the install prompt.
+      promptEvent.prompt();
+      // Log the result
+      const result = await promptEvent.userChoice;
+      console.log("👍", "userChoice", result);
+      // Reset the deferred prompt variable, since
+      // prompt() can only be called once.
+      window.deferredPrompt = null;
+      // Hide the install button.
+      setIsReadyForInstall(false);
+    }
 
   useEffect(() => {
     setTimeout(() => {
@@ -152,10 +191,12 @@ function Introduction() {
               <Grid container justifyContent="center" spacing={4}>
                 <Grid item xs={12} lg={10}>
                   <Subtitle color="textSecondary">
-                    En Aviation In sight podrás prepárate de la mejor manera para el examen de titulación CIAAC.
-                    Tendrás la oportunidad de administrar tu estudio, seleccionando cuestionarios por materia o con
-                    simulacros tipo CIAAC. Podrás practicar las veces que quieras, desde cualquier dispositivo (pc,
-                    tableta o celular) en cualquier horario.
+                    En Aviation In sight podrás prepárate de la mejor manera
+                    para el examen de titulación CIAAC. Tendrás la oportunidad
+                    de administrar tu estudio, seleccionando cuestionarios por
+                    materia o con simulacros tipo CIAAC. Podrás practicar las
+                    veces que quieras, desde cualquier dispositivo (pc, tableta
+                    o celular) en cualquier horario.
                   </Subtitle>
                 </Grid>
               </Grid>
@@ -170,6 +211,15 @@ function Introduction() {
                   Inscribete
                   <ArrowForward />
                 </Button>
+              </Box>
+
+              <Box my={6}>
+                {isReadyForInstall && (
+                  <Button variant="contained" color="secondary" size="large" onClick={downloadApp}>
+                    <Download />
+                    Descargar App
+                  </Button>
+                )}
               </Box>
 
               <Typography variant="body2" color="textSecondary">
@@ -216,11 +266,11 @@ function Introduction() {
               }`}
               style={{ opacity: triggerAnimation ? 1 : 0 }}
             >
-              <ImageWrapper style={{ alignItems:'center' }}>
-                  <Image
-                    alt="App de aviacion"
-                    src={`/static/img/screenshots/temp-app.png`}
-                  />
+              <ImageWrapper style={{ alignItems: "center" }}>
+                <Image
+                  alt="App de aviacion"
+                  src={`/static/img/screenshots/temp-app.png`}
+                />
               </ImageWrapper>
             </div>
           </Grid>
