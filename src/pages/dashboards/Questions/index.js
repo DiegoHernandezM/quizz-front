@@ -84,7 +84,7 @@ function QuestionsContent({ open }) {
     { field: "id", headerName: "ID", width: 50 },
     {
       field: "subject",
-      headerName: "Materia/Categoria",
+      headerName: "Materia",
       width: 120,
     },
     {
