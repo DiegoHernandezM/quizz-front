@@ -95,6 +95,11 @@
     "stream-browserify": "3.0.0",
     "util": "0.12.5",
     "web-vitals": "3.3.1",
+    "workbox-core": "^6.5.4",
+    "workbox-expiration": "^6.5.4",
+    "workbox-precaching": "^6.5.4",
+    "workbox-routing": "^6.5.4",
+    "workbox-strategies": "^6.5.4",
     "yup": "1.1.1"
   },
   "devDependencies": {
