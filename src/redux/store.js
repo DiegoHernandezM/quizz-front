@@ -4,6 +4,7 @@ import counterReducer from "./slices/counter";
 import usersReducer from "./slices/users";
 import questionsReducer from "./slices/questions";
 import subjectsReducer from "./slices/subjects";
+import paypalReducer from "./slices/paypal";
 
 export const store = configureStore(
   {
@@ -12,6 +13,7 @@ export const store = configureStore(
       questions: questionsReducer,
       counter: counterReducer,
       subjects: subjectsReducer,
+      paypal: paypalReducer,
     },
     middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

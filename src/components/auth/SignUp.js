@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
@@ -19,25 +19,26 @@ const Alert = styled(MuiAlert)(spacing);
 const TextField = styled(MuiTextField)(spacing);
 
 SignUp.propTypes ={
-  handleCallBack: PropTypes.func
+  handleCallBack: PropTypes.func,
+  handleChangeEmail: PropTypes.func
 }
 
-export default function SignUp({ handleCallBack }) {
+export default function SignUp({ handleCallBack, handleChangeEmail }) {
   const navigate = useNavigate();
   const { signUp } = useAuth();
-
+  
   return (
     <Formik
       initialValues={{
-        fullName: "",
+        name: "",
         school: "",
         email: "",
         password: "",
         submit: false,
-        type: 2
+        type: 3
       }}
       validationSchema={Yup.object().shape({
-        fullName: Yup.string().max(255).required("El nombre es requerido"),
+        name: Yup.string().max(255).required("El nombre es requerido"),
         email: Yup.string()
           .email("El correo tiene que ser valido")
           .max(255)
@@ -77,13 +78,28 @@ export default function SignUp({ handleCallBack }) {
             </Alert>
           )}
           <TextField
-            type="text"
-            name="fullName"
-            label="Nombre Completo"
-            value={values.fullName}
-            error={Boolean(touched.fullName && errors.fullName)}
+            type="email"
+            name="email"
+            label="Correo"
+            value={values.email}
+            error={Boolean(touched.email && errors.email)}
             fullWidth
-            helperText={touched.fullName && errors.fullName}
+            helperText={touched.email && errors.email}
+            onBlur={(e) => {
+              handleBlur(e);
+              handleChangeEmail(e);
+            }}
+            onChange={handleChange}
+            my={3}
+          />
+          <TextField
+            type="text"
+            name="name"
+            label="Nombre Completo"
+            value={values.name}
+            error={Boolean(touched.name && errors.name)}
+            fullWidth
+            helperText={touched.name && errors.name}
             onBlur={handleBlur}
             onChange={handleChange}
             my={3}
@@ -96,18 +112,6 @@ export default function SignUp({ handleCallBack }) {
             error={Boolean(touched.school && errors.school)}
             fullWidth
             helperText={touched.school && errors.school}
-            onBlur={handleBlur}
-            onChange={handleChange}
-            my={3}
-          />
-          <TextField
-            type="email"
-            name="email"
-            label="Correo"
-            value={values.email}
-            error={Boolean(touched.email && errors.email)}
-            fullWidth
-            helperText={touched.email && errors.email}
             onBlur={handleBlur}
             onChange={handleChange}
             my={3}

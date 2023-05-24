@@ -21,6 +21,8 @@ const initialOptions = {
   "client-id":
     "AbhmG5DCb8R8ellA-bS0BvTqdDArpCYiNSGCCA2PFQUeLkzjBLmQSexRtq9dHIDKjj6jAI64m7US0ATu",
   currency: "MXN",
+  locale: "es_MX",
+  intent: "capture",
 };
 
 root.render(
