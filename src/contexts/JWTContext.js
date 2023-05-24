@@ -77,7 +77,6 @@ function AuthProvider({ children }) {
             },
           });
         } else {
-          console.log("no token");
           dispatch({
             type: INITIALIZE,
             payload: {

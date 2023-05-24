@@ -12,18 +12,13 @@ import {
   Button,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { createUser } from "../../redux/slices/users";
+import { createUser, findUserByEmail } from "../../redux/slices/users";
+import { createPayment } from "../../redux/slices/paypal";
 import { ReactComponent as Logo } from "../../vendor/logo.svg";
 import SignUpComponent from "../../components/auth/SignUp";
+import DialogSignUpComponent from "../../components/auth/DialogSignUp";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useNavigate } from "react-router-dom";
-
-const Brand = styled(Logo)`
-  fill: ${(props) => props.theme.palette.primary.main};
-  width: 64px;
-  height: 64px;
-  margin-bottom: 32px;
-`;
 
 const Wrapper = styled(Paper)`
   padding: ${(props) => props.theme.spacing(6)};
@@ -31,6 +26,14 @@ const Wrapper = styled(Paper)`
   ${(props) => props.theme.breakpoints.up("md")} {
     padding: ${(props) => props.theme.spacing(10)};
   }
+`;
+
+const BigAvatar = styled(Logo)`
+  fill: ${(props) => props.theme.palette.primary.main};
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  margin: 0 auto ${(props) => props.theme.spacing(5)};
 `;
 
 function SignUp() {
@@ -42,6 +45,7 @@ function SignUp() {
   const amount = "0.1";
   const description = "Pago para accesar a la APP";
   const style = {"layout":"vertical", "height":33};
+  const [open, setOpen] = useState(false);
 
   const handleCreateUser = (values) => {
     dispatch(createUser(values));
@@ -53,16 +57,44 @@ function SignUp() {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
-
+  const handleChangeEmail = (e) => {
+    dispatch(findUserByEmail(e.target.value)).then((response) => {
+      if(Object.keys(response.data).length > 0) {
+        console.log(response.data.email);
+        setOpen(true);
+      }
+    });
+  };
+  const handleAgree = () => {
+    let newSkipped = skipped;
+    if (isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values());
+      newSkipped.delete(activeStep);
+    }
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
+    setOpen(false);
+  }
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
 
+  const handleSavePayment = (order) => {
+    dispatch(createPayment(order)).then((response) => {
+      if(Object.keys(response).length > 0) {
+        console.log(order);
+        navigate("/auth/sign-in");
+      }
+    });
+  };
+
   return (
     <React.Fragment>
-      <Brand />
       <Wrapper>
         <Helmet title="Registro" />
+        <Box align="center">
+          <BigAvatar alt="logo" src="/static/img/avatars/logoAviation.png" align="center"/>  
+        </Box>
         <Typography component="h1" variant="h4" align="center" gutterBottom>
           Ingresa tus datos
         </Typography>
@@ -77,7 +109,10 @@ function SignUp() {
               </StepLabel>
               <StepContent>
                 <Box sx={{ mb: 2, sm: 2, lg: 2 }}>
-                  <SignUpComponent handleCallBack={handleCreateUser} />
+                  <SignUpComponent
+                    handleCallBack={handleCreateUser}
+                    handleChangeEmail={handleChangeEmail}
+                  />
                 </Box>
               </StepContent>
           </Step>
@@ -103,20 +138,19 @@ function SignUp() {
                             ],
                         })
                         .then((orderId) => {
-                            // Your code here after create the order
                             return orderId;
                         });
                   }}
                   onApprove={ async (data, actions) => {
                     const order = await actions.order?.capture();
-                    console.log(order);
-                    navigate("/auth/sign-in");
+                    handleSavePayment(order);
                   }}
                 />
               </StepContent>
           </Step>
         </Stepper>
       </Wrapper>
+      <DialogSignUpComponent open={open} handleClose={() => {setOpen(false)}} handleAgree={handleAgree}/>
     </React.Fragment>
   );
 }

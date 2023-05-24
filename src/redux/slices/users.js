@@ -74,8 +74,9 @@ export function createUser(values) {
         email: values.email,
         type_id: values.type_id,
         expires_at: values.expires_at,
-        password: null
+        password: values.password ?? null
       });
+      dispatch(slice.actions.getUserSuccess(response.data));
       dispatch(slice.actions.endLoading())
       return Promise.resolve(response);
     } catch (error) {
@@ -141,6 +142,22 @@ export function clearDataUser() {
       dispatch(slice.actions.clearDataSuccess());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function findUserByEmail(email) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`http://quizz.test/api/user/email`,
+      { params: { email } });
+      dispatch(slice.actions.endLoading());
+      dispatch(slice.actions.getUserSuccess(response.data));
+      return Promise.resolve(response);
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+      return Promise.reject(error);
     }
   };
 }
