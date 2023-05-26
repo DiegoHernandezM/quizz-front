@@ -51,7 +51,13 @@ const JWTReducer = (state, action) => {
   }
 };
 
-const AuthContext = createContext(null);
+const AuthContext = createContext({
+  ...initialState,
+  method: "jwt",
+  login: () => Promise.resolve(),
+  logout: () => Promise.resolve(),
+  register: () => Promise.resolve(),
+});
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(JWTReducer, initialState);
@@ -61,19 +67,16 @@ function AuthProvider({ children }) {
       try {
         const accessToken = window.localStorage.getItem("accessToken");
         if (accessToken && isValidToken(accessToken)) {
-          console.log(accessToken);
           setSession(accessToken);
 
           const response = await axios.get("http://quizz.test/api/user");
-          const { user } = response.data;
-
-          console.log(user);
+          const u = response.data;
 
           dispatch({
             type: INITIALIZE,
             payload: {
               isAuthenticated: true,
-              user,
+              user: u,
             },
           });
         } else {

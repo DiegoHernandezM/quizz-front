@@ -12,7 +12,7 @@ import Navbar from "../components/navbar/Navbar";
 import dashboardItems from "../components/sidebar/dashboardItems";
 import Sidebar from "../components/sidebar/Sidebar";
 import Footer from "../components/Footer";
-import Settings from "../components/Settings";
+import useAuth from "../hooks/useAuth";
 
 const drawerWidth = 258;
 
@@ -52,7 +52,10 @@ const MainContent = styled(Paper)`
 
 const Dashboard = ({ children }) => {
   const router = useLocation();
+  const auth = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  console.log(auth);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

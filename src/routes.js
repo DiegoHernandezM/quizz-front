@@ -14,6 +14,9 @@ import PresentationLayout from "./layouts/Presentation";
 // Guards
 import AuthGuard from "./components/guards/AuthGuard";
 
+// App
+import App from "./pages/App";
+
 // Auth components
 import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
@@ -124,6 +127,20 @@ const routes = [
       {
         path: "",
         element: <Landing />,
+      },
+    ],
+  },
+  {
+    path: "app",
+    element: (
+      <AuthGuard>
+        <PresentationLayout />
+      </AuthGuard>
+    ),
+    children: [
+      {
+        path: "",
+        element: <App />,
       },
     ],
   },

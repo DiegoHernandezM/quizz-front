@@ -1,5 +1,5 @@
 import React from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
@@ -20,12 +20,20 @@ const Alert = styled(MuiAlert)(spacing);
 const TextField = styled(MuiTextField)(spacing);
 
 SignIn.propTypes = {
-  token: PropTypes.any
+  token: PropTypes.any,
 };
 
 export default function SignIn({ token }) {
-  const { signIn } = useAuth();
+  const { signIn, user } = useAuth();
   const navigate = useNavigate();
+
+  const handleSignIn = () => {
+    if (user.type_id === 1 || user.type_id === 2) {
+      navigate("/dashboard");
+    } else {
+      navigate("/app");
+    }
+  };
 
   return (
     <Formik
@@ -43,9 +51,11 @@ export default function SignIn({ token }) {
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
-          await signIn(values.email, values.password);
-
-          navigate("/dashboard");
+          await signIn(values.email, values.password).then(() => {
+            setTimeout(() => {
+              handleSignIn();
+            }, 500);
+          });
         } catch (error) {
           console.log(error);
           const message = error.message || "Something went wrong";

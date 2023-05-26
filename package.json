@@ -6,6 +6,8 @@
   "private": true,
   "license": "https://mui.com/store/license/",
   "scripts": {
+    "deploy": "aws s3 sync build/ s3://quizz-front",
+    "prod": "npm run build && npm run deploy",
     "start": "craco start",
     "build": "craco build",
     "eject": "craco eject",
