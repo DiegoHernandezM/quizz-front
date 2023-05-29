@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../../utils/axios";
 
 const initialState = {
   questionsCatalogue: [],
@@ -35,7 +35,7 @@ export function getQuestionsCatalogue() {
   return async (dispatch) => {
     try {
       const response = await axios.get(
-        `http://quizz.test/api/questions/catalogue`
+        `/api/questions/catalogue`
       );
       dispatch(slice.actions.setCatalogue(response.data));
     } catch (error) {
@@ -47,7 +47,7 @@ export function getQuestionsCatalogue() {
 export function getQuestion(id) {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`http://quizz.test/api/questions/${id}`);
+      const response = await axios.get(`/api/questions/${id}`);
       dispatch(slice.actions.setQuestion(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -59,7 +59,7 @@ export function createQuestion(data) {
   return async (dispatch) => {
     try {
       const response = await axios.post(
-        `http://quizz.test/api/questions/create`,
+        `/api/questions/create`,
         data
       );
       dispatch(slice.actions.setQuestion(response.data));
@@ -73,7 +73,7 @@ export function updateQuestion(id, data) {
   return async (dispatch) => {
     try {
       const response = await axios.put(
-        `http://quizz.test/api/questions/${id}`,
+        `/api/questions/${id}`,
         data
       );
       dispatch(slice.actions.setQuestion(response.data));
@@ -87,7 +87,7 @@ export function deleteQuestion(id) {
   return async (dispatch) => {
     try {
       const response = await axios.delete(
-        `http://quizz.test/api/questions/${id}`
+        `/api/questions/${id}`
       );
       dispatch(slice.actions.setQuestion(response.data));
     } catch (error) {
@@ -102,7 +102,7 @@ export function massLoad(file) {
       const formData = new FormData();
       formData.append("excel", file);
       const response = await axios.post(
-        `http://quizz.test/api/questions/massload`,
+        `/api/questions/massload`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
