@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer } from "react";
 
-import axios from "axios";
+import axios from "../utils/axios";
 import { isValidToken, setSession } from "../utils/jwt";
 
 // Note: If you're trying to connect JWT to your own backend, don't forget

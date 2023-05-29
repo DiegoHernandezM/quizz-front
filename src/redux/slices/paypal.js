@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../../utils/axios";
 
 const initialState = {
   loading: false,
@@ -35,7 +35,7 @@ export function createPayment(order) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(`http://quizz.test/api/paypal/create`, {
+      const response = await axios.post(`/api/paypal/create`, {
         order: order.purchase_units[0]
       });
       dispatch(slice.actions.getPaymentSuccess(response.data));

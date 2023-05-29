@@ -19,7 +19,7 @@ const root = createRoot(container);
 
 const initialOptions = {
   "client-id":
-    "AbhmG5DCb8R8ellA-bS0BvTqdDArpCYiNSGCCA2PFQUeLkzjBLmQSexRtq9dHIDKjj6jAI64m7US0ATu",
+    "AckKPDcE6Ek3XiS47nrVGVbVtTGYKI-kz_L7Z4v49OD0ULg-9K2E8nV1poohm1cTTntML-8ZyxwVYD6F",
   currency: "MXN",
   locale: "es_MX",
   intent: "capture",
