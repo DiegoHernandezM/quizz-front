@@ -15,7 +15,6 @@ import PresentationLayout from "./layouts/Presentation";
 import AuthGuard from "./components/guards/AuthGuard";
 
 // App
-import App from "./pages/App";
 
 // Auth components
 import SignIn from "./pages/auth/SignIn";
@@ -96,7 +95,7 @@ const Analytics = async(() => import("./pages/dashboards/Analytics"));
 const Questions = async(() => import("./pages/dashboards/Questions"));
 const Subjects = async(() => import("./pages/dashboards/Subjects"));
 const SaaS = async(() => import("./pages/dashboards/SaaS"));
-
+const App = async(() => import("./pages/App"));
 // Form components
 const Pickers = async(() => import("./pages/forms/Pickers"));
 const Editors = async(() => import("./pages/forms/Editors"));

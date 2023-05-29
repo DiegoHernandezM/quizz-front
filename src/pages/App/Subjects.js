@@ -1,51 +1,35 @@
-import React from "react";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
-import { Paper } from "@mui/material";
-
-const columns = [
-  { field: "id", headerName: "ID", width: 150 },
-  {
-    field: "name",
-    headerName: "Materia",
-    width: 400,
-    editable: false,
-  },
-];
-
-const Subjects = () => {
+export default function SubjectCard({
+  subjectName,
+  subjectDescription,
+  subjectId,
+  numberOfQuestions,
+}) {
   return (
-    <Card mb={6}>
-      <Paper>
-        <div style={{ height: 400, width: "100%" }}>
-          <DataGrid
-            localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-            rows={rows.length > 0 ? rows : allSubjects}
-            rowHeight={40}
-            columns={columns}
-            onRowDoubleClick={(params) => {
-              setId(params.row.id);
-              dispatch(getSubject(params.row.id));
-              setModeUpdate(true);
-              setOpenForm(true);
-            }}
-            componentsProps={{
-              hideFooterPagination: false,
-              toolbar: {
-                export: false,
-                columns: true,
-                density: true,
-                search: true,
-                value: searchText,
-                onChange: (event) => requestSearch(event.target.value),
-                clearSearch: () => requestSearch(""),
-              },
-            }}
-            pageSize={10}
-          />
-        </div>
-      </Paper>
-    </Card>
+    <Box sx={{ minWidth: 200 }}>
+      <Card variant="outlined">
+        <CardContent>
+          <Typography variant="h5" component="div">
+            {subjectName}
+          </Typography>
+          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            {subjectDescription}
+          </Typography>
+          <Typography variant="body2">
+            {numberOfQuestions} preguntas.
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button size="small">Comenzar Test</Button>
+        </CardActions>
+      </Card>
+    </Box>
   );
-};
-
-export default Subjects;
+}
