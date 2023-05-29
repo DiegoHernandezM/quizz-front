@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../../utils/axios";
 
 const initialState = {
   allSubjects: [],
@@ -31,7 +31,7 @@ export default slice.reducer;
 export function getSubjects() {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`http://quizz.test/api/subject/list`);
+      const response = await axios.get(`/api/subject/list`);
       dispatch(slice.actions.setSubjects(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -42,7 +42,7 @@ export function getSubjects() {
 export function getSubject(id) {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`http://quizz.test/api/subject/find/${id}`);
+      const response = await axios.get(`/api/subject/find/${id}`);
       dispatch(slice.actions.setSubject(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -54,7 +54,7 @@ export function getSubject(id) {
 export function create(values) {
   return async (dispatch) => {
     try {
-      const response = await axios.post(`http://quizz.test/api/subject/create`, {
+      const response = await axios.post(`/api/subject/create`, {
         name: values.name
       });
       return Promise.resolve(response);
@@ -68,7 +68,7 @@ export function create(values) {
 export function update(id, values) {
   return async (dispatch) => {
     try {
-      const response = await axios.post(`http://quizz.test/api/subject/update/${id}`, {
+      const response = await axios.post(`/api/subject/update/${id}`, {
         name: values.name
       });
       return Promise.resolve(response);
@@ -82,7 +82,7 @@ export function update(id, values) {
 export function getDeleteSubject(id) {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`http://quizz.test/api/subject/delete/${id}`);
+      const response = await axios.get(`/api/subject/delete/${id}`);
       return Promise.resolve(response);
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -94,7 +94,7 @@ export function getDeleteSubject(id) {
 export function getRestoreSubject(id) {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`http://quizz.test/api/subject/restore/${id}`);
+      const response = await axios.get(`/api/subject/restore/${id}`);
       return Promise.resolve(response);
     } catch (error) {
       dispatch(slice.actions.hasError(error));

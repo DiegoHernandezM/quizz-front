@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../../utils/axios";
 
 const initialState = {
   loading: false,
@@ -44,7 +44,7 @@ export function getUsers() {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`http://quizz.test/api/user/all`);
+      const response = await axios.get(`/api/user/all`);
       dispatch(slice.actions.getUsersSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -56,7 +56,7 @@ export function getUser(id) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading)
     try {
-      const response = await axios.get(`http://quizz.test/api/user/get/${id}`);
+      const response = await axios.get(`/api/user/get/${id}`);
       dispatch(slice.actions.getUserSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -68,14 +68,15 @@ export function createUser(values) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(`http://quizz.test/api/user/create`, {
+      const response = await axios.post(`/api/user/create`, {
         name: values.name,
         school: values.school,
         email: values.email,
         type_id: values.type_id,
         expires_at: values.expires_at,
-        password: null
+        password: values.password ?? null
       });
+      dispatch(slice.actions.getUserSuccess(response.data));
       dispatch(slice.actions.endLoading())
       return Promise.resolve(response);
     } catch (error) {
@@ -89,7 +90,7 @@ export function updateUser(id, values) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(`http://quizz.test/api/user/update/${id}`, {
+      const response = await axios.post(`/api/user/update/${id}`, {
         name: values.name,
         school: values.school,
         email: values.email,
@@ -109,7 +110,7 @@ export function deleteUser(id) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(`http://quizz.test/api/user/delete/${id}`);
+      const response = await axios.post(`/api/user/delete/${id}`);
       dispatch(slice.actions.endLoading());
       return Promise.resolve(response);
     } catch (error) {
@@ -124,7 +125,7 @@ export function restoreUser(id) {
     dispatch(slice.actions.startLoading());
     try {
       const response = await axios.post(
-        `http://quizz.test/api/user/restore/${id}`
+        `/api/user/restore/${id}`
       );
       dispatch(slice.actions.endLoading());
       return Promise.resolve(response);
@@ -141,6 +142,22 @@ export function clearDataUser() {
       dispatch(slice.actions.clearDataSuccess());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function findUserByEmail(email) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/user/email`,
+      { params: { email } });
+      dispatch(slice.actions.endLoading());
+      dispatch(slice.actions.getUserSuccess(response.data));
+      return Promise.resolve(response);
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+      return Promise.reject(error);
     }
   };
 }

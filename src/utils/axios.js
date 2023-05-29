@@ -1,8 +1,8 @@
 import axios from "axios";
-import { applicationConfig } from "../config";
+import { HOST_API } from "../config";
 
 const axiosInstance = axios.create({
-  baseURL: applicationConfig.baseUrl,
+  baseURL: HOST_API
 });
 
 axiosInstance.interceptors.response.use(
