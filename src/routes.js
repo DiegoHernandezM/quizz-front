@@ -55,9 +55,6 @@ import Settings from "./pages/pages/Settings";
 import Projects from "./pages/pages/Projects";
 import Chat from "./pages/pages/Chat";
 
-// Users
-import Users from "./pages/pages/Users";
-
 // Table components
 import SimpleTable from "./pages/tables/SimpleTable";
 import AdvancedTable from "./pages/tables/AdvancedTable";
@@ -115,6 +112,9 @@ const ApexCharts = async(() => import("./pages/charts/ApexCharts"));
 // Maps components
 const GoogleMaps = async(() => import("./pages/maps/GoogleMaps"));
 const VectorMaps = async(() => import("./pages/maps/VectorMaps"));
+
+//Users
+const Users = async(() => import("./pages/pages/Users"));
 
 const routes = [
   {
