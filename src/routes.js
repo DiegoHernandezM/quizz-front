@@ -115,7 +115,7 @@ const GoogleMaps = async(() => import("./pages/maps/GoogleMaps"));
 const VectorMaps = async(() => import("./pages/maps/VectorMaps"));
 
 //Users
-const Users = async(() => import("./pages/pages/Users"));
+const Users = async(() => import("./pages/dashboards/Users"));
 
 const routes = [
   {

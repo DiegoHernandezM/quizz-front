@@ -29,7 +29,7 @@ import {
   clearDataUser,
 } from "../../../redux/slices/users";
 import Page from "../../components/Page";
-import UserForm from "../../../components/user/UserForm";
+import UserForm from "../../../../src/components/user/UserForm";
 import SnackAlert from "../../components/general/SnackAlert";
 import DialogConfirm from "../../components/general/DialogConfirm";
 import QuickSearch from "../../tables/QuickSearch";
