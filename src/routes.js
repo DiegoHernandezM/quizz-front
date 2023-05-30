@@ -88,6 +88,7 @@ import ProtectedPage from "./pages/protected/ProtectedPage";
 const Default = async(() => import("./pages/dashboards/Default"));
 const Analytics = async(() => import("./pages/dashboards/Analytics"));
 const Questions = async(() => import("./pages/dashboards/Questions"));
+const Administrators = async(() => import("./pages/dashboards/Administrators"));
 const Subjects = async(() => import("./pages/dashboards/Subjects"));
 const SaaS = async(() => import("./pages/dashboards/SaaS"));
 
@@ -137,7 +138,7 @@ const routes = [
     children: [
       {
         path: "",
-        element: <Analytics />,
+        element: <Administrators />,
       },
       {
         path: "questions",
