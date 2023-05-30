@@ -13,7 +13,6 @@ function Presentation() {
       <AppBar />
       <Introduction />
       <Features />
-      <JoinUs />
     </React.Fragment>
   );
 }
