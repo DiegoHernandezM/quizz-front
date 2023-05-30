@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useDispatch, useSelector } from "react-redux";
 import { getSubjects, getDeleteSubject, getRestoreSubject, getSubject, update, create } from "../../../redux/slices/subjects";
+import { getQuestionsSubject } from "../../../redux/slices/questions";
 
 import {
   Button,
@@ -24,6 +25,7 @@ import { spacing } from "@mui/system";
 import QuickSearch from '../../tables/QuickSearch';
 import Confirm from "../../../components/general/Confirm";
 import SubjectForm from "../../../components/subject/SubjectForm";
+import QuestionSubjectTable from "../../../components/subject/QuestionSubjectTable";
 
 const Card = styled(MuiCard)(spacing);
 
@@ -40,6 +42,11 @@ const filters = {
       cursor: 'pointer',
       marginLeft: '5px',
       textAlign: 'center'
+    },
+    nopinter: {
+      marginLeft: '5px',
+      textAlign: 'center',
+      color: 'grey'
     }
 };
 
@@ -50,6 +57,7 @@ function escapeRegExp(value) {
 function Subjects() {
   const dispatch = useDispatch();
   const { allSubjects, subject } = useSelector((state) => state.subjects);
+  const { questionsCatalogue } = useSelector((state) => state.questions);
   const [searchText, setSearchText] = useState('');
   const [rows, setRows] = useState([]);
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -59,6 +67,8 @@ function Subjects() {
   const [id, setId] = useState(0);
   const [openForm, setOpenForm] = useState(false);
   const [modeUpdate, setModeUpdate] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [subjectSelected, setSubjectSelected] = useState({});
 
   useEffect(() => {
     dispatch(getSubjects());
@@ -98,6 +108,39 @@ function Subjects() {
       editable: false,
     },
     {
+      field: "questions_count",
+      headerName: "# Preguntas",
+      width: 150,
+      editable: false,
+      renderCell: (params) => {
+        const onClickView = (e) => {
+          e.stopPropagation();
+          setOpenDialog(true);
+          handleCallQuestions(params.row.id);
+          setSubjectSelected(params.row);
+        };
+        return (
+          <>
+            <Tooltip key={`re-${params.row.id}`} title="Ver Preguntas">
+              <div>
+                <IconButton
+                  disabled={params.row.deleted_at !== null}
+                  onClick={onClickView}
+                  key={`view-${params.row.id}`}
+                  type="button"
+                  color="success"
+                  sx={{ fontSize: '16px' }}
+                  style={params.row.deleted_at !== null ? filters.pinter : filters.nopinter}
+                >
+                  {params.row.questions_count}
+                </IconButton>
+              </div>
+            </Tooltip>
+          </>
+        );
+      }
+    },
+    {
       field: 'action',
       headerName: 'Acciones',
       sortable: false,
@@ -105,7 +148,6 @@ function Subjects() {
       width: 300,
       renderCell: (params) => {
         const onClickDelete = (e) => {
-          console.log("ok");
           e.stopPropagation();
           setRestore(false);
           handleOpenConfirm();
@@ -230,6 +272,10 @@ function Subjects() {
     dispatch(updateSubject(values));
   };
 
+  function handleCallQuestions(subject) {
+    dispatch(getQuestionsSubject(subject));
+  }
+
   return (
     <>
       <Card mb={6}>
@@ -292,6 +338,12 @@ function Subjects() {
         subject={subject}
         update={modeUpdate}
         updateRegister={handleUpdate}
+      />
+      <QuestionSubjectTable
+        open={openDialog}
+        close={() => setOpenDialog(false)}
+        questions={questionsCatalogue}
+        subject={subjectSelected}
       />
     </>
   );

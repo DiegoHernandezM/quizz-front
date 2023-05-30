@@ -107,8 +107,8 @@ function Users() {
       renderHeader: (p) => (
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
-      renderCell: (params) =>
-        params.row.expires_at === null ?  'Sin dato' : params.row.expires_at,
+      renderCell: (params) => 
+        params.row.payments.length > 0 ? params.row.payments[0].create_time : 'SIN DATO'      
     },
     {
       field: "action",

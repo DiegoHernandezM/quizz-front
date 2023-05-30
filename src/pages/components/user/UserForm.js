@@ -12,6 +12,10 @@ import {
   IconButton,
   TextField,
   Typography,
+  Divider,
+  Card,
+  CardActions,
+  CardContent
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import * as yup from "yup";
@@ -96,7 +100,7 @@ export default function UserForm({
     );
     formik.setFieldValue(
       "expires_at",
-      update ? user.expires_at : formik.initialValues.expires_at
+      update && user?.payments?.length > 0 ? user.payments[0].create_time : formik.initialValues.expires_at
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [update, user]);
@@ -279,6 +283,44 @@ export default function UserForm({
               </div>
             )}
           </form>
+          <Divider light style={{ marginTop: "10px" }} />
+          <Box sx={{ m: 2 }}>
+            <Typography gutterBottom variant="body1">
+              DATOS PAYPAL
+            </Typography>
+            { user?.payments?.length > 0 ? (
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    Dirección:
+                  </Typography>
+                  <Typography variant="body2">
+                    { user.payments[0].address }
+                  </Typography>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    Pago:
+                  </Typography>
+                  <Typography variant="body2">
+                  {'$ '}{ user.payments[0].amount }
+                  </Typography>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    Identificador de pago en PAYPAL:
+                  </Typography>
+                  <Typography variant="body2">
+                    { user.payments[0].payment_id }
+                  </Typography>
+                </CardContent>
+              </Card>
+            ) : (
+              <Card sx={{ minWidth: 275 }}>
+                <CardContent>
+                  <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                    SIN DATOS
+                  </Typography>
+                </CardContent>
+              </Card>
+            ) }
+          </Box>
         </Box>
       </LocalizationProvider>
     </Drawer>
