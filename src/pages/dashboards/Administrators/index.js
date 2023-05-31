@@ -36,6 +36,7 @@ function Dashboard() {
   );
   const { t } = useTranslation();
   const { user } = useAuth();
+  const name = localStorage.getItem("user");
 
   useEffect(() => {
     dispatch(getUsers());
@@ -60,7 +61,7 @@ function Dashboard() {
             Dashboard
           </Typography>
           <Typography variant="subtitle1">
-            {t("Bienvenido")} {user?.displayName}
+            {t("Bienvenido Capitan:")} {name}
           </Typography>
         </Grid>
       </Grid>
