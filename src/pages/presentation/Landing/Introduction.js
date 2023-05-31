@@ -177,7 +177,7 @@ function Introduction() {
   }, []);
 
   return (
-    <Wrapper class="demo-wrap">
+    <Wrapper>
       <Container>
         <ImageWrapper style={{ alignItems:'center' }}>
           <ImageBack

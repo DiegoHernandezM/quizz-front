@@ -5,13 +5,17 @@ import { AuthContext } from "../contexts/JWTContext";
 // import { AuthContext } from "../contexts/Auth0Context";
 // import { AuthContext } from "../contexts/CognitoContext";
 
-const useAuth = () => {
-  const context = useContext(AuthContext);
+//const useAuth = () => {
+//  const context = useContext(AuthContext);
 
-  if (!context)
-    throw new Error("AuthContext must be placed within AuthProvider");
+//  if (!context)
+//    throw new Error("AuthContext must be placed within AuthProvider");
 
-  return context;
-};
+//  return context;
+// };
+
+//export default useAuth;
+
+const useAuth = () => useContext(AuthContext);
 
 export default useAuth;

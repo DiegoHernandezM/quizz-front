@@ -28,7 +28,7 @@ const pagesSection = [
     title: "Cuestionarios",
   },
   {
-    href: "/users",
+    href: "/dashboard/users",
     icon: Users,
     title: "Usuarios",
   }
