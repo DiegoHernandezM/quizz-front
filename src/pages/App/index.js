@@ -25,6 +25,7 @@ function App() {
                 subjectDescription={subject.description}
                 subjectId={subject.id}
                 numberOfQuestions={subject.questions_count}
+                latestUserTest={subject.latest_user_test}
               />
             </Grid>
           ))}

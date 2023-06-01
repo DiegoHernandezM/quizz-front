@@ -96,6 +96,7 @@ const Questions = async(() => import("./pages/dashboards/Questions"));
 const Subjects = async(() => import("./pages/dashboards/Subjects"));
 const SaaS = async(() => import("./pages/dashboards/SaaS"));
 const App = async(() => import("./pages/App"));
+const Tests = async(() => import("./pages/App/Tests"));
 // Form components
 const Pickers = async(() => import("./pages/forms/Pickers"));
 const Editors = async(() => import("./pages/forms/Editors"));
@@ -140,6 +141,10 @@ const routes = [
       {
         path: "",
         element: <App />,
+      },
+      {
+        path: "test",
+        element: <Tests />,
       },
     ],
   },
