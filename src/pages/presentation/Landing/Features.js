@@ -59,7 +59,7 @@ const Feature = ({ Icon, title, description }) => {
     <Grid item xs={12} sm={6} md={3} lg={3}>
       <FeatureWrapper>
         <FeatureIcon>
-          <Icon />
+          <Icon color="white" />
         </FeatureIcon>
         <Box ml={6}>
           <Typography variant="h4" gutterBottom>
@@ -76,7 +76,7 @@ const Feature = ({ Icon, title, description }) => {
 
 function Features() {
   return (
-    <Wrapper py={20}>
+    <Wrapper py={20} style={{ backgroundColor:"#203764", color:"white" }}>
       <Container>
         <Typography variant="h2" component="h3" gutterBottom>
           En Aviation In Sight podrás realizar lo siguiente:
@@ -85,7 +85,7 @@ function Features() {
         <Grid container spacing={4}>
           <Feature
             Icon={Book}
-            title="Estudiar con cuestionarios por materia o tipo examen."
+            title="Estudiar con cuestionarios por materia."
             description=""
           />
           <Feature
@@ -100,7 +100,7 @@ function Features() {
           />
           <Feature
             Icon={List}
-            title="Visualizar resultado final y el progreso de tu estudio."
+            title="Visualizar resultado final y progreso."
             description=""
           />
         </Grid>

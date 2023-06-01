@@ -1,15 +1,10 @@
 import { createContext, useEffect, useReducer } from "react";
-
+import PropTypes from "prop-types";
+import { HOST_API } from "../config";
+// utils
 import axios from "../utils/axios";
 import { isValidToken, setSession } from "../utils/jwt";
-
-// Note: If you're trying to connect JWT to your own backend, don't forget
-// to remove the Axios mocks in the `/src/index.js` file.
-
-const INITIALIZE = "INITIALIZE";
-const SIGN_IN = "SIGN_IN";
-const SIGN_OUT = "SIGN_OUT";
-const SIGN_UP = "SIGN_UP";
+// ----------------------------------------------------------------------
 
 const initialState = {
   isAuthenticated: false,
@@ -17,63 +12,70 @@ const initialState = {
   user: null,
 };
 
-const JWTReducer = (state, action) => {
-  switch (action.type) {
-    case INITIALIZE:
-      return {
-        isAuthenticated: action.payload.isAuthenticated,
-        isInitialized: true,
-        user: action.payload.user,
-      };
-    case SIGN_IN:
-      const { user } = action.payload;
-      return {
-        ...state,
-        isAuthenticated: true,
-        user,
-      };
-    case SIGN_OUT:
-      return {
-        ...state,
-        isAuthenticated: false,
-        user: null,
-      };
+const handlers = {
+  INITIALIZE: (state, action) => {
+    const { isAuthenticated, user } = action.payload;
+    return {
+      ...state,
+      isAuthenticated,
+      isInitialized: true,
+      user,
+    };
+  },
+  SIGN_IN: (state, action) => {
+    const { user } = action.payload;
 
-    case SIGN_UP:
-      return {
-        ...state,
-        isAuthenticated: true,
-        user: action.payload.user,
-      };
+    return {
+      ...state,
+      isAuthenticated: true,
+      user,
+    };
+  },
+  SIGN_OUT: (state) => ({
+    ...state,
+    isAuthenticated: false,
+    user: null,
+  }),
+  SIGN_UP: (state, action) => {
+    const { user } = action.payload;
 
-    default:
-      return state;
-  }
+    return {
+      ...state,
+      isAuthenticated: true,
+      user,
+    };
+  },
 };
+
+const reducer = (state, action) =>
+  handlers[action.type] ? handlers[action.type](state, action) : state;
 
 const AuthContext = createContext({
   ...initialState,
   method: "jwt",
-  login: () => Promise.resolve(),
-  logout: () => Promise.resolve(),
-  register: () => Promise.resolve(),
+  signIn: () => Promise.resolve(),
+  signOut: () => Promise.resolve(),
+  signUp: () => Promise.resolve(),
 });
 
+AuthProvider.propTypes = {
+  children: PropTypes.node,
+};
+
 function AuthProvider({ children }) {
-  const [state, dispatch] = useReducer(JWTReducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     const initialize = async () => {
       try {
         const accessToken = window.localStorage.getItem("accessToken");
+
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
-
-          const response = await axios.get("http://quizz.test/api/user");
+          const response = await axios.get(`${HOST_API}/api/user`);
           const u = response.data;
-
           dispatch({
-            type: INITIALIZE,
+            type: "INITIALIZE",
             payload: {
               isAuthenticated: true,
               user: u,
@@ -81,7 +83,7 @@ function AuthProvider({ children }) {
           });
         } else {
           dispatch({
-            type: INITIALIZE,
+            type: "INITIALIZE",
             payload: {
               isAuthenticated: false,
               user: null,
@@ -91,7 +93,7 @@ function AuthProvider({ children }) {
       } catch (err) {
         console.error(err);
         dispatch({
-          type: INITIALIZE,
+          type: "INITIALIZE",
           payload: {
             isAuthenticated: false,
             user: null,
@@ -104,12 +106,14 @@ function AuthProvider({ children }) {
   }, []);
 
   const signIn = async (email, password) => {
-    const response = await axios.post(`http://quizz.test/api/login`, {
+    const response = await axios.post(`${HOST_API}/api/login`, {
       username: email,
       password,
     });
-    const { access_token, user } = response.data;
-    setSession(access_token);
+    const { accessToken, user } = response.data;
+
+    setSession(accessToken);
+    localStorage.setItem("user", user.displayName);
     dispatch({
       type: "SIGN_IN",
       payload: {
@@ -118,13 +122,8 @@ function AuthProvider({ children }) {
     });
   };
 
-  const signOut = async () => {
-    setSession(null);
-    dispatch({ type: SIGN_OUT });
-  };
-
   const signUp = async (email, password, firstName, lastName) => {
-    const response = await axios.post("/api/auth/sign-up", {
+    const response = await axios.post(`${HOST_API}/api/auth/sign-up`, {
       email,
       password,
       firstName,
@@ -134,14 +133,22 @@ function AuthProvider({ children }) {
 
     window.localStorage.setItem("accessToken", accessToken);
     dispatch({
-      type: SIGN_UP,
+      type: "SIGN_UP",
       payload: {
         user,
       },
     });
   };
 
-  const resetPassword = (email) => console.log(email);
+  const signOut = async () => {
+    setSession(null);
+    localStorage.setItem("user", null);
+    dispatch({ type: "LOGOUT" });
+  };
+
+  const resetPassword = () => {};
+
+  const updateProfile = () => {};
 
   return (
     <AuthContext.Provider
@@ -152,6 +159,7 @@ function AuthProvider({ children }) {
         signOut,
         signUp,
         resetPassword,
+        updateProfile,
       }}
     >
       {children}

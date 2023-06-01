@@ -44,6 +44,19 @@ export function getQuestionsCatalogue() {
   };
 }
 
+export function getQuestionsSubject(subject) {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(
+        `/api/questions/catalogue/${subject}`
+      );
+      dispatch(slice.actions.setCatalogue(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
 export function getQuestion(id) {
   return async (dispatch) => {
     try {

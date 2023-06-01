@@ -4,18 +4,17 @@ import { NavLink } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 
 import {
-  CardContent,
-  Grid,
-  Link,
   Breadcrumbs as MuiBreadcrumbs,
   Card as MuiCard,
   CircularProgress as MuiCircularProgress,
   Divider as MuiDivider,
   LinearProgress as MuiLinearProgress,
   Paper as MuiPaper,
-  Typography,
+  Box,
+  Container,
 } from "@mui/material";
 import { spacing } from "@mui/system";
+import planeGift from "../../vendor/d0980bb2312e930e2fdf31a2c13577af.gif";
 
 const Card = styled(MuiCard)(spacing);
 
@@ -29,230 +28,77 @@ const CircularProgress = styled(MuiCircularProgress)(spacing);
 
 const LinearProgress = styled(MuiLinearProgress)(spacing);
 
-function CircularIndeterminate() {
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Circular Indeterminate
-        </Typography>
-        <Paper mt={3}>
-          <CircularProgress m={2} />
-          <CircularProgress m={2} color="secondary" />
-        </Paper>
-      </CardContent>
-    </Card>
-  );
-}
+const Wrapper = styled.div`
+  padding-top: 3.5rem;
+  position: relative;
+  text-align: center;
+  overflow: hidden;
 
-function CircularDeterminate() {
-  const [progress, setProgress] = React.useState(0);
+  @keyframes perspectiveAnimation {
+    from {
+      opacity: 0.1;
+      transform: perspective(1500px) rotateX(0deg);
+    }
 
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((prevProgress) =>
-        prevProgress >= 100 ? 0 : prevProgress + 10
-      );
-    }, 800);
+    to {
+      opacity: 1;
+      transform: perspective(2000px) rotateX(25deg);
+    }
+  }
 
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+  .animate__perspective {
+    animation-name: perspectiveAnimation;
+  }
+`;
 
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Circular Determinate
-        </Typography>
-        <Paper mt={3}>
-          <CircularProgress variant="determinate" value={progress} />
-        </Paper>
-      </CardContent>
-    </Card>
-  );
-}
+const ImageBack = styled.img`
+  max-width: 100%;
+  height: auto;
+  min-height: 33vh;
+  display: block;
+  box-shadow: 0 6px 18px 0 rgba(18, 38, 63, 0.075);
+  border-radius: 5px;
+  z-index: 0;
+  opacity: 0.1;
+  image-rendering: optimizequality;
+  image-rendering: -webkit-optimize-contrast;
+  margin-bottom: -100px;
+  margin-top: -35px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+`;
 
-function CircularStatic() {
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Circular Static
-        </Typography>
-        <Paper mt={3}>
-          <CircularProgress m={2} variant="determinate" value={5} />
-          <CircularProgress m={2} variant="determinate" value={25} />
-          <CircularProgress m={2} variant="determinate" value={50} />
-          <CircularProgress m={2} variant="determinate" value={75} />
-          <CircularProgress m={2} variant="determinate" value={100} />
-        </Paper>
-      </CardContent>
-    </Card>
-  );
-}
-
-function LinearIndeterminate() {
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Linear Indeterminate
-        </Typography>
-        <Paper mt={3}>
-          <LinearProgress my={2} />
-          <LinearProgress my={2} color="secondary" />
-        </Paper>
-      </CardContent>
-    </Card>
-  );
-}
-
-function LinearDeterminate() {
-  const [progress, setProgress] = useState(0);
-
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((oldProgress) => {
-        if (oldProgress === 100) {
-          return 0;
-        }
-        const diff = Math.random() * 10;
-        return Math.min(oldProgress + diff, 100);
-      });
-    }, 500);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Linear Determinate
-        </Typography>
-        <Paper mt={3}>
-          <LinearProgress my={2} variant="determinate" value={progress} />
-          <LinearProgress
-            my={2}
-            variant="determinate"
-            value={progress}
-            color="secondary"
-          />
-        </Paper>
-      </CardContent>
-    </Card>
-  );
-}
-
-function LinearBuffer() {
-  const [progress, setProgress] = React.useState(0);
-  const [buffer, setBuffer] = React.useState(10);
-
-  const progressRef = React.useRef(() => {});
-  React.useEffect(() => {
-    progressRef.current = () => {
-      if (progress > 100) {
-        setProgress(0);
-        setBuffer(10);
-      } else {
-        const diff = Math.random() * 10;
-        const diff2 = Math.random() * 10;
-        setProgress(progress + diff);
-        setBuffer(progress + diff + diff2);
-      }
-    };
-  });
-
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      progressRef.current();
-    }, 500);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Linear Buffer
-        </Typography>
-        <Paper mt={3}>
-          <LinearProgress
-            my={2}
-            variant="buffer"
-            value={progress}
-            valueBuffer={buffer}
-          />
-          <LinearProgress
-            my={2}
-            color="secondary"
-            variant="buffer"
-            value={progress}
-            valueBuffer={buffer}
-          />
-        </Paper>
-      </CardContent>
-    </Card>
-  );
-}
-
-function LinearQuery() {
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Linear Query
-        </Typography>
-        <Paper mt={3}>
-          <LinearProgress my={2} variant="query" />
-          <LinearProgress my={2} variant="query" color="secondary" />
-        </Paper>
-      </CardContent>
-    </Card>
-  );
-}
+const ImageWrapper = styled.div`
+  background-attachment: fixed;
+  &:before {
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.02));
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    content: " ";
+    z-index: 1;
+    display: block;
+    width: 50%;
+    height: 75px;
+    pointer-events: none;
+  }
+`;
 
 function Progress() {
   return (
-    <React.Fragment>
-      <Helmet title="Progress" />
-      <Typography variant="h3" gutterBottom display="inline">
-        Progress
-      </Typography>
-
-      <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-        <Link component={NavLink} to="/">
-          Dashboard
-        </Link>
-        <Link component={NavLink} to="/">
-          Components
-        </Link>
-        <Typography>Progress</Typography>
-      </Breadcrumbs>
-
-      <Divider my={6} />
-
-      <Grid container spacing={6}>
-        <Grid item xs={12} md={6}>
-          <CircularIndeterminate />
-          <CircularDeterminate />
-          <CircularStatic />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <LinearIndeterminate />
-          <LinearDeterminate />
-          <LinearBuffer />
-          <LinearQuery />
-        </Grid>
-      </Grid>
-    </React.Fragment>
+    <Wrapper>
+      <Container>
+        <ImageWrapper style={{ alignItems:'center' }}>
+          <ImageBack
+            alt="App de aviacion"
+            src={planeGift}
+          />
+        </ImageWrapper>
+      </Container>
+    </Wrapper>
   );
 }
 

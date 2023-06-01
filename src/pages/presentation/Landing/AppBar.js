@@ -36,14 +36,13 @@ const BrandIcon = styled(Logo)`
 
 const AppBarComponent = () => (
   <React.Fragment>
-    <AppBar position="relative" color="transparent" elevation={0}>
+    <AppBar position="relative" color="transparent" elevation={4} style={{ backgroundColor:"#203764", color:"white" }}>
       <Toolbar>
         <Container>
           <Grid container alignItems="center">
             <Grid item>
               <Brand>
-                <BrandIcon />
-                Aviation InSight
+                Bienvenido Capitán
               </Brand>
             </Grid>
             <Grid item xs />

@@ -162,4 +162,37 @@ export function findUserByEmail(email) {
   };
 }
 
+export function getProfile() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/user/profile`);
+      dispatch(slice.actions.getUserSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function changePassword(
+  oldPassword,
+  newPassword,
+  newPasswordConfirmation
+) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post(`/api/user/changepassword`, {
+        old_password: oldPassword,
+        new_password: newPassword,
+        new_password_confirmation: newPasswordConfirmation,
+      });
+      return Promise.resolve(response);
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+      return Promise.resolve(error);
+    }
+  };
+}
+
 

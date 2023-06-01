@@ -6,6 +6,7 @@ import questionsReducer from "./slices/questions";
 import subjectsReducer from "./slices/subjects";
 import paypalReducer from "./slices/paypal";
 import usertestsReducer from "./slices/usertests";
+import dashboardReducer from "./slices/dashboard";
 
 export const store = configureStore(
   {
@@ -16,6 +17,7 @@ export const store = configureStore(
       subjects: subjectsReducer,
       paypal: paypalReducer,
       usertests: usertestsReducer,
+      dashboard: dashboardReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

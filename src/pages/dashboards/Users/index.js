@@ -27,12 +27,12 @@ import {
   deleteUser,
   restoreUser,
   clearDataUser,
-} from "../../redux/slices/users";
-import Page from "../components/Page";
-import UserForm from "../components/user/UserForm";
-import SnackAlert from "../components/general/SnackAlert";
-import DialogConfirm from "../components/general/DialogConfirm";
-import QuickSearch from "../tables/QuickSearch";
+} from "../../../redux/slices/users";
+import Page from "../../components/Page";
+import UserForm from "../../../../src/components/user/UserForm";
+import SnackAlert from "../../components/general/SnackAlert";
+import DialogConfirm from "../../components/general/DialogConfirm";
+import QuickSearch from "../../tables/QuickSearch";
 
 const filters = {
   pinter: {
@@ -88,7 +88,7 @@ function Users() {
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
       renderCell: (params) =>
-        params.row.school === null ? 'Sin dato' : params.row.school,
+        params.row.school === null ? "Sin dato" : params.row.school,
     },
     {
       field: "type_id",
@@ -98,7 +98,7 @@ function Users() {
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
       renderCell: (params) =>
-        params.row.type_id === 1 ? 'Admin' : 'Estudiante',
+        params.row.type_id === 1 ? "Admin" : "Estudiante",
     },
     {
       field: "expires_at",
@@ -108,7 +108,7 @@ function Users() {
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
       renderCell: (params) =>
-        params.row.expires_at === null ?  'Sin dato' : params.row.expires_at,
+        params.row.payments?.length > 0 ? params.row.payments[0].create_time : "Sin dato",
     },
     {
       field: "action",
@@ -355,37 +355,34 @@ function Users() {
                   components={{
                     Toolbar: QuickSearch,
                   }}
-                  loading={loading}
+                  initialState={{
+                    pagination: { paginationModel: { page: 0, pageSize: 10 } },
+                  }}
                   localeText={
                     esES.components.MuiDataGrid.defaultProps.localeText
                   }
+                  pageSizeOptions={[5, 10, 25]}
                   rows={rows.length > 0 ? rows : users}
-                  columns={columns}
                   rowHeight={40}
-                  componentsProps={{
-                    hideFooterPagination: false,
-                    toolbar: {
-                      hideFooterPagination: false,
-                      export: false,
-                      columns: true,
-                      density: true,
-                      search: true,
-                      customExport: false,
-                      value: searchText,
-                      onChange: (event) => requestSearch(event.target.value),
-                      clearSearch: () => requestSearch(""),
-                    },
-                  }}
+                  columns={columns}
                   onRowDoubleClick={(params) => {
                     dispatch(getUser(params.row.id));
                     setModeUpdate(true);
                     setOpenForm(true);
                   }}
-                  pageSize={pageSize}
-                  onPageSizeChange={(newPageSize) => {
-                    setPageSize(newPageSize);
+                  componentsProps={{
+                    hideFooterPagination: false,
+                    toolbar: {
+                      export: false,
+                      columns: true,
+                      density: true,
+                      search: true,
+                      value: searchText,
+                      onChange: (event) => requestSearch(event.target.value),
+                      clearSearch: () => requestSearch(""),
+                    },
                   }}
-                  rowsPerPageOptions={[10, 20, 50, 100]}
+                  pageSize={10}
                 />
               </div>
             </div>
