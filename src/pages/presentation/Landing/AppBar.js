@@ -17,7 +17,7 @@ import { ReactComponent as Logo } from "../../../vendor/logo.svg";
 const Button = styled(MuiButton)(spacing);
 
 const Brand = styled.div`
-  font-size: ${(props) => props.theme.typography.h5.fontSize};
+  font-size: ${(props) => props.theme.typography.h2.fontSize};
   font-weight: ${(props) => props.theme.typography.fontWeightMedium};
   font-family: ${(props) => props.theme.typography.fontFamily};
 `;
@@ -29,7 +29,6 @@ const BrandIcon = styled(Logo)`
   fill: ${(props) => props.theme.sidebar.header.brand.color};
   width: 32px;
   height: 32px;
-
   vertical-align: middle;
   display: inline;
 `;
