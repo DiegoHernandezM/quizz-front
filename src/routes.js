@@ -134,6 +134,24 @@ export default function Router() {
       ],
     },
     {
+      path: "app",
+      element: (
+        <AuthGuard>
+          <PresentationLayout />
+        </AuthGuard>
+      ),
+      children: [
+        {
+          path: "",
+          element: <App />,
+        },
+        {
+          path: "test",
+          element: <Tests />,
+        },
+      ],
+    },
+    {
       path: "dashboard",
       element:
         user?.type_id === 1 ? (
