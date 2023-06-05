@@ -196,7 +196,7 @@ function Introduction() {
                   <BigAvatar alt="logo" src="/static/img/avatars/logoAviation.png" align="center"/>  
                 </Box>
                 <Title variant="h1" gutterBottom>
-                  Aviation InSight{" "}
+                  Aviation In Sight{" "}
                 </Title>
                 <Grid container justifyContent="center" spacing={4}>
                   <Grid item xs={12} lg={10}>

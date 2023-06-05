@@ -67,9 +67,8 @@ const Sidebar = ({ items, showFooter = true, ...rest }) => {
   return (
     <Drawer variant="permanent" {...rest}>
       <Brand component={NavLink} to="/dashboard">
-        <BrandIcon />{" "}
         <Box ml={1}>
-          Aviation InSight
+          Aviation In Sight
         </Box>
       </Brand>
       <SidebarNav items={items} />
