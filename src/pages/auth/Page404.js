@@ -19,6 +19,7 @@ const Wrapper = styled.div`
 `;
 
 function Page404() {
+  const name = localStorage.getItem("user");
   return (
     <Wrapper>
       <Helmet title="404 Error" />
@@ -26,20 +27,20 @@ function Page404() {
         404
       </Typography>
       <Typography component="h2" variant="h5" align="center" gutterBottom>
-        Page not found.
+        Página no encontrada.
       </Typography>
       <Typography component="h2" variant="body1" align="center" gutterBottom>
-        The page you are looking for might have been removed.
+        La página que estas buscando no sencuentra o ha sido removida
       </Typography>
 
       <Button
         component={Link}
-        to="/dashboard"
+        to={ name === "null" ? "/auth/sign-in" : "dashboard" }
         variant="contained"
         color="secondary"
         mt={2}
       >
-        Return to website
+        REGRESAR
       </Button>
     </Wrapper>
   );
