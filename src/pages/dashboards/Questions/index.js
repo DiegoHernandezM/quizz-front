@@ -13,6 +13,7 @@ import {
   updateQuestion,
   deleteQuestion,
   getQuestion,
+  resetQuestion,
 } from "../../../redux/slices/questions";
 import { getSubjects } from "../../../redux/slices/subjects";
 import { UploadSingleFile } from "../../../components/UploadSingleFile";
@@ -40,6 +41,8 @@ import {
 import { DataGrid, esES } from "@mui/x-data-grid";
 import { spacing } from "@mui/system";
 import { Close } from "@mui/icons-material";
+import Page from "../../components/Page";
+import { reset } from "numeral";
 
 const Card = styled(MuiCard)(spacing);
 
@@ -188,8 +191,9 @@ function QuestionsContent({ open }) {
         </Typography>
       </CardContent>
       <Paper>
-        <div style={{ height: 400, width: "100%" }}>
+        <div style={{ height: 400, width: "1100px" }}>
           <DataGrid
+            width="100%"
             components={{
               Toolbar: QuickSearch,
             }}
@@ -272,19 +276,17 @@ function QuestionForm({ open, close }) {
   }, []);
 
   useEffect(() => {
-    if (questionData.id) {
-      formik.setFieldValue("id", questionData.subject_id);
-      formik.setFieldValue("subject_id", questionData.subject_id);
-      formik.setFieldValue("question", questionData.question);
-      formik.setFieldValue("points", questionData.points);
-      formik.setFieldValue("a", questionData.a);
-      formik.setFieldValue("b", questionData.b);
-      formik.setFieldValue("c", questionData.c);
-      formik.setFieldValue("d", questionData.d);
-      formik.setFieldValue("e", questionData.e);
-      formik.setFieldValue("answer", questionData.answer);
-      formik.setFieldValue("explanation", questionData.explanation);
-    }
+    formik.setFieldValue("id", questionData.subject_id);
+    formik.setFieldValue("subject_id", questionData.subject_id);
+    formik.setFieldValue("question", questionData.question);
+    formik.setFieldValue("points", questionData.points);
+    formik.setFieldValue("a", questionData.a);
+    formik.setFieldValue("b", questionData.b);
+    formik.setFieldValue("c", questionData.c);
+    formik.setFieldValue("d", questionData.d);
+    formik.setFieldValue("e", questionData.e);
+    formik.setFieldValue("answer", questionData.answer);
+    formik.setFieldValue("explanation", questionData.explanation);
   }, [questionData]);
   return (
     <Drawer anchor="right" open={open} onClose={close}>
@@ -544,13 +546,18 @@ function QuestionsPage() {
     setOpen(true);
   };
 
+  const newQuestion = () => {
+    dispatch(resetQuestion()).then(() => {
+      setOpen(true);
+    });
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
 
   return (
-    <React.Fragment>
-      <Helmet title="Data Grid" />
+    <Page title="Questions">
       <QuestionForm open={open} close={handleClose} />
       <Typography variant="h3" gutterBottom display="inline">
         Lista de Preguntas
@@ -567,7 +574,7 @@ function QuestionsPage() {
       <Button
         variant="contained"
         sx={{ marginBottom: "10px" }}
-        onClick={handleOpen}
+        onClick={newQuestion}
       >
         Nueva pregunta
       </Button>
@@ -578,12 +585,11 @@ function QuestionsPage() {
           <UploadSingleFile
             file={file}
             onDrop={handleDropSingleFile}
-            accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
             requirements="Recuerda que debes incluir en los nombres de las columnas ID, MATERIA/CATEGORIA, PUNTOS, PREGUNTA, RESPUESTA, ANSWER A, ANSWER B, ANSWER C y JUSTIFICACION en la primer hoja"
           />
         </CardContent>
       </Card>
-    </React.Fragment>
+    </Page>
   );
 }
 

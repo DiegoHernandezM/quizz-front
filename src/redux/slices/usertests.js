@@ -3,6 +3,7 @@ import axios from "../../utils/axios";
 
 const initialState = {
   userTest: {},
+  userTests: [],
   subject: {},
   testQuestions: [],
   isLoading: false,
@@ -24,6 +25,11 @@ const slice = createSlice({
       console.log(payload);
     },
 
+    setUserTests(state, payload) {
+      state.userTests = payload.payload;
+      state.isLoading = false;
+    },
+
     setUserAnswer(state, payload) {
       state.userTest = payload.payload;
       state.userTest.questions = JSON.parse(payload.payload.questions);
@@ -34,15 +40,31 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-export function getUserTest(subject_id) {
+export function getUserTest(subject_id = null) {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`/api/usertest/singlesubject/create`, {
-        params: {
-          subject_id,
-        },
-      });
-      dispatch(slice.actions.setUserTest(response.data));
+      if (!subject_id) {
+        const response = await axios.get(`/api/usertest/simulation/create`);
+        dispatch(slice.actions.setUserTest(response.data));
+      } else {
+        const response = await axios.get(`/api/usertest/singlesubject/create`, {
+          params: {
+            subject_id,
+          },
+        });
+        dispatch(slice.actions.setUserTest(response.data));
+      }
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getUserTests() {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`/api/usertest/getfromuser`);
+      dispatch(slice.actions.setUserTests(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

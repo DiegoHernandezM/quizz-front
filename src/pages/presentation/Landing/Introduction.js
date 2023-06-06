@@ -179,21 +179,35 @@ function Introduction() {
   return (
     <Wrapper>
       <Container>
-        <ImageWrapper style={{ alignItems:'center' }}>
-          <ImageBack
-            alt="App de aviacion"
-            src={backgroundJpe}
-          />
-          <Grid container alignItems="center" justifyContent="center" spacing={4}>
+        <ImageWrapper style={{ alignItems: "center" }}>
+          <ImageBack alt="App de aviacion" src={backgroundJpe} />
+          <Grid
+            container
+            alignItems="center"
+            justifyContent="center"
+            spacing={4}
+          >
             <Grid item xs={12} sm={6} md={6} lg={6}>
               <ContainerFrame>
-              <iframe width="560" height="315" src="https://www.youtube.com/embed/EkruPJwD8XQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen />
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/EkruPJwD8XQ"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullscreen
+                />
               </ContainerFrame>
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={6}>
               <Content>
                 <Box align="center">
-                  <BigAvatar alt="logo" src="/static/img/avatars/logoAviation.png" align="center"/>  
+                  <BigAvatar
+                    alt="logo"
+                    src="/static/img/avatars/logoAviation.png"
+                    align="center"
+                  />
                 </Box>
                 <Title variant="h1" gutterBottom>
                   Aviation In Sight{" "}
@@ -201,9 +215,11 @@ function Introduction() {
                 <Grid container justifyContent="center" spacing={4}>
                   <Grid item xs={12} lg={10}>
                     <Subtitle color="textSecondary">
-                      En Aviation In sight podrás prepárate de la mejor manera para el examen de titulación CIAAC.
-                      Tendrás la oportunidad de administrar tu estudio, seleccionando cuestionarios por materia o con
-                      simulacros tipo CIAAC. Podrás practicar las veces que quieras, desde cualquier dispositivo (pc,
+                      En Aviation In sight podrás prepárate de la mejor manera
+                      para el examen de titulación CIAAC. Tendrás la oportunidad
+                      de administrar tu estudio, seleccionando cuestionarios por
+                      materia o con simulacros tipo CIAAC. Podrás practicar las
+                      veces que quieras, desde cualquier dispositivo (pc,
                       tableta o celular) en cualquier horario.
                     </Subtitle>
                   </Grid>

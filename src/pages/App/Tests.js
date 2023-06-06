@@ -6,7 +6,7 @@ import Question from "./Question";
 
 import { getUserTest, saveAnswer } from "../../redux/slices/usertests";
 import { useFormik } from "formik";
-import { LinearProgress, Paper } from "@mui/material";
+import { Box, Button, LinearProgress, Paper } from "@mui/material";
 
 function Tests() {
   const dispatch = useDispatch();
@@ -46,23 +46,60 @@ function Tests() {
   return (
     <React.Fragment>
       <Paper sx={{ padding: "12px" }}>
-        <h1>{`Test de ${subject.name}`}</h1>
-        <LinearProgress variant="determinate" value={userTest.percentage} />
-        <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-          {testQuestions.map((question) => (
-            <Question
-              key={question.id}
-              question={question}
-              value={
-                userTest.questions[question.id]
-                  ? userTest.questions[question.id]
-                  : ""
-              }
-              handleChange={handleSaveAnswer}
-              showAnswer={userTest.completed}
-            />
-          ))}
-        </form>
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            width: "100%",
+            padding: "12px",
+          }}
+          elevation={3}
+        >
+          <h2>
+            {`Test de ${subject.name}`}{" "}
+            {userTest.completed && (
+              <Button variant="outlined">Reiniciar test</Button>
+            )}
+          </h2>
+
+          <LinearProgress variant="determinate" value={userTest.percentage} />
+        </Box>
+        <Box
+          sx={{
+            position: "fixed",
+            top: 100,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            width: "100%",
+            overflow: "scroll",
+            padding: "12px",
+          }}
+          elevation={3}
+        >
+          <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
+            {testQuestions.map((question) => (
+              <Question
+                key={question.id}
+                question={question}
+                value={
+                  userTest.questions[question.id]
+                    ? userTest.questions[question.id]
+                    : ""
+                }
+                disabled={userTest.questions[question.id] ? true : false}
+                handleChange={handleSaveAnswer}
+                showAnswer={userTest.completed}
+              />
+            ))}
+          </form>
+          <br />
+          <br />
+          <br />
+        </Box>
       </Paper>
 
       <Navigation />

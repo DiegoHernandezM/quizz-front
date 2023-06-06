@@ -3,7 +3,19 @@ import axios from "../../utils/axios";
 
 const initialState = {
   questionsCatalogue: [],
-  questionData: {},
+  questionData: {
+    id: "",
+    subject_id: "",
+    question: "",
+    points: "",
+    a: "",
+    b: "",
+    c: "",
+    d: "",
+    e: "",
+    answer: "",
+    explanation: "",
+  },
   isLoading: false,
   error: null,
 };
@@ -26,6 +38,21 @@ const slice = createSlice({
     hasError(state, payload) {
       console.log(payload);
     },
+    resetQuestion(state) {
+      state.questionData = {
+        id: null,
+        subject_id: "",
+        question: "",
+        points: "",
+        a: "",
+        b: "",
+        c: "",
+        d: "",
+        e: "",
+        answer: "",
+        explanation: "",
+      };
+    },
   },
 });
 
@@ -34,9 +61,7 @@ export default slice.reducer;
 export function getQuestionsCatalogue() {
   return async (dispatch) => {
     try {
-      const response = await axios.get(
-        `/api/questions/catalogue`
-      );
+      const response = await axios.get(`/api/questions/catalogue`);
       dispatch(slice.actions.setCatalogue(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -44,13 +69,16 @@ export function getQuestionsCatalogue() {
   };
 }
 
-export function getQuestionsSubject(subject) {
+export function getQuestionsSubject(subject = null) {
   return async (dispatch) => {
     try {
-      const response = await axios.get(
-        `/api/questions/catalogue/${subject}`
-      );
-      dispatch(slice.actions.setCatalogue(response.data));
+      if (subject === null) {
+        const response = await axios.get(`/api/questions/catalogue/random`);
+        dispatch(slice.actions.setCatalogue(response.data));
+      } else {
+        const response = await axios.get(`/api/questions/catalogue/${subject}`);
+        dispatch(slice.actions.setCatalogue(response.data));
+      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -71,10 +99,7 @@ export function getQuestion(id) {
 export function createQuestion(data) {
   return async (dispatch) => {
     try {
-      const response = await axios.post(
-        `/api/questions/create`,
-        data
-      );
+      const response = await axios.post(`/api/questions/create`, data);
       dispatch(slice.actions.setQuestion(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -85,10 +110,7 @@ export function createQuestion(data) {
 export function updateQuestion(id, data) {
   return async (dispatch) => {
     try {
-      const response = await axios.put(
-        `/api/questions/${id}`,
-        data
-      );
+      const response = await axios.put(`/api/questions/${id}`, data);
       dispatch(slice.actions.setQuestion(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -99,9 +121,7 @@ export function updateQuestion(id, data) {
 export function deleteQuestion(id) {
   return async (dispatch) => {
     try {
-      const response = await axios.delete(
-        `/api/questions/${id}`
-      );
+      const response = await axios.delete(`/api/questions/${id}`);
       dispatch(slice.actions.setQuestion(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -114,14 +134,20 @@ export function massLoad(file) {
     try {
       const formData = new FormData();
       formData.append("excel", file);
-      const response = await axios.post(
-        `/api/questions/massload`,
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
+      const response = await axios.post(`/api/questions/massload`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       dispatch(slice.actions.setCatalogue(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function resetQuestion() {
+  return async (dispatch) => {
+    try {
+      dispatch(slice.actions.resetQuestion());
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

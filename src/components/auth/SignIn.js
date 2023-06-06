@@ -28,6 +28,7 @@ export default function SignIn({ token }) {
   const navigate = useNavigate();
 
   const handleSignIn = () => {
+    console.log(user);
     if (user.type_id === 1 || user.type_id === 2) {
       navigate("/dashboard");
     } else {

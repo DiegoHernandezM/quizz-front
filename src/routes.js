@@ -32,6 +32,7 @@ const Subjects = async(() => import("./pages/dashboards/Subjects"));
 const SaaS = async(() => import("./pages/dashboards/SaaS"));
 const App = async(() => import("./pages/App"));
 const Tests = async(() => import("./pages/App/Tests"));
+const Results = async(() => import("./pages/App/Results"));
 // Form components
 const Pickers = async(() => import("./pages/forms/Pickers"));
 const Editors = async(() => import("./pages/forms/Editors"));
@@ -70,6 +71,10 @@ export default function Router() {
         {
           path: "test",
           element: <Tests />,
+        },
+        {
+          path: "results",
+          element: <Results />,
         },
       ],
     },

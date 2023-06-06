@@ -16,8 +16,14 @@ export default function SubjectCard({
 }) {
   const navigate = useNavigate();
 
-  const handleStartTest = (subjectId) => {
-    navigate(`/app/test?subject_id=${subjectId}`);
+  const handleStartTest = (subjectId = null) => {
+    if (subjectId == null) {
+      navigate(`/app/test`);
+      return;
+    } else {
+      navigate(`/app/test?subject_id=${subjectId}`);
+      return;
+    }
   };
 
   return (
