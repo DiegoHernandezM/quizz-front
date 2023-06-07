@@ -48,7 +48,6 @@ const Users = async(() => import("./pages/dashboards/Users"));
 export default function Router() {
   const { user } = useAuth();
   const type = localStorage.getItem("usertype");
-  console.log(type);
   return useRoutes([
     {
       path: "/",

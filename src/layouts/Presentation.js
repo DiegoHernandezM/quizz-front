@@ -7,7 +7,6 @@ import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 
 import { THEMES } from "../constants";
 import createTheme from "../theme";
-import Navbar from "../components/navbar/Navbar";
 
 import GlobalStyle from "../components/GlobalStyle";
 
@@ -29,15 +28,12 @@ const Presentation = ({ children }) => {
   };
   return (
     <MuiThemeProvider theme={createTheme(THEMES.DEFAULT)}>
-      <Root>
-        <CssBaseline />
-        <GlobalStyle />
-        <Navbar onDrawerToggle={handleDrawerToggle} />
-        <AppContent>
-          {children}
-          <Outlet />
-        </AppContent>
-      </Root>
+      <CssBaseline />
+      <GlobalStyle />
+      <AppContent>
+        {children}
+        <Outlet />
+      </AppContent>
     </MuiThemeProvider>
   );
 };
