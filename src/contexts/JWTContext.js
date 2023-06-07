@@ -114,6 +114,8 @@ function AuthProvider({ children }) {
 
     setSession(accessToken);
     localStorage.setItem("user", user.displayName);
+    localStorage.setItem("usertype", user.type_id);
+    localStorage.setItem("dashone", true);
     dispatch({
       type: "SIGN_IN",
       payload: {
@@ -143,6 +145,7 @@ function AuthProvider({ children }) {
   const signOut = async () => {
     setSession(null);
     localStorage.setItem("user", null);
+    localStorage.setItem("usertype", null);
     dispatch({ type: "LOGOUT" });
   };
 

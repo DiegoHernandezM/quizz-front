@@ -32,7 +32,7 @@ export default function SignIn({ token }) {
     if (user.type_id === 1 || user.type_id === 2) {
       navigate("/dashboard");
     } else {
-      navigate("/app");
+      navigate("/dashboardapp");
     }
   };
 

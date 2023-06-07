@@ -11,6 +11,7 @@ import {
   AppBar as MuiAppBar,
   IconButton as MuiIconButton,
   Toolbar,
+  Typography
 } from "@mui/material";
 
 import { Menu as MenuIcon } from "@mui/icons-material";
@@ -77,20 +78,29 @@ const Input = styled(InputBase)`
 
 const Navbar = ({ onDrawerToggle }) => {
   const { t } = useTranslation();
+  const name = localStorage.getItem("user");
+  const type = localStorage.getItem("usertype");
   return (
     <React.Fragment>
       <AppBar position="sticky" elevation={0}>
         <Toolbar>
+          {name != "null" ? (
+            <Typography variant="h5" gutterBottom>
+            Aviation In Sight
+          </Typography>
+          ): null}
           <Grid container alignItems="center">
             <Grid item sx={{ display: { xs: "block", md: "none" } }}>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={onDrawerToggle}
-                size="large"
-              >
-                <MenuIcon />
-              </IconButton>
+              {type != 3 ? (
+                <IconButton
+                  color="inherit"
+                  aria-label="Open drawer"
+                  onClick={onDrawerToggle}
+                  size="large"
+                >
+                  <MenuIcon />
+                </IconButton>
+              ) : null}     
             </Grid>
             <Grid item xs />
             <Grid item>
