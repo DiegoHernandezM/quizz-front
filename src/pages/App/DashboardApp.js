@@ -60,7 +60,7 @@ function DashboardApp() {
       <Grid justifyContent="space-between" container spacing={6}>
         <Grid item>
           <Typography variant="h3" gutterBottom>
-            {("Bienvenido Capitan:")} {name}
+            {("Bienvenido Capitán:")} {name}
           </Typography>
         </Grid>
       </Grid>

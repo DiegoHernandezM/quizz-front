@@ -61,7 +61,7 @@ function Dashboard() {
             Dashboard
           </Typography>
           <Typography variant="subtitle1">
-            {t("Bienvenido Capitan:")} {name}
+            {t("Bienvenido Capitán:")} {name}
           </Typography>
         </Grid>
       </Grid>

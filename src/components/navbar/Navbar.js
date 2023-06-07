@@ -84,10 +84,10 @@ const Navbar = ({ onDrawerToggle }) => {
     <React.Fragment>
       <AppBar position="sticky" elevation={0}>
         <Toolbar>
-          {name != "null" ? (
+          {type === "3" ? (
             <Typography variant="h5" gutterBottom>
-            Aviation In Sight
-          </Typography>
+              Aviation In Sight
+            </Typography>
           ): null}
           <Grid container alignItems="center">
             <Grid item sx={{ display: { xs: "block", md: "none" } }}>
