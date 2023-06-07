@@ -93,6 +93,14 @@ function Dashboard() {
                 additionalText="&nbsp;"
               />
             </Grid>
+            <Grid item xs={12} sm={12} md={6}>
+              <Stats
+                title="Uso AWS"
+                amount={stats?.cpuUsage}
+                illustration="/static/img/illustrations/checklist.png"
+                additionalText="&nbsp;"
+              />
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12} lg={7}>

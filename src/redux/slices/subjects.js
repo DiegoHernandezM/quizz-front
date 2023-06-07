@@ -55,7 +55,8 @@ export function create(values) {
   return async (dispatch) => {
     try {
       const response = await axios.post(`/api/subject/create`, {
-        name: values.name
+        name: values.name,
+        description: values.description
       });
       return Promise.resolve(response);
     } catch (error) {
@@ -69,7 +70,8 @@ export function update(id, values) {
   return async (dispatch) => {
     try {
       const response = await axios.post(`/api/subject/update/${id}`, {
-        name: values.name
+        name: values.name,
+        description: values.description
       });
       return Promise.resolve(response);
     } catch (error) {
