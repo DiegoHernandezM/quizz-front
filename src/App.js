@@ -25,7 +25,7 @@ const clientSideEmotionCache = createEmotionCache();
 function App({ emotionCache = clientSideEmotionCache }) {
   const { isInitialized, user } = useAuth();
   const { theme } = useTheme();
-  console.log(isInitialized ? user : 'no');
+
   return (
     <CacheProvider value={emotionCache}>
       <HelmetProvider>

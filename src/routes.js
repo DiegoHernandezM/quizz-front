@@ -47,6 +47,7 @@ const Profile = async(() => import("./pages/dashboards/Users/Profile"));
 const Users = async(() => import("./pages/dashboards/Users"));
 export default function Router() {
   const { user } = useAuth();
+  const type = localStorage.getItem("usertype");
   return useRoutes([
     {
       path: "/",
@@ -87,7 +88,7 @@ export default function Router() {
     {
       path: "dashboard",
       element:
-        user?.type_id === 1 ? (
+        type === 1 ? (
           <AuthGuard>
             <DashboardLayout />
           </AuthGuard>
