@@ -19,7 +19,6 @@ export default function Results() {
     dispatch(getUserTests());
   }, []);
 
-
   const ProgressDiv = styled("div")({
     width: "100%",
     border: "1px solid rgba(140, 140, 140, 0.5)",
@@ -83,22 +82,25 @@ export default function Results() {
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
       renderCell: (params) => {
+        const result = ((params.row.grade * 100) / params.row.points).toFixed(2);
+        let color = "";
+        if (result < 70) {
+          color = "#DF4848";
+        } else if (result > 70 && result < 80) {
+          color = "#F79E0C";
+        } else if (result > 80 && result <= 100) {
+          color = "#11D55B";
+        }
         return params.value !== null ? (
           <ProgressDiv>
             <ProgressContainer>
-              {((params.row.grade * 100) / params.row.points).toFixed(2)}%
+              {result}%
             </ProgressContainer>
             <div
               style={{
                 height: "100%",
-                maxWidth: `${(
-                  (params.row.grade * 100) /
-                  params.row.points
-                ).toFixed(2)}%`,
-                backgroundColor:
-                  theme.palette.mode === "light"
-                    ? theme.palette.primary.light
-                    : theme.palette.primary.dark,
+                maxWidth: `${result}%`,
+                backgroundColor: color
               }}
             />
           </ProgressDiv>
