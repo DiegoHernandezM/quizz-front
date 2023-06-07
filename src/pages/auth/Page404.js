@@ -19,7 +19,8 @@ const Wrapper = styled.div`
 `;
 
 function Page404() {
-  const name = localStorage.getItem("user");
+  const type = localStorage.getItem("usertype");
+
   return (
     <Wrapper>
       <Helmet title="404 Error" />
@@ -35,7 +36,7 @@ function Page404() {
 
       <Button
         component={Link}
-        to={ name === "null" ? "/auth/sign-in" : "dashboard" }
+        to={type === "null" ? "/auth/sign-in" : type === "1" ? "/dashboard" : "/dashboardapp"}
         variant="contained"
         color="secondary"
         mt={2}
