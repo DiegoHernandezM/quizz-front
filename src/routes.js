@@ -87,6 +87,10 @@ export default function Router() {
           path: "results",
           element: <Results />,
         },
+        {
+          path: "profile",
+          element: <Profile />,
+        }
       ],
     },
     {
@@ -118,6 +122,10 @@ export default function Router() {
           path: "users",
           element: <Users />,
         },
+        {
+          path: "profile",
+          element: <Profile />,
+        }
       ],
     },
     {

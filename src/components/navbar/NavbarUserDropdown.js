@@ -23,6 +23,7 @@ function NavbarUserDropdown() {
   const [anchorMenu, setAnchorMenu] = React.useState(null);
   const navigate = useNavigate();
   const { signOut } = useAuth();
+  const type = localStorage.getItem("usertype");
 
   const toggleMenu = (event) => {
     setAnchorMenu(event.currentTarget);
@@ -38,7 +39,7 @@ function NavbarUserDropdown() {
   };
 
   const handleProfile = async () => {
-    navigate("/pages/profile");
+    type === "1" ? navigate("/dashboard/profile") : navigate("/dashboardapp/profile");
   };
 
   return (
