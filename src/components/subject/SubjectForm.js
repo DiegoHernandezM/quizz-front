@@ -29,7 +29,8 @@ export default function SubjectForm({
   });
   const formik = useFormik({
     initialValues: {
-      name: ''
+      name: '',
+      description: ''
     },
     validationSchema,
     onSubmit: (values, { resetForm }) => {
@@ -44,6 +45,7 @@ export default function SubjectForm({
 
   useEffect(() => {  
     formik.setFieldValue('name', update ? subject.name : formik.initialValues.name);
+    formik.setFieldValue('description', update ? subject.description : formik.initialValues.description);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [update, subject]);
 
@@ -99,6 +101,19 @@ export default function SubjectForm({
               fullWidth
               helperText={formik.touched.name && formik.errors.name}
               size="small"
+            />
+          </FormControl>
+          <FormControl style={{ marginTop: '8px', width: '100%' }}>
+            <TextField
+              id="description"
+              label="Descripción"
+              placeholder="Descripción"
+              multiline
+              name="description"
+              value={formik.values.description || ''}
+              onChange={formik.handleChange}
+              error={formik.touched.description && Boolean(formik.errors.description)}
+              fullWidth
             />
           </FormControl>
         </form>
