@@ -18,10 +18,10 @@ export default function SubjectCard({
 
   const handleStartTest = (subjectId = null) => {
     if (subjectId == null) {
-      navigate(`/app/test`);
+      navigate(`/dashboardapp/test`);
       return;
     } else {
-      navigate(`/app/test?subject_id=${subjectId}`);
+      navigate(`/dashboardapp/test?subject_id=${subjectId}`);
       return;
     }
   };

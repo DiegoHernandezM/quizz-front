@@ -25,9 +25,8 @@ const ChartWrapper = styled.div`
   width: 100%;
 `;
 
-const BarChart = ({ theme, labels, info  }) => {
+const BarChart = ({ theme, labels, info, title  }) => {
   const firstDatasetColor = theme.palette.secondary.main;
-
   const data = {
     labels: labels ?? [],
     datasets: [
@@ -76,7 +75,7 @@ const BarChart = ({ theme, labels, info  }) => {
             <MoreVertical />
           </IconButton>
         }
-        title="Conteo de preguntas por materia"
+        title={title}
       />
       <CardContent>
         <ChartWrapper>

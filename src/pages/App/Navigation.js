@@ -7,6 +7,7 @@ import {
   Quiz as QuizIcon,
   Subject as SubjectIcon,
   Checklist as CheckListIcon,
+  Home as HomeIcon
 } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 
@@ -19,19 +20,24 @@ const NavbarSimple = ({ onDrawerToggle }) => {
     >
       <BottomNavigation showLabels>
         <BottomNavigationAction
+          label="Inicio"
+          icon={<HomeIcon />}
+          onClick={() => navigate("/dashboardapp")}
+        />
+        <BottomNavigationAction
           label="Materias"
           icon={<SubjectIcon />}
-          onClick={() => navigate("/app")}
+          onClick={() => navigate("/dashboardapp/app")}
         />
         <BottomNavigationAction
           label="Test Simulacro"
           icon={<QuizIcon />}
-          onClick={() => navigate("/app/test")}
+          onClick={() => navigate("/dashboardapp/test")}
         />
         <BottomNavigationAction
           label="Progreso y Resultados"
           icon={<CheckListIcon />}
-          onClick={() => navigate("/app/results")}
+          onClick={() => navigate("/dashboardapp/results")}
         />
       </BottomNavigation>
     </Box>

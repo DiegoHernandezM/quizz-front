@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "@emotion/styled";
 
@@ -7,6 +7,7 @@ import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 
 import { THEMES } from "../constants";
 import createTheme from "../theme";
+import Navbar from "../components/navbar/Navbar";
 
 import GlobalStyle from "../components/GlobalStyle";
 
@@ -22,11 +23,16 @@ const AppContent = styled.div`
 `;
 
 const Presentation = ({ children }) => {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
   return (
     <MuiThemeProvider theme={createTheme(THEMES.DEFAULT)}>
       <Root>
         <CssBaseline />
         <GlobalStyle />
+        <Navbar onDrawerToggle={handleDrawerToggle} />
         <AppContent>
           {children}
           <Outlet />

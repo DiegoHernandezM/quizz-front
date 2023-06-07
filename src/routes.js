@@ -33,6 +33,8 @@ const SaaS = async(() => import("./pages/dashboards/SaaS"));
 const App = async(() => import("./pages/App"));
 const Tests = async(() => import("./pages/App/Tests"));
 const Results = async(() => import("./pages/App/Results"));
+const DashboardAppLayout = async(() => import("./pages/App/DashboardAppLayout"));
+const DashboardApp = async(() => import("./pages/App/DashboardApp"));
 // Form components
 const Pickers = async(() => import("./pages/forms/Pickers"));
 const Editors = async(() => import("./pages/forms/Editors"));
@@ -45,6 +47,7 @@ const Profile = async(() => import("./pages/dashboards/Users/Profile"));
 const Users = async(() => import("./pages/dashboards/Users"));
 export default function Router() {
   const { user } = useAuth();
+  const type = localStorage.getItem("usertype");
   return useRoutes([
     {
       path: "/",
@@ -57,15 +60,19 @@ export default function Router() {
       ],
     },
     {
-      path: "app",
+      path: "dashboardapp",
       element: (
         <AuthGuard>
-          <PresentationLayout />
+          <DashboardAppLayout />
         </AuthGuard>
       ),
       children: [
         {
           path: "",
+          element: <DashboardApp />,
+        },
+        {
+          path: "app",
           element: <App />,
         },
         {
@@ -81,12 +88,14 @@ export default function Router() {
     {
       path: "dashboard",
       element:
-        user?.type_id === 1 ? (
+        type === 1 ? (
           <AuthGuard>
             <DashboardLayout />
           </AuthGuard>
         ) : (
-          <Page404 />
+          <AuthGuard>
+            <DashboardAppLayout />
+          </AuthGuard>
         ),
       children: [
         {
