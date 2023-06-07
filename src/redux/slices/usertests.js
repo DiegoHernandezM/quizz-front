@@ -60,6 +60,26 @@ export function getUserTest(subject_id = null) {
   };
 }
 
+export function resetTest(subject_id = null) {
+  return async (dispatch) => {
+    try {
+      if (!subject_id) {
+        const response = await axios.get(`/api/usertest/simulation/reset`);
+        dispatch(slice.actions.setUserTest(response.data));
+      } else {
+        const response = await axios.get(`/api/usertest/singlesubject/reset`, {
+          params: {
+            subject_id,
+          },
+        });
+        dispatch(slice.actions.setUserTest(response.data));
+      }
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
 export function getUserTests() {
   return async (dispatch) => {
     try {

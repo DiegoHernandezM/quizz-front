@@ -1,7 +1,7 @@
 import React from "react";
 import useAuth from "./hooks/useAuth";
 import async from "./components/Async";
-import { useRoutes } from "react-router-dom";
+import { Navigate, useRoutes } from "react-router-dom";
 
 // All pages that rely on 3rd party components (other than MUI) are
 // loaded asynchronously, to keep the initial JS bundle to a minimum size
@@ -33,7 +33,9 @@ const SaaS = async(() => import("./pages/dashboards/SaaS"));
 const App = async(() => import("./pages/App"));
 const Tests = async(() => import("./pages/App/Tests"));
 const Results = async(() => import("./pages/App/Results"));
-const DashboardAppLayout = async(() => import("./pages/App/DashboardAppLayout"));
+const DashboardAppLayout = async(() =>
+  import("./pages/App/DashboardAppLayout")
+);
 const DashboardApp = async(() => import("./pages/App/DashboardApp"));
 // Form components
 const Pickers = async(() => import("./pages/forms/Pickers"));
@@ -61,15 +63,16 @@ export default function Router() {
     },
     {
       path: "dashboardapp",
-      element:  type === "3" ? (
-        <AuthGuard>
-          <DashboardAppLayout />
-        </AuthGuard>
-      ) : (
-        <AuthGuard>
-          <Page404 />
-        </AuthGuard>
-      ),
+      element:
+        type === "3" ? (
+          <AuthGuard>
+            <DashboardAppLayout />
+          </AuthGuard>
+        ) : (
+          <AuthGuard>
+            <Page404 />
+          </AuthGuard>
+        ),
       children: [
         {
           path: "",
@@ -90,7 +93,7 @@ export default function Router() {
         {
           path: "profile",
           element: <Profile />,
-        }
+        },
       ],
     },
     {
@@ -101,9 +104,7 @@ export default function Router() {
             <DashboardLayout />
           </AuthGuard>
         ) : (
-          <AuthGuard>
-            <Page404 />
-          </AuthGuard>
+          <Navigate to="/dashboardapp" replace />
         ),
       children: [
         {
@@ -125,7 +126,7 @@ export default function Router() {
         {
           path: "profile",
           element: <Profile />,
-        }
+        },
       ],
     },
     {

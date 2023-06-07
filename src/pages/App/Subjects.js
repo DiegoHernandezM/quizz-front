@@ -1,11 +1,16 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import styled from "@emotion/styled";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardActions,
+  Typography as MuiTypography,
+  Button,
+} from "@mui/material";
+
+import { useTheme } from "@emotion/react";
 
 export default function SubjectCard({
   subjectName,
@@ -13,9 +18,10 @@ export default function SubjectCard({
   subjectId,
   numberOfQuestions,
   latestUserTest,
-  color
+  color,
 }) {
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleStartTest = (subjectId = null) => {
     if (subjectId == null) {
@@ -27,10 +33,32 @@ export default function SubjectCard({
     }
   };
 
+  const fontColor =
+    theme.palette.mode === "light"
+      ? theme.palette.primary.light
+      : theme.palette.primary.dark;
+
+  const Typography = styled(MuiTypography)`
+    color: ${fontColor};
+  `;
+
   return (
-    <Box sx={{ minHeight: 250, marginBottom: 5 }}>
+    <Box
+      sx={{
+        minHeight: 250,
+        marginBottom: 5,
+        color:
+          theme.palette.mode === "light"
+            ? theme.palette.primary.light
+            : theme.palette.primary.dark,
+      }}
+    >
       <Card
-        sx={{ minHeight: 250, boxShadow: "2px 3px 9px #203764",  background: `${color}` }}
+        sx={{
+          minHeight: 250,
+          boxShadow: "2px 3px 9px #203764",
+          background: `${color}`,
+        }}
         variant="outlined"
       >
         <CardContent>

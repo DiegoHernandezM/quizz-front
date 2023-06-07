@@ -9,7 +9,21 @@ import { Grid, Paper } from "@mui/material";
 function App() {
   const dispatch = useDispatch();
   const { allSubjects } = useSelector((state) => state.subjects);
-  const colors = ['#F2F3F4', '#D1F2EB', '#EAEDED', '#EAECEE', '#FADBD8', '#E8DAEF', '#ECF0F1', '#D6EAF8', '#E5E7E9', '#EAECEE', '#F4ECF7', '#FEF9E7', '#E5E8E8'];
+  const colors = [
+    "#F2F3F4",
+    "#D1F2EB",
+    "#E3DFFD",
+    "#ECE8DD",
+    "#FADBD8",
+    "#E8DAEF",
+    "#ECF0F1",
+    "#D6EAF8",
+    "#E5E7E9",
+    "#EAECEE",
+    "#F4ECF7",
+    "#FEF9E7",
+    "#E5E8E8",
+  ];
 
   useEffect(() => {
     dispatch(getSubjects());

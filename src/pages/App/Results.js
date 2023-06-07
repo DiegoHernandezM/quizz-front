@@ -82,25 +82,26 @@ export default function Results() {
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
       renderCell: (params) => {
-        const result = ((params.row.grade * 100) / params.row.points).toFixed(2);
+        const result = ((params.row.grade * 100) / params.row.points).toFixed(
+          2
+        );
         let color = "";
         if (result < 70) {
-          color = "#DF4848";
+          color = "rgb(255, 140, 140, 0.5)";
         } else if (result > 70 && result < 80) {
-          color = "#F79E0C";
+          color = "rgb(255, 255, 0, 0.5)";
         } else if (result > 80 && result <= 100) {
-          color = "#11D55B";
+          color = "rgb(140, 255, 140, 0.5)";
         }
         return params.value !== null ? (
           <ProgressDiv>
-            <ProgressContainer>
-              {result}%
-            </ProgressContainer>
+            <ProgressContainer>{result}%</ProgressContainer>
             <div
               style={{
                 height: "100%",
                 maxWidth: `${result}%`,
-                backgroundColor: color
+                backgroundColor: color,
+                background: color,
               }}
             />
           </ProgressDiv>
@@ -123,16 +124,11 @@ export default function Results() {
     },
     {
       field: "duration",
-      headerName: "Tiempo",
+      headerName: "Duración",
       width: 220,
       renderHeader: (p) => (
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
-      valueFormatter: (params) => {
-        return params.value !== null
-          ? moment(params.value).format("HH:mm:ss")
-          : "Sin datos";
-      },
     },
   ];
 

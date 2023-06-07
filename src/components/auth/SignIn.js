@@ -28,12 +28,7 @@ export default function SignIn({ token }) {
   const navigate = useNavigate();
 
   const handleSignIn = () => {
-    console.log(user);
-    if (user.type_id === 1 || user.type_id === 2) {
-      navigate("/dashboard");
-    } else {
-      navigate("/dashboardapp");
-    }
+    navigate("/dashboard");
   };
 
   return (
@@ -53,9 +48,7 @@ export default function SignIn({ token }) {
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
           await signIn(values.email, values.password).then(() => {
-            setTimeout(() => {
-              handleSignIn();
-            }, 500);
+            handleSignIn();
           });
         } catch (error) {
           console.log(error);
