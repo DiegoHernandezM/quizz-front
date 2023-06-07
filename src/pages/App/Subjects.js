@@ -13,6 +13,7 @@ export default function SubjectCard({
   subjectId,
   numberOfQuestions,
   latestUserTest,
+  color
 }) {
   const navigate = useNavigate();
 
@@ -27,10 +28,10 @@ export default function SubjectCard({
   };
 
   return (
-    <Box sx={{ minWidth: 200 }}>
+    <Box sx={{ minHeight: 250, marginBottom: 5 }}>
       <Card
+        sx={{ minHeight: 250, boxShadow: "2px 3px 9px #203764",  background: `${color}` }}
         variant="outlined"
-        sx={{ height: 250, boxShadow: "2px 3px 9px #203764" }}
       >
         <CardContent>
           <Typography variant="h5" component="div">
