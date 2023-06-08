@@ -51,8 +51,7 @@ export default function SignIn({ token }) {
             handleSignIn();
           });
         } catch (error) {
-          console.log(error);
-          const message = error.message || "Something went wrong";
+          const message = error?.data?.message || "Something went wrong";
 
           setStatus({ success: false });
           setErrors({ submit: message });
