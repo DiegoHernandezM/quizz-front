@@ -104,7 +104,7 @@ function Dashboard() {
           </Grid>
         </Grid>
         <Grid item xs={12} lg={7}>
-          <BarChart labels={dataBarChart.labels} info={dataBarChart.info} title="Conteo de preguntas por materia" />
+          <BarChart labels={dataBarChart.labels} info={dataBarChart.info} title="Conteo de repetición de test por materia" label="Repeticiones" />
         </Grid>
       </Grid>
 

@@ -25,13 +25,13 @@ const ChartWrapper = styled.div`
   width: 100%;
 `;
 
-const BarChart = ({ theme, labels, info, title  }) => {
+const BarChart = ({ theme, labels, info, title, label  }) => {
   const firstDatasetColor = theme.palette.secondary.main;
   const data = {
     labels: labels ?? [],
     datasets: [
       {
-        label: "# Preguntas",
+        label: label ?? "# Preguntas",
         backgroundColor: firstDatasetColor,
         borderColor: firstDatasetColor,
         hoverBackgroundColor: firstDatasetColor,
