@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router";
+import { getDataStudent } from "../../redux/slices/dashboard";
 import {
   Grid,
   Divider as MuiDivider,
   Typography as MuiTypography,
-  Card,
-  CardActions,
   Button,
   Box,
   Dialog,
@@ -16,11 +16,14 @@ import {
   DialogTitle,
   Slide
 } from "@mui/material";
-import BarChart from "../dashboards/Administrators/BarChart";
-import LinearChartDemo from "../dashboards/Administrators/LinearChartDemo";
 import backgroundJpe from "../../vendor/avatar.png";
+import checkImage from "../../vendor/checklist.png";
+import workingImage from "../../vendor/working.png";
+import subjectImage from "../../vendor/subject.png";
 import useAuth from "../../hooks/useAuth";
 import { spacing } from "@mui/system";
+import Stats from "../dashboards/Administrators/Stats";
+import BarChart from "../dashboards/Administrators/BarChart";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -49,11 +52,16 @@ const Image = styled.img`
 
 function DashboardApp() {
   const { user } = useAuth();
+  const dispatch = useDispatch();
+  const { dataStudent } = useSelector((state) => state.dashboard);
   const navigate = useNavigate();
   const name = localStorage.getItem("user");
   const [open, setOpen] = useState(localStorage.getItem("dashone") === "true");
-  const labels = [1,2,3,4];
-  const info = [10,5,3,3];
+
+  useEffect(() => {
+    dispatch(getDataStudent());
+  }, [dispatch]);
+  
   return (
     <React.Fragment>
       <Helmet title="Dashboard" />
@@ -65,39 +73,40 @@ function DashboardApp() {
         </Grid>
       </Grid>
       <Divider my={6} />
-      <Grid justifyContent="space-between" container>
-        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-          <Box display="flex" justifyContent="center" alignItems="center" minHeight="10vh">
-            <Card sx={{ maxWidth: 345 }}>
-              <BarChart parentCallback={() => null} labels={labels} info={info} />
-              <CardActions>
-                <Button 
-                  variant="contained"
-                  size="small"
-                  onClick={() => navigate("/dashboardapp/results")}
-                >
-                  Ver mi progreso
-                </Button>
-              </CardActions>
-            </Card>
-          </Box>
-        </Grid>    
-        <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-          <Box display="flex" justifyContent="center" alignItems="center" minHeight="10vh">
-            <Card sx={{ maxWidth: 345 }}>
-              <LinearChartDemo labels={labels} info={info} />
-              <CardActions>
-                <Button 
-                  variant="contained"
-                  size="small"
-                  onClick={() => navigate("/dashboardapp/results")}
-                >
-                  Ver mis resultados
-                </Button>
-              </CardActions>
-            </Card>
-          </Box>
+      <Grid container spacing={6}>
+        <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
+          <BarChart labels={dataStudent?.aSubjects} info={dataStudent?.aReps} title="Conteo de test por materia" label="Repeticiones" />
+        </Grid>  
+        <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
+          <Grid container spacing={5}>
+          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+            <Stats
+              title="Materias en curso"
+              amount={dataStudent?.subjectsActives}
+              illustration={subjectImage}
+              additionalText="&nbsp;"
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+            <Stats
+              title="Test simulacro"
+              amount={dataStudent?.test}
+              illustration={workingImage}
+              additionalText="&nbsp;"
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+            <Stats
+              title="Materias terminadas"
+              amount={dataStudent?.subjects}
+              illustration={checkImage}
+              additionalText="&nbsp;"
+            />
+          </Grid>
+          </Grid>
+          
         </Grid>
+        
       </Grid>
       <Dialog
         open={open}
