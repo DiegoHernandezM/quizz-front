@@ -15,13 +15,13 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import "animate.css/animate.min.css";
 import { AuthProvider } from "./contexts/JWTContext";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { CLIENT_PAYPAL } from "./config";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
-
+console.log(CLIENT_PAYPAL);
 const initialOptions = {
-  "client-id":
-    "AckKPDcE6Ek3XiS47nrVGVbVtTGYKI-kz_L7Z4v49OD0ULg-9K2E8nV1poohm1cTTntML-8ZyxwVYD6F",
+  "client-id": CLIENT_PAYPAL,
   currency: "MXN",
   locale: "es_MX",
   intent: "capture",
