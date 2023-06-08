@@ -10,6 +10,7 @@ const initialState = {
   stats: [],
   dataBarChart: [],
   dataLinearChart: [],
+  dataStudent: []
 };
 
 const slice = createSlice({
@@ -52,6 +53,11 @@ const slice = createSlice({
     getLinearChartSuccess(state, action) {
       state.loading = false;
       state.dataLinearChart = action.payload;
+      state.error = false;
+    },
+    getDataStudentSuccess(state, action) {
+      state.loading = false;
+      state.dataStudent = action.payload;
       state.error = false;
     },
     clearDataSuccess(state) {
@@ -122,6 +128,18 @@ export function getDataLinearChart(date) {
         date: moment(date).format("YYYY-MM-DD"),
       });
       dispatch(slice.actions.getLinearChartSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getDataStudent() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get(`/api/dashboardstudent/data`);
+      dispatch(slice.actions.getDataStudentSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

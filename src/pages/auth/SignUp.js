@@ -42,7 +42,7 @@ function SignUp() {
   const { user } = useSelector((state) => state.users);
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
-  const amount = "0.1";
+  const amount = "20.00";
   const description = "Pago para accesar a la APP";
   const style = {"layout":"vertical", "height":33};
   const [open, setOpen] = useState(false);
