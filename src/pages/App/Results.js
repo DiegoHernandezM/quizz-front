@@ -8,16 +8,21 @@ import { DataGrid, esES } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import Navigation from "./Navigation";
 import moment from "moment";
+import { Button } from "@mui/material";
 
 export default function Results() {
   const dispatch = useDispatch();
-  const { userTests } = useSelector((state) => state.usertests);
   const navigate = useNavigate();
+  const { userTests } = useSelector((state) => state.usertests);
   const theme = useTheme();
 
   useEffect(() => {
     dispatch(getUserTests());
   }, []);
+
+  const handleSeeTest = (testId) => {
+    navigate(`/dashboardapp/test?test_id=${testId}`);
+  };
 
   const ProgressDiv = styled("div")({
     width: "100%",
@@ -61,7 +66,7 @@ export default function Results() {
     {
       field: "subject_name",
       headerName: "Materia",
-      width: 120,
+      width: 150,
       renderHeader: (p) => (
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
@@ -70,14 +75,9 @@ export default function Results() {
       },
     },
     {
-      field: "points",
-      headerName: "Puntos",
-      width: 120,
-    },
-    {
       field: "progress",
-      headerName: "Progreso",
-      width: 250,
+      headerName: "Calificación",
+      width: 150,
       renderHeader: (p) => (
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
@@ -118,16 +118,35 @@ export default function Results() {
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
       renderCell: (params) => {
-        const total = params.row.grade + "/" + params.row.points;
+        const total = (params.row.grade ?? 0) + " / " + params.row.points;
         return total;
       },
     },
     {
       field: "duration",
       headerName: "Duración",
-      width: 220,
+      width: 100,
       renderHeader: (p) => (
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
+      ),
+    },
+    {
+      field: "total2",
+      headerName: "Acciones",
+      width: 150,
+      renderHeader: (p) => (
+        <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
+      ),
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => {
+            handleSeeTest(params.row.id);
+          }}
+        >
+          Ver Respuestas
+        </Button>
       ),
     },
   ];
@@ -137,11 +156,7 @@ export default function Results() {
       <Box sx={{ minWidth: 200 }}>
         <div style={{ height: 720, width: "100%" }}>
           <DataGrid
-            initialState={{
-              pagination: { paginationModel: { page: 0, pageSize: 10 } },
-            }}
             localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-            pageSizeOptions={[10, 20, 50]}
             rows={userTests ?? []}
             rowHeight={50}
             columns={columns}

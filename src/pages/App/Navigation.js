@@ -7,7 +7,7 @@ import {
   Quiz as QuizIcon,
   Subject as SubjectIcon,
   Checklist as CheckListIcon,
-  Home as HomeIcon
+  Home as HomeIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 
@@ -15,8 +15,15 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   const navigate = useNavigate();
   return (
     <Box
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0, width: "100%" }}
-      elevation={3}
+      sx={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: "100%",
+        zIndex: 1000,
+      }}
+      elevation={10}
     >
       <BottomNavigation showLabels>
         <BottomNavigationAction

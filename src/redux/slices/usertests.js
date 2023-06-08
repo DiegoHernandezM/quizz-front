@@ -6,6 +6,7 @@ const initialState = {
   userTests: [],
   subject: {},
   testQuestions: [],
+  onlyShow: false,
   isLoading: false,
   error: null,
 };
@@ -19,6 +20,14 @@ const slice = createSlice({
       state.userTest.questions = JSON.parse(payload.payload.userTest.questions);
       state.subject = payload.payload.subject;
       state.testQuestions = payload.payload.questions;
+      state.isLoading = false;
+    },
+    showUserTest(state, payload) {
+      state.userTest = payload.payload.userTest;
+      state.userTest.questions = JSON.parse(payload.payload.userTest.questions);
+      state.subject = payload.payload.subject;
+      state.testQuestions = payload.payload.questions;
+      state.onlyShow = true;
       state.isLoading = false;
     },
     hasError(state, payload) {
@@ -85,6 +94,17 @@ export function getUserTests() {
     try {
       const response = await axios.get(`/api/usertest/getfromuser`);
       dispatch(slice.actions.setUserTests(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function setTestFromId(id) {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`/api/usertest/find/${id}`);
+      dispatch(slice.actions.showUserTest(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
