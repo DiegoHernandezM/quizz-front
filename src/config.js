@@ -2,6 +2,7 @@ export const applicationConfig = {
   baseUrl: process.env.REACT_APP_BASE_URL,
 };
 export const HOST_API = process.env.REACT_APP_BASE_URL || '';
+export const CLIENT_PAYPAL = process.env.REACT_APP_PAYPAL_CLIENT || '';
 
 export const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
