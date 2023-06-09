@@ -9,7 +9,7 @@ const UserProgress = ({ open, close, progress }) => {
   const theme = useTheme();
   const ProgressDiv = styled("div")({
     width: "100%",
-    border: "1px solid rgba(255, 255, 255, 0.12)",
+    border: "1px solid rgba(140, 140, 140, 0.5)",
     height: "26px",
     overflow: "hidden",
     position: "relative",
