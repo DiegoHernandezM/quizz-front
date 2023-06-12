@@ -234,14 +234,14 @@ function Subjects() {
     setOpenConfirm(false);
   };
 
-  const handleCallback = (values) => {
-    dispatch(createSubject(values));
+  const handleCallback = (values, image) => {
+    dispatch(createSubject(values, image));
   };
 
-  function updateSubject(values) {
+  function updateSubject(values, image) {
     return (dispatch) =>
       new Promise((resolve) => {
-        resolve(dispatch(update(id, values)));
+        resolve(dispatch(update(id, values, image)));
       })
         .then((response) => {
           dispatch(getSubjects());
@@ -253,10 +253,10 @@ function Subjects() {
         });
   }
 
-  function createSubject(values) {
+  function createSubject(values, image) {
     return (dispatch) =>
       new Promise((resolve) => {
-        resolve(dispatch(create(values)));
+        resolve(dispatch(create(values, image)));
       })
         .then((response) => {
           dispatch(getSubjects());
@@ -268,8 +268,8 @@ function Subjects() {
         });
   }
 
-  const handleUpdate = (values) => {
-    dispatch(updateSubject(values));
+  const handleUpdate = (values, image) => {
+    dispatch(updateSubject(values, image));
   };
 
   function handleCallQuestions(subject) {
