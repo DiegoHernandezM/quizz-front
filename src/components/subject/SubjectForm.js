@@ -1,10 +1,20 @@
-import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 // material
-import { Box, Button, Drawer, FormControl, TextField, Typography, IconButton } from '@mui/material';
-import { Close } from '@mui/icons-material';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
+import {
+  Box,
+  Button,
+  Drawer,
+  FormControl,
+  TextField,
+  Typography,
+  IconButton,
+} from "@mui/material";
+import { Close } from "@mui/icons-material";
+import * as yup from "yup";
+import { useFormik } from "formik";
+import SnackAlert from "../../../src/pages/components/general/SnackAlert";
+
 // ----------------------------------------------------------------------
 
 SubjectForm.propTypes = {
@@ -13,7 +23,7 @@ SubjectForm.propTypes = {
   parentCallback: PropTypes.any,
   subject: PropTypes.object,
   update: PropTypes.bool,
-  updateRegister: PropTypes.func
+  updateRegister: PropTypes.func,
 };
 
 export default function SubjectForm({
@@ -22,47 +32,81 @@ export default function SubjectForm({
   parentCallback,
   subject,
   update,
-  updateRegister
+  updateRegister,
 }) {
+  const [image, setImage] = useState(null);
+  const [openMessage, setOpenMessage] = useState(false);
+  const [typeMessage, setTypeMessage] = useState("success");
+  const [message, setMessage] = useState("");
   const validationSchema = yup.object({
-    name: yup.string('Nombre').required('El nombre es requerido'),
+    name: yup.string("Nombre").required("El nombre es requerido"),
   });
   const formik = useFormik({
     initialValues: {
-      name: '',
-      description: ''
+      name: "",
+      // description: "",
     },
     validationSchema,
     onSubmit: (values, { resetForm }) => {
       if (!update) {
-        parentCallback(values);
+        if (image !== null) {
+          parentCallback(values, image);
+        } else {
+          setMessage("Debe agregar una imagen");
+          setTypeMessage("error");
+          setOpenMessage(true);
+        }
       } else {
-        updateRegister(values);
+        if (image !== null) {
+          updateRegister(values, image);
+        } else {
+          setMessage("Debe agregar una imagen");
+          setTypeMessage("error");
+          setOpenMessage(true);
+        }
       }
       resetForm(formik.initialValues);
-    }
+    },
   });
 
-  useEffect(() => {  
-    formik.setFieldValue('name', update ? subject.name : formik.initialValues.name);
-    formik.setFieldValue('description', update ? subject.description : formik.initialValues.description);
+  useEffect(() => {
+    formik.setFieldValue(
+      "name",
+      update ? subject.name : formik.initialValues.name
+    );
+    /*formik.setFieldValue(
+      "description",
+      update ? subject.description : formik.initialValues.description
+    );*/
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [update, subject]);
 
+  const handleCloseMessage = () => {
+    setOpenMessage(false);
+  };
+
   return (
     <Drawer anchor="right" open={open} onClose={close}>
-      <Box sx={{ width: { xs: '100%', md: '500px', xl: '600px' }, padding: "10px" }}>
+      <Box
+        sx={{
+          width: { xs: "100%", md: "500px", xl: "600px" },
+          padding: "10px",
+        }}
+      >
         <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
           <Box
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              flexWrap: 'nowrap',
-              justifyContent: 'space-between'
+              display: "flex",
+              flexDirection: "row",
+              flexWrap: "nowrap",
+              justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4" style={{ marginTop: '10px', marginBottom: '30px' }}>
-              {update ? 'Actualizar' : 'Nuevo'}
+            <Typography
+              variant="h4"
+              style={{ marginTop: "10px", marginBottom: "30px" }}
+            >
+              {update ? "Actualizar" : "Nuevo"}
             </Typography>
             <Button
               variant="contained"
@@ -70,32 +114,32 @@ export default function SubjectForm({
               type="submit"
               style={{
                 borderRadius: 30,
-                height: '30px',
-                marginTop: '10px',
-                marginLeft: '10px',
-                marginBottom: '30px'
+                height: "30px",
+                marginTop: "10px",
+                marginLeft: "10px",
+                marginBottom: "30px",
               }}
               size="small"
             >
-              {update ? 'Actualizar' : 'Guardar'}
+              {update ? "Actualizar" : "Guardar"}
             </Button>
             <IconButton
               aria-label="close"
               onClick={close}
               sx={{
-                color: (theme) => theme.palette.grey[500]
+                color: (theme) => theme.palette.grey[500],
               }}
-              style={{ marginTop: '10px', marginBottom: '30px' }}
+              style={{ marginTop: "10px", marginBottom: "30px" }}
             >
               <Close />
             </IconButton>
           </Box>
-          <FormControl style={{ marginTop: '8px', width: '100%' }}>
+          <FormControl style={{ marginTop: "8px", width: "100%" }}>
             <TextField
               id="name"
               name="name"
               label="Nombre"
-              value={formik.values.name || ''}
+              value={formik.values.name || ""}
               onChange={formik.handleChange}
               error={formik.touched.name && Boolean(formik.errors.name)}
               fullWidth
@@ -103,21 +147,39 @@ export default function SubjectForm({
               size="small"
             />
           </FormControl>
-          <FormControl style={{ marginTop: '8px', width: '100%' }}>
+          {/*<FormControl style={{ marginTop: "8px", width: "100%" }}>
             <TextField
               id="description"
               label="Descripción"
               placeholder="Descripción"
               multiline
               name="description"
-              value={formik.values.description || ''}
+              value={formik.values.description || ""}
               onChange={formik.handleChange}
-              error={formik.touched.description && Boolean(formik.errors.description)}
+              error={
+                formik.touched.description && Boolean(formik.errors.description)
+              }
+              fullWidth
+            />
+          </FormControl>*/}
+          <FormControl style={{ marginTop: "8px", width: "100%" }}>
+            <TextField
+              id="image"
+              type="file"
+              name="imagen"
+              accepts="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
               fullWidth
             />
           </FormControl>
         </form>
       </Box>
+      <SnackAlert
+        message={message}
+        type={typeMessage}
+        open={openMessage}
+        close={handleCloseMessage}
+      />
     </Drawer>
   );
 }
