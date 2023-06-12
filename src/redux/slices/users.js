@@ -40,11 +40,12 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-export function getUsers() {
+export function getUsers(trashed) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/user/all`);
+      const response = await axios.get(`/api/user/all`,
+      { params: { trashed } });
       dispatch(slice.actions.getUsersSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

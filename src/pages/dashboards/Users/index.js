@@ -11,7 +11,12 @@ import {
   Link,
   Tooltip,
   Typography,
+  Box,
+  Tab
 } from "@mui/material";
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 import { spacing } from "@mui/system";
 import { DataGrid, esES } from "@mui/x-data-grid";
 import { Add as AddIcon } from "@mui/icons-material";
@@ -62,6 +67,12 @@ function Users() {
   const [userId, setUserId] = useState(0);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [modeRestore, setModeRestore] = useState(false);
+  const [value, setValue] = useState('1');
+
+  const handleChange = (e, newValue) => {
+    dispatch(getUsers(newValue === '1' ? false : true));
+    setValue(newValue);
+  };
 
   const columns = [
     {
@@ -107,8 +118,14 @@ function Users() {
       renderHeader: (p) => (
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
-      renderCell: (params) =>
-        params.row.payments?.length > 0 ? params.row.payments[0].create_time : "Sin dato",
+      renderCell: (params) => {
+        if (params.row.expires_at === null) {
+          return params.row.payments?.length > 0 ? params.row.payments[0].create_time : "Sin dato";
+        } else {
+          return params.row.expires_at;
+        }
+      }
+        
     },
     {
       field: "action",
@@ -166,7 +183,7 @@ function Users() {
   ];
 
   useEffect(() => {
-    dispatch(getUsers());
+    dispatch(getUsers(false));
   }, [dispatch]);
 
   const requestSearch = (searchValue) => {
@@ -348,9 +365,15 @@ function Users() {
           close={handleCloseMessage}
         />
         <Card>
-          <div style={{ height: 600, width: "100%" }}>
-            <div style={{ display: "flex", height: "100%" }}>
-              <div style={{ flexGrow: 1 }}>
+          <Box sx={{ width: '100%', typography: 'body1' }}>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }} display="flex" justifyContent="center" alignItems="center">
+                <TabList onChange={handleChange}>
+                  <Tab label="Activos" value="1" />
+                  <Tab label="Inactivos" value="2" />
+                </TabList>
+              </Box>
+              <div style={{ height: 400, width: "100%" }}>
                 <DataGrid
                   components={{
                     Toolbar: QuickSearch,
@@ -385,8 +408,8 @@ function Users() {
                   pageSize={10}
                 />
               </div>
-            </div>
-          </div>
+            </TabContext>
+          </Box>
           <UserForm
             open={openForm}
             close={handleCloseForm}
