@@ -40,10 +40,10 @@ export default function SignIn({ token }) {
       }}
       validationSchema={Yup.object().shape({
         email: Yup.string()
-          .email("Must be a valid email")
+          .email("Tiene que ser un coreo valido")
           .max(255)
-          .required("Email is required"),
-        password: Yup.string().max(255).required("Password is required"),
+          .required("El correo es requerido"),
+        password: Yup.string().max(255).required("La Contraseña es requerida"),
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
@@ -51,7 +51,7 @@ export default function SignIn({ token }) {
             handleSignIn();
           });
         } catch (error) {
-          const message = error?.data?.message || "Something went wrong";
+          const message = error?.data?.message || "Algo salio mal";
 
           setStatus({ success: false });
           setErrors({ submit: message });
@@ -77,7 +77,7 @@ export default function SignIn({ token }) {
           <TextField
             type="email"
             name="email"
-            label="Email Address"
+            label="Correo electronico"
             value={values.email}
             error={Boolean(touched.email && errors.email)}
             fullWidth
@@ -89,7 +89,7 @@ export default function SignIn({ token }) {
           <TextField
             type="password"
             name="password"
-            label="Password"
+            label="Contraseña"
             value={values.password}
             error={Boolean(touched.password && errors.password)}
             fullWidth
@@ -107,14 +107,16 @@ export default function SignIn({ token }) {
           >
             Ingresar
           </Button>
-          <Button
+          {/* 
+           <Button
             component={Link}
             to="/auth/reset-password"
             fullWidth
             color="primary"
-          >
-            Olvide mi contraseña
-          </Button>
+            >
+              Olvide mi contraseña
+            </Button>
+          */}
         </form>
       )}
     </Formik>
