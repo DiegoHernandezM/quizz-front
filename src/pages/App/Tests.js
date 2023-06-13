@@ -27,7 +27,7 @@ import {
   Typography,
   AppBar,
   Toolbar,
-  IconButton
+  IconButton,
 } from "@mui/material";
 import useAuth from "../../hooks/useAuth";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
@@ -43,6 +43,7 @@ function Tests() {
   const { testQuestions, userTest, subject } = useSelector(
     (state) => state.usertests
   );
+
   const maxSteps = testQuestions.length;
   const queryParameters = new URLSearchParams(window.location.search);
   const subject_id = queryParameters.get("subject_id");
@@ -79,14 +80,16 @@ function Tests() {
     }
 
     if (userTest.questions) {
-      let pre = Object.entries(userTest.questions);
+      let pre = userTest.questions;
+      console.log(pre);
       let a = Object.keys(pre);
-      let step = a.find((k) => pre[k][1] === "");
-
+      let step = a.find((k) => Object.values(pre[k])[0] === "");
+      console.log(step);
       if (step === undefined) {
         step = maxSteps - 1;
         setAnswered(true);
       } else {
+        setAnswered(false);
         step = parseInt(step) - 1;
       }
       if (step < 0) step = 0;
@@ -108,6 +111,7 @@ function Tests() {
 
   const handleResetTest = () => {
     dispatch(resetTest(userTest.subject_id ?? null));
+    setOpen(false);
   };
 
   const handleEndTest = () => {
@@ -118,7 +122,13 @@ function Tests() {
 
   const getColor = () => {
     const percent = (userTest.grade * 100) / userTest.points;
-    return percent > 80 ? "green" : percent > 70 ? "#f4bb00" : percent < 70 ? "red" : "red"
+    return percent > 80
+      ? "green"
+      : percent > 70
+      ? "#f4bb00"
+      : percent < 70
+      ? "red"
+      : "red";
   };
 
   return (
@@ -146,7 +156,7 @@ function Tests() {
             ) : null}
           </h2>
           {userTest.completed && testId > 0 ? (
-            <Typography variant="h4">
+            <Typography variant="h4" component={"span"}>
               Calificación: {userTest.grade} / {userTest.points} (
               {((userTest.grade * 100) / userTest.points).toFixed(2)}%)
             </Typography>
@@ -176,12 +186,12 @@ function Tests() {
                 key={testQuestions[activeStep].id}
                 question={testQuestions[activeStep]}
                 value={
-                  userTest.questions[testQuestions[activeStep].id]
-                    ? userTest.questions[testQuestions[activeStep].id]
+                  Object.values(userTest.questions[activeStep])[0]
+                    ? Object.values(userTest.questions[activeStep])[0]
                     : ""
                 }
                 disabled={
-                  userTest.questions[testQuestions[activeStep].id]
+                  Object.values(userTest.questions[activeStep])[0]
                     ? true
                     : false
                 }
@@ -220,8 +230,8 @@ function Tests() {
           </Box>
           <br />
           {testQuestions[activeStep] &&
-            userTest.questions[testQuestions[activeStep].id] &&
-            testQuestions[activeStep].explanation ? (
+          Object.values(userTest.questions[activeStep])[0] &&
+          testQuestions[activeStep].explanation ? (
             <Button
               size="small"
               variant="outlined"
@@ -258,7 +268,11 @@ function Tests() {
           open={explainOpen}
           onClose={() => setExplainOpen(false)}
         >
-          <Typography variant="h5" sx={{ margin: "0 auto", marginTop: "20px" }}>
+          <Typography
+            variant="h5"
+            sx={{ margin: "0 auto", marginTop: "20px" }}
+            component={"span"}
+          >
             {testQuestions[activeStep].explanation ?? "Sin explicación..."}
           </Typography>
         </Drawer>
@@ -269,63 +283,88 @@ function Tests() {
         aria-describedby="alert-dialog-slide-description"
         fullScreen
       >
-        <AppBar sx={{ position: 'relative' }}>
+        <AppBar sx={{ position: "relative" }}>
           <Toolbar>
             <IconButton
               edge="start"
               color="inherit"
               onClick={() => setOpen(false)}
               aria-label="close"
+            ></IconButton>
+            <Typography
+              sx={{ ml: 2, flex: 1 }}
+              variant="h3"
+              component="div"
+              onClick={() => setOpen(false)}
             >
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h3" component="div" onClick={() => setOpen(false)}>
               Aviation In InSight
             </Typography>
           </Toolbar>
         </AppBar>
         <DialogTitle style={{ background: "white" }}>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: "15%" }}>
-            <Typography variant="h1">{"¡Test completado!"}</Typography>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            style={{ marginTop: "15%" }}
+          >
+            <Typography variant="h1" component={"span"}>
+              {"¡Test completado!"}
+            </Typography>
           </Box>
         </DialogTitle>
         <DialogContent style={{ background: "white" }}>
           <DialogContentText id="alert-dialog-slide-description">
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography
-                variant="h2"
-                color={getColor}
-              >
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              component={"span"}
+            >
+              <Typography variant="h2" color={getColor} component={"span"}>
                 Tu puntaje fue de {userTest.grade} / {userTest.points} (
                 {((userTest.grade * 100) / userTest.points).toFixed(2)}%)
               </Typography>
             </Box>
-            <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: "20px" }}>
-              {
-                ((userTest.grade * 100) / userTest.points) > 80 ?
-                  (
-                    <Typography variant="h3" color={getColor}>
-                      Excelente trabajo capitán
-                    </Typography>
-                  ) : ((userTest.grade * 100) / userTest.points) > 70 ?
-                    (
-                      <Typography variant="h3" color={getColor}>
-                        Sigue practicando para emprender el vuelo. Estas cerca del éxito
-                      </Typography>
-                    ) : ((userTest.grade * 100) / userTest.points) < 70 ?
-                      (
-                        <Typography variant="h3" color={getColor}>
-                          Hay que reforzar conceptos, aún estas a tiempo. Ánimo capitán
-                        </Typography>
-                      ) : null
-              }
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ marginTop: "20px" }}
+              component={"span"}
+            >
+              {(userTest.grade * 100) / userTest.points > 80 ? (
+                <Typography variant="h3" color={getColor} component={"span"}>
+                  Excelente trabajo capitán
+                </Typography>
+              ) : (userTest.grade * 100) / userTest.points > 70 ? (
+                <Typography variant="h3" color={getColor} component={"span"}>
+                  Sigue practicando para emprender el vuelo. Estas cerca del
+                  éxito
+                </Typography>
+              ) : (userTest.grade * 100) / userTest.points < 70 ? (
+                <Typography variant="h3" color={getColor} component={"span"}>
+                  Hay que reforzar conceptos, aún estas a tiempo. Ánimo capitán
+                </Typography>
+              ) : null}
             </Box>
           </DialogContentText>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: "20px" }}>
-            <Typography variant="h6">
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            style={{ marginTop: "20px" }}
+          >
+            <Typography variant="h6" component={"span"}>
               ¿Qué deseas hacer?
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px' }}>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            style={{ marginTop: "20px" }}
+          >
             <Button
               variant="contained"
               onClick={() => setOpen(false)}
@@ -334,7 +373,12 @@ function Tests() {
               Revisar mis respuestas
             </Button>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px' }}>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            style={{ marginTop: "20px" }}
+          >
             <Button
               variant="contained"
               onClick={handleResetTest}
@@ -343,7 +387,12 @@ function Tests() {
               Reintentar
             </Button>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px' }}>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            style={{ marginTop: "20px" }}
+          >
             <Button
               variant="contained"
               onClick={() => navigate("/dashboardapp")}
