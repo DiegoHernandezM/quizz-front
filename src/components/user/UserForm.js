@@ -100,7 +100,7 @@ export default function UserForm({
     );
     formik.setFieldValue(
       "expires_at",
-      update && user?.payments?.length > 0 ? user.payments[0].create_time : formik.initialValues.expires_at
+      update && user.expires_at !== null ? moment(user.expires_at).toDate() :  user?.payments?.length > 0 ? user.payments[0].create_time : formik.initialValues.expires_at
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [update, user]);

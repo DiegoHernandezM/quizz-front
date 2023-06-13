@@ -1,3 +1,5 @@
+/* eslint-disable no-octal-escape */
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "@emotion/styled";
@@ -8,13 +10,16 @@ import {
   CardActions,
   Typography as MuiTypography,
   Button,
+  CardMedia
 } from "@mui/material";
 
 import { useTheme } from "@emotion/react";
+import { HOST_API } from "../../config";
+
 
 export default function SubjectCard({
   subjectName,
-  subjectDescription,
+  subjectImage,
   subjectId,
   numberOfQuestions,
   latestUserTest,
@@ -59,19 +64,21 @@ export default function SubjectCard({
           boxShadow: "2px 3px 9px #203764",
           background: `${color}`,
         }}
-        variant="outlined"
       >
+        <CardMedia
+          sx={{ height: 160 }}
+          image={
+            subjectImage !== null
+              ? `${HOST_API}/images/${subjectImage}`
+              : `${HOST_API}/images/default.png`
+          }
+          title="subject"
+        />
         <CardContent>
-          <Typography variant="h5" component="div">
+          <Typography gutterBottom variant="h5" component="div">
             {subjectName}
           </Typography>
-          <Typography
-            sx={{ mb: 1.5, height: "120px", overflow: "scroll" }}
-            color="text.secondary"
-          >
-            {subjectDescription}
-          </Typography>
-          <Typography variant="body2">
+          <Typography variant="body2" color="text.secondary">
             {numberOfQuestions} preguntas.{" "}
             {latestUserTest &&
               latestUserTest.percentage != null &&

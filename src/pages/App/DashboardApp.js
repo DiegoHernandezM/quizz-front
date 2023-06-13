@@ -14,8 +14,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Slide
+  Slide,
+  AppBar,
+  Toolbar,
+  IconButton
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import backgroundJpe from "../../vendor/avatar.png";
 import checkImage from "../../vendor/checklist.png";
 import workingImage from "../../vendor/working.png";
@@ -56,7 +60,7 @@ function DashboardApp() {
   const { dataStudent } = useSelector((state) => state.dashboard);
   const navigate = useNavigate();
   const name = localStorage.getItem("user");
-  const [open, setOpen] = useState(localStorage.getItem("dashone") === "true");
+  const [open, setOpen] = useState(localStorage.getItem("dashone") === "false");
 
   useEffect(() => {
     dispatch(getDataStudent());
@@ -118,17 +122,41 @@ function DashboardApp() {
         }}
         aria-describedby="alert-dialog-slide-description"
         style={{ background: "white" }}
+        fullScreen
       >
-        <DialogTitle style={{ background: "white" }}>
-          <Box display="flex" justifyContent="center" alignItems="center">
+        <AppBar sx={{ position: 'relative' }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={() => setOpen(false)}
+              aria-label="close"
+            >
+              </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h3" component="div" onClick={() => {
+              setOpen(false);
+              localStorage.setItem("dashone", false);
+            }}>
+              Aviation In InSight
+            </Typography>
+            <Button autoFocus color="inherit" onClick={() => {
+              setOpen(false);
+              localStorage.setItem("dashone", false);
+              }}>
+              Comenzar
+            </Button>
+          </Toolbar>
+        </AppBar>
+        <DialogTitle>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10%'}}>
             <Typography variant="h1">
               {"Hola Capitán"}
             </Typography>
           </Box>
         </DialogTitle>
-        <DialogContent style={{ background: "white" }}>
+        <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            <Box display="flex" justifyContent="center" alignItems="center">
+            <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px'}}>
               <Typography variant="h2">
                 Bienvenido a
               </Typography>
@@ -142,10 +170,15 @@ function DashboardApp() {
           <Box display="flex" justifyContent="center" alignItems="center">
             <Image alt="App de aviacion" src={backgroundJpe} />
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center">
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px'}}>
             <Typography variant="subtitle1">
                 ¿Que desea hacer hoy capitán {name} ?
             </Typography>
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px'}}>
+            <Button variant="contained" autoFocus onClick={() => setOpen(false)} size="large">
+              Comenzar
+            </Button>
           </Box>
         </DialogContent>
       </Dialog>

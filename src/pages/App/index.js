@@ -37,7 +37,8 @@ function App() {
             <Grid key={subject.id} item xs={6} sm={6} md={4} lg={3}>
               <Subjects
                 subjectName={subject.name}
-                subjectDescription={subject.description}
+                // subjectDescription={subject.description}
+                subjectImage={subject.image}
                 subjectId={subject.id}
                 numberOfQuestions={subject.questions_count}
                 latestUserTest={subject.latest_user_test}

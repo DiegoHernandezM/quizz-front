@@ -17,9 +17,9 @@ const slice = createSlice({
       state.isLoading = false;
     },
     setSubject(state, payload) {
-        state.subject = payload.payload.data;
-        state.isLoading = false;
-      },
+      state.subject = payload.payload.data;
+      state.isLoading = false;
+    },
     hasError(state, payload) {
       console.log(payload);
     },
@@ -51,12 +51,15 @@ export function getSubject(id) {
   };
 }
 
-export function create(values) {
+export function create(values, image) {
   return async (dispatch) => {
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("name", values.name);
+    // formData.append("description", values.description);
     try {
-      const response = await axios.post(`/api/subject/create`, {
-        name: values.name,
-        description: values.description
+      const response = await axios.post("/api/subject/create", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
       return Promise.resolve(response);
     } catch (error) {
@@ -66,12 +69,15 @@ export function create(values) {
   };
 }
 
-export function update(id, values) {
+export function update(id, values, image) {
   return async (dispatch) => {
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("name", values.name);
+    // formData.append("description", values.description);
     try {
-      const response = await axios.post(`/api/subject/update/${id}`, {
-        name: values.name,
-        description: values.description
+      const response = await axios.post(`/api/subject/update/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
       return Promise.resolve(response);
     } catch (error) {

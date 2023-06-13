@@ -24,8 +24,10 @@ import {
   LinearProgress,
   MobileStepper,
   Paper,
-  Slide,
   Typography,
+  AppBar,
+  Toolbar,
+  IconButton
 } from "@mui/material";
 import useAuth from "../../hooks/useAuth";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
@@ -111,6 +113,10 @@ function Tests() {
     dispatch(endTest(userTest.subject_id ?? null)).then(() => {
       setOpen(true);
     });
+
+  const getColor = () => {
+    const percent = (userTest.grade * 100) / userTest.points;
+    return percent > 80 ? "green" : percent > 70 ? "#f4bb00" : percent < 70 ? "red" : "red"
   };
 
   return (
@@ -259,47 +265,82 @@ function Tests() {
         open={open}
         onClose={() => setOpen(false)}
         aria-describedby="alert-dialog-slide-description"
+        fullScreen
       >
+         <AppBar sx={{ position: 'relative' }}>
+          <Toolbar>
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={() => setOpen(false)}
+              aria-label="close"
+            >
+              </IconButton>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h3" component="div" onClick={() => setOpen(false)}>
+              Aviation In InSight
+            </Typography>
+          </Toolbar>
+        </AppBar>
         <DialogTitle style={{ background: "white" }}>
-          <Box display="flex" justifyContent="center" alignItems="center">
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: "15%" }}>
             <Typography variant="h1">{"¡Test completado!"}</Typography>
           </Box>
         </DialogTitle>
         <DialogContent style={{ background: "white" }}>
           <DialogContentText id="alert-dialog-slide-description">
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              component={"span"}
-            >
-              <Typography variant="h2" component={"span"}>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <Typography 
+                variant="h2"
+                color={getColor}
+                >
                 Tu puntaje fue de {userTest.grade} / {userTest.points} (
                 {((userTest.grade * 100) / userTest.points).toFixed(2)}%)
               </Typography>
             </Box>
+            <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: "20px" }}>
+              {
+                ((userTest.grade * 100) / userTest.points) > 80 ? 
+                (
+                  <Typography variant="h3" color={getColor}>
+                    Excelente trabajo capitán
+                  </Typography>
+                ) : ((userTest.grade * 100) / userTest.points) > 70 ? 
+                (
+                  <Typography variant="h3" color={getColor}>
+                    Sigue practicando para emprender el vuelo. Estas cerca del éxito
+                  </Typography>
+                ) : ((userTest.grade * 100) / userTest.points) < 70 ? 
+                (
+                  <Typography variant="h3" color={getColor}>
+                    Hay que reforzar conceptos, aún estas a tiempo. Ánimo capitán
+                  </Typography>
+                ): null
+              }
+            </Box>
           </DialogContentText>
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <Typography variant="subtitle1">
-              Deseas volver a intentarlo?
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: "20px" }}>
+            <Typography variant="h6">
+              ¿Qué deseas hacer?
             </Typography>
           </Box>
-          <DialogActions>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px'}}>
             <Button
-              variant="outlined"
+              variant="contained"
               onClick={() => setOpen(false)}
               color="primary"
             >
               Revisar mis respuestas
             </Button>
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px'}}>
             <Button
-              variant="contained"
-              onClick={handleResetTest}
-              color="primary"
-            >
-              Reintentar
+                variant="contained"
+                onClick={handleResetTest}
+                color="primary"
+              >
+                Reintentar
             </Button>
-          </DialogActions>
+          </Box>
         </DialogContent>
       </Dialog>
     </React.Fragment>

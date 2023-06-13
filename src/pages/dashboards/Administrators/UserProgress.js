@@ -9,7 +9,7 @@ const UserProgress = ({ open, close, progress }) => {
   const theme = useTheme();
   const ProgressDiv = styled("div")({
     width: "100%",
-    border: "1px solid rgba(255, 255, 255, 0.12)",
+    border: "1px solid rgba(140, 140, 140, 0.5)",
     height: "26px",
     overflow: "hidden",
     position: "relative",
@@ -46,23 +46,37 @@ const UserProgress = ({ open, close, progress }) => {
     },
     {
       field: "progress",
-      headerName: "Progreso",
-      width: 250,
+      headerName: "Calificación",
+      width: 150,
       renderHeader: (p) => (
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
       renderCell: (params) => {
-        return (
+        const result = ((params.row.grade * 100) / params.row.points).toFixed(
+          2
+        );
+        let color = "";
+        if (result < 70) {
+          color = "rgb(255, 140, 140, 0.5)";
+        } else if (result > 70 && result < 80) {
+          color = "rgb(255, 255, 0, 0.5)";
+        } else if (result > 80 && result <= 100) {
+          color = "rgb(140, 255, 140, 0.5)";
+        }
+        return params.row.grade !== null || params.row.points ? (
           <ProgressDiv>
-            <ProgressContainer>{params.row.percentage}%</ProgressContainer>
+            <ProgressContainer>{result}%</ProgressContainer>
             <div
               style={{
                 height: "100%",
-                maxWidth: `${params.row.percentage}%`,
-                backgroundColor: theme.palette.mode === 'light' ? theme.palette.primary.light : theme.palette.primary.dark
+                maxWidth: `${result}%`,
+                backgroundColor: color,
+                background: color,
               }}
             />
           </ProgressDiv>
+        ) : (
+          "Sin datos"
         );
       },
     },
