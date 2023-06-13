@@ -5,8 +5,16 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import FormLabel from "@mui/material/FormLabel";
+import { styled } from "@mui/system";
 
-const Question = ({ question, value, showAnswer, disabled, handleChange }) => {
+const Question = ({
+  question,
+  value,
+  showAnswer,
+  disabled,
+  handleChange,
+  rightAnswer,
+}) => {
   return (
     <FormControl
       error={value !== question.answer && showAnswer === 1}
@@ -19,7 +27,6 @@ const Question = ({ question, value, showAnswer, disabled, handleChange }) => {
         {question.question}
       </FormLabel>
       <RadioGroup
-        row
         aria-labelledby="demo-row-radio-buttons-group-label"
         name={`${question.id}`}
         value={value}
@@ -31,18 +38,54 @@ const Question = ({ question, value, showAnswer, disabled, handleChange }) => {
           control={<Radio />}
           label={`A) ${question.a}`}
           disabled={disabled}
+          componentsProps={{
+            typography: {
+              sx: {
+                "&.Mui-disabled": {
+                  color:
+                    "A" !== question.answer
+                      ? "red !important"
+                      : "green !important",
+                },
+              },
+            },
+          }}
         />
         <FormControlLabel
           value="B"
           control={<Radio />}
           label={`B) ${question.b}`}
           disabled={disabled}
+          componentsProps={{
+            typography: {
+              sx: {
+                "&.Mui-disabled": {
+                  color:
+                    "B" !== question.answer
+                      ? "red !important"
+                      : "green !important",
+                },
+              },
+            },
+          }}
         />
         <FormControlLabel
           value="C"
           control={<Radio />}
           label={`C) ${question.c}`}
           disabled={disabled}
+          componentsProps={{
+            typography: {
+              sx: {
+                "&.Mui-disabled": {
+                  color:
+                    "C" !== question.answer
+                      ? "red !important"
+                      : "green !important",
+                },
+              },
+            },
+          }}
         />
         {question.d && (
           <FormControlLabel
@@ -50,6 +93,18 @@ const Question = ({ question, value, showAnswer, disabled, handleChange }) => {
             control={<Radio />}
             label={`D) ${question.d}`}
             disabled={disabled}
+            componentsProps={{
+              typography: {
+                sx: {
+                  "&.Mui-disabled": {
+                    color:
+                      "D" !== question.answer
+                        ? "red !important"
+                        : "green !important",
+                  },
+                },
+              },
+            }}
           />
         )}
         {question.e && (
@@ -58,12 +113,21 @@ const Question = ({ question, value, showAnswer, disabled, handleChange }) => {
             control={<Radio />}
             label={`E) ${question.e}`}
             disabled={disabled}
+            componentsProps={{
+              typography: {
+                sx: {
+                  "&.Mui-disabled": {
+                    color:
+                      "E" !== question.answer
+                        ? "red !important"
+                        : "green !important",
+                  },
+                },
+              },
+            }}
           />
         )}
       </RadioGroup>
-      {showAnswer === 1 && value !== question.answer && (
-        <FormHelperText>{question.explanation}</FormHelperText>
-      )}
     </FormControl>
   );
 };

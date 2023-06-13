@@ -9,6 +9,7 @@ import {
   saveAnswer,
   resetTest,
   setTestFromId,
+  endTest,
 } from "../../redux/slices/usertests";
 import { useFormik } from "formik";
 import {
@@ -19,20 +20,28 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Drawer,
   LinearProgress,
+  MobileStepper,
   Paper,
   Slide,
   Typography,
 } from "@mui/material";
 import useAuth from "../../hooks/useAuth";
+import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
+import { set } from "date-fns";
 
 function Tests() {
   const dispatch = useDispatch();
   const { user } = useAuth();
   const [open, setOpen] = React.useState(false);
+  const [explainOpen, setExplainOpen] = React.useState(false);
+  const [answered, setAnswered] = React.useState(false);
+  const [activeStep, setActiveStep] = React.useState(0);
   const { testQuestions, userTest, subject } = useSelector(
     (state) => state.usertests
   );
+  const maxSteps = testQuestions.length;
   const queryParameters = new URLSearchParams(window.location.search);
   const subject_id = queryParameters.get("subject_id");
   const testId = queryParameters.get("test_id");
@@ -45,6 +54,14 @@ function Tests() {
     }
   }, []);
 
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
   const formik = useFormik({
     initialValues: userTest.questions,
     onSubmit: (values, { resetForm }) => {
@@ -54,7 +71,24 @@ function Tests() {
 
   useEffect(() => {
     formik.setValues(userTest.questions);
-    setOpen(userTest.completed && testId === null);
+    if (userTest.completed && testId === null) {
+      setOpen(true);
+    }
+
+    if (userTest.questions) {
+      let pre = Object.entries(userTest.questions);
+      let a = Object.keys(pre);
+      let step = a.find((k) => pre[k][1] === "");
+
+      if (step === undefined) {
+        step = maxSteps - 1;
+        setAnswered(true);
+      } else {
+        step = parseInt(step) - 1;
+      }
+      if (step < 0) step = 0;
+      setActiveStep(step);
+    }
   }, [userTest]);
 
   const handleSaveAnswer = (event) => {
@@ -73,9 +107,15 @@ function Tests() {
     dispatch(resetTest(userTest.subject_id ?? null));
   };
 
+  const handleEndTest = () => {
+    dispatch(endTest(userTest.subject_id ?? null)).then(() => {
+      setOpen(true);
+    });
+  };
+
   return (
     <React.Fragment>
-      <Paper sx={{ padding: "12px" }}>
+      <Box sx={{ padding: "12px" }}>
         <Box
           sx={{
             position: "fixed",
@@ -123,27 +163,98 @@ function Tests() {
           elevation={3}
         >
           <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-            {testQuestions.map((question) => (
+            {testQuestions.length > 0 ? (
               <Question
-                key={question.id}
-                question={question}
+                key={testQuestions[activeStep].id}
+                question={testQuestions[activeStep]}
                 value={
-                  userTest.questions[question.id]
-                    ? userTest.questions[question.id]
+                  userTest.questions[testQuestions[activeStep].id]
+                    ? userTest.questions[testQuestions[activeStep].id]
                     : ""
                 }
-                disabled={userTest.questions[question.id] ? true : false}
+                disabled={
+                  userTest.questions[testQuestions[activeStep].id]
+                    ? true
+                    : false
+                }
                 handleChange={handleSaveAnswer}
                 showAnswer={userTest.completed}
               />
-            ))}
+            ) : null}
           </form>
+          <Box sx={{ flexGrow: 1 }}>
+            <MobileStepper
+              variant="text"
+              steps={maxSteps}
+              position="static"
+              activeStep={activeStep}
+              nextButton={
+                <Button
+                  size="small"
+                  onClick={handleNext}
+                  disabled={activeStep === maxSteps - 1}
+                >
+                  Siguiente
+                  <KeyboardArrowRight />
+                </Button>
+              }
+              backButton={
+                <Button
+                  size="small"
+                  onClick={handleBack}
+                  disabled={activeStep === 0}
+                >
+                  <KeyboardArrowLeft />
+                  Anterior
+                </Button>
+              }
+            />
+          </Box>
           <br />
-          <br />
-          <br />
+          {testQuestions[activeStep] &&
+          userTest.questions[testQuestions[activeStep].id] &&
+          testQuestions[activeStep].explanation ? (
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => setExplainOpen(true)}
+            >
+              Mostrar explicación
+            </Button>
+          ) : null}
+
+          {answered && userTest.completed === 0 ? (
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={handleEndTest}
+              color="error"
+              sx={{ float: "right" }}
+            >
+              Finalizar y calificar
+            </Button>
+          ) : null}
         </Box>
-      </Paper>
+      </Box>
       <Navigation />
+      {testQuestions.length > 0 ? (
+        <Drawer
+          PaperProps={{
+            sx: {
+              height: `calc(40% - 60px)`,
+              backgroundColor: "GainsBoro",
+              padding: "10px",
+            },
+          }}
+          anchor="bottom"
+          open={explainOpen}
+          onClose={() => setExplainOpen(false)}
+        >
+          <Typography variant="h5" sx={{ margin: "0 auto", marginTop: "20px" }}>
+            {testQuestions[activeStep].explanation ?? "Sin explicación..."}
+          </Typography>
+        </Drawer>
+      ) : null}
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
@@ -156,8 +267,13 @@ function Tests() {
         </DialogTitle>
         <DialogContent style={{ background: "white" }}>
           <DialogContentText id="alert-dialog-slide-description">
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography variant="h2">
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              component={"span"}
+            >
+              <Typography variant="h2" component={"span"}>
                 Tu puntaje fue de {userTest.grade} / {userTest.points} (
                 {((userTest.grade * 100) / userTest.points).toFixed(2)}%)
               </Typography>

@@ -106,6 +106,7 @@ function AuthProvider({ children }) {
   }, []);
 
   const signIn = async (email, password) => {
+    console.log(navigator.userAgent);
     const response = await axios.post(`${HOST_API}/api/login`, {
       username: email,
       password,
