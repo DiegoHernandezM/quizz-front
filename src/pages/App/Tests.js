@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Navigation from "./Navigation";
 import Question from "./Question";
@@ -47,6 +47,7 @@ function Tests() {
   const queryParameters = new URLSearchParams(window.location.search);
   const subject_id = queryParameters.get("subject_id");
   const testId = queryParameters.get("test_id");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (testId > 0) {
@@ -113,6 +114,7 @@ function Tests() {
     dispatch(endTest(userTest.subject_id ?? null)).then(() => {
       setOpen(true);
     });
+  };
 
   const getColor = () => {
     const percent = (userTest.grade * 100) / userTest.points;
@@ -218,8 +220,8 @@ function Tests() {
           </Box>
           <br />
           {testQuestions[activeStep] &&
-          userTest.questions[testQuestions[activeStep].id] &&
-          testQuestions[activeStep].explanation ? (
+            userTest.questions[testQuestions[activeStep].id] &&
+            testQuestions[activeStep].explanation ? (
             <Button
               size="small"
               variant="outlined"
@@ -267,7 +269,7 @@ function Tests() {
         aria-describedby="alert-dialog-slide-description"
         fullScreen
       >
-         <AppBar sx={{ position: 'relative' }}>
+        <AppBar sx={{ position: 'relative' }}>
           <Toolbar>
             <IconButton
               edge="start"
@@ -275,7 +277,7 @@ function Tests() {
               onClick={() => setOpen(false)}
               aria-label="close"
             >
-              </IconButton>
+            </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h3" component="div" onClick={() => setOpen(false)}>
               Aviation In InSight
             </Typography>
@@ -289,32 +291,32 @@ function Tests() {
         <DialogContent style={{ background: "white" }}>
           <DialogContentText id="alert-dialog-slide-description">
             <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography 
+              <Typography
                 variant="h2"
                 color={getColor}
-                >
+              >
                 Tu puntaje fue de {userTest.grade} / {userTest.points} (
                 {((userTest.grade * 100) / userTest.points).toFixed(2)}%)
               </Typography>
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: "20px" }}>
               {
-                ((userTest.grade * 100) / userTest.points) > 80 ? 
-                (
-                  <Typography variant="h3" color={getColor}>
-                    Excelente trabajo capitán
-                  </Typography>
-                ) : ((userTest.grade * 100) / userTest.points) > 70 ? 
-                (
-                  <Typography variant="h3" color={getColor}>
-                    Sigue practicando para emprender el vuelo. Estas cerca del éxito
-                  </Typography>
-                ) : ((userTest.grade * 100) / userTest.points) < 70 ? 
-                (
-                  <Typography variant="h3" color={getColor}>
-                    Hay que reforzar conceptos, aún estas a tiempo. Ánimo capitán
-                  </Typography>
-                ): null
+                ((userTest.grade * 100) / userTest.points) > 80 ?
+                  (
+                    <Typography variant="h3" color={getColor}>
+                      Excelente trabajo capitán
+                    </Typography>
+                  ) : ((userTest.grade * 100) / userTest.points) > 70 ?
+                    (
+                      <Typography variant="h3" color={getColor}>
+                        Sigue practicando para emprender el vuelo. Estas cerca del éxito
+                      </Typography>
+                    ) : ((userTest.grade * 100) / userTest.points) < 70 ?
+                      (
+                        <Typography variant="h3" color={getColor}>
+                          Hay que reforzar conceptos, aún estas a tiempo. Ánimo capitán
+                        </Typography>
+                      ) : null
               }
             </Box>
           </DialogContentText>
@@ -323,7 +325,7 @@ function Tests() {
               ¿Qué deseas hacer?
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px'}}>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px' }}>
             <Button
               variant="contained"
               onClick={() => setOpen(false)}
@@ -332,13 +334,22 @@ function Tests() {
               Revisar mis respuestas
             </Button>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px'}}>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px' }}>
             <Button
-                variant="contained"
-                onClick={handleResetTest}
-                color="primary"
-              >
-                Reintentar
+              variant="contained"
+              onClick={handleResetTest}
+              color="primary"
+            >
+              Reintentar
+            </Button>
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px' }}>
+            <Button
+              variant="contained"
+              onClick={() => navigate("/dashboardapp")}
+              color="primary"
+            >
+              Ir al inicio
             </Button>
           </Box>
         </DialogContent>
@@ -346,5 +357,4 @@ function Tests() {
     </React.Fragment>
   );
 }
-
 export default Tests;
