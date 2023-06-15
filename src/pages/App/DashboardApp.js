@@ -20,7 +20,7 @@ import {
   IconButton
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import backgroundJpe from "../../vendor/avatar.png";
+import backgroundJpe from "../../vendor/avatar.gif";
 import checkImage from "../../vendor/checklist.png";
 import workingImage from "../../vendor/working.png";
 import subjectImage from "../../vendor/subject.png";
@@ -38,19 +38,19 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const Image = styled.img`
-  max-width: 100%;
+  max-width: 20%;
   height: auto;
-  min-height: 30vh;
+  min-height: 10px;
   display: block;
   border-radius: 10px;
   z-index: 0;
   position: relative;
   image-rendering: optimizequality;
   image-rendering: -webkit-optimize-contrast;
-  margin-bottom: -100px;
-  margin-top: -35px;
+  margin-bottom: 10px;
+  margin-top: 5px;
   ${(props) => props.theme.breakpoints.up("md")} {
-    margin-top: -40px;
+    margin-top: 10px;
   }
 `;
 
@@ -148,7 +148,7 @@ function DashboardApp() {
           </Toolbar>
         </AppBar>
         <DialogTitle>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10%'}}>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
             <Typography variant="h1">
               {"Hola Capitán"}
             </Typography>
@@ -156,7 +156,7 @@ function DashboardApp() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px'}}>
+            <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
               <Typography variant="h2">
                 Bienvenido a
               </Typography>
@@ -170,12 +170,12 @@ function DashboardApp() {
           <Box display="flex" justifyContent="center" alignItems="center">
             <Image alt="App de aviacion" src={backgroundJpe} />
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px'}}>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
             <Typography variant="subtitle1">
                 ¿Que desea hacer hoy capitán {name} ?
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '20px'}}>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
             <Button variant="contained" autoFocus onClick={() => setOpen(false)} size="large">
               Comenzar
             </Button>
