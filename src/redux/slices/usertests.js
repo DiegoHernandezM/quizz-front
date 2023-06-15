@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "../../utils/axios";
+import orderedJSON from "json-order";
 
 const initialState = {
   userTest: {},
@@ -17,14 +18,14 @@ const slice = createSlice({
   reducers: {
     setUserTest(state, payload) {
       state.userTest = payload.payload.userTest;
-      state.userTest.questions = JSON.parse(payload.payload.userTest.questions);
+      state.userTest.questions = payload.payload.userTest.parsed;
       state.subject = payload.payload.subject;
       state.testQuestions = payload.payload.questions;
       state.isLoading = false;
     },
     showUserTest(state, payload) {
       state.userTest = payload.payload.userTest;
-      state.userTest.questions = JSON.parse(payload.payload.userTest.questions);
+      state.userTest.questions = payload.payload.userTest.parsed;
       state.subject = payload.payload.subject;
       state.testQuestions = payload.payload.questions;
       state.onlyShow = true;
@@ -41,7 +42,7 @@ const slice = createSlice({
 
     setUserAnswer(state, payload) {
       state.userTest = payload.payload;
-      state.userTest.questions = JSON.parse(payload.payload.questions);
+      state.userTest.questions = payload.payload.parsed;
       state.isLoading = false;
     },
   },
