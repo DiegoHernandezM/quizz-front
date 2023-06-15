@@ -22,7 +22,7 @@ const Question = ({
     >
       <FormLabel
         id="demo-row-radio-buttons-group-label"
-        sx={{ fontWeight: "bold", fontSize: "1rem" }}
+        sx={{ fontWeight: "bold", fontSize: "1rem", marginBottom: "10px" }}
       >
         {question.question}
       </FormLabel>
@@ -38,6 +38,7 @@ const Question = ({
           control={<Radio />}
           label={`A) ${question.a}`}
           disabled={disabled}
+          sx={{ marginBottom: "10px" }}
           componentsProps={{
             typography: {
               sx: {
@@ -56,6 +57,7 @@ const Question = ({
           control={<Radio />}
           label={`B) ${question.b}`}
           disabled={disabled}
+          sx={{ marginBottom: "10px" }}
           componentsProps={{
             typography: {
               sx: {
@@ -74,6 +76,7 @@ const Question = ({
           control={<Radio />}
           label={`C) ${question.c}`}
           disabled={disabled}
+          sx={{ marginBottom: "10px" }}
           componentsProps={{
             typography: {
               sx: {
@@ -93,6 +96,7 @@ const Question = ({
             control={<Radio />}
             label={`D) ${question.d}`}
             disabled={disabled}
+            sx={{ marginBottom: "10px" }}
             componentsProps={{
               typography: {
                 sx: {
@@ -113,6 +117,7 @@ const Question = ({
             control={<Radio />}
             label={`E) ${question.e}`}
             disabled={disabled}
+            sx={{ marginBottom: "10px" }}
             componentsProps={{
               typography: {
                 sx: {

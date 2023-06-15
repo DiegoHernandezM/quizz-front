@@ -28,6 +28,7 @@ import {
   AppBar,
   Toolbar,
   IconButton,
+  Divider,
 } from "@mui/material";
 import useAuth from "../../hooks/useAuth";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
@@ -49,6 +50,21 @@ function Tests() {
   const subject_id = queryParameters.get("subject_id");
   const testId = queryParameters.get("test_id");
   const navigate = useNavigate();
+  const colors = [
+    "#F2F3F4",
+    "#D1F2EB",
+    "#E3DFFD",
+    "#ECE8DD",
+    "#FADBD8",
+    "#E8DAEF",
+    "#ECF0F1",
+    "#D6EAF8",
+    "#E5E7E9",
+    "#EAECEE",
+    "#F4ECF7",
+    "#FEF9E7",
+    "#E5E8E8",
+  ];
 
   useEffect(() => {
     if (testId > 0) {
@@ -147,24 +163,35 @@ function Tests() {
           }}
           elevation={3}
         >
-          <h2>
-            {`Test de ${subject.name}`}{" "}
-            {userTest.completed && user?.id == userTest.user_id ? (
-              <Button variant="outlined" size="small" onClick={handleResetTest}>
-                Reiniciar test
-              </Button>
+          <Box
+            style={{
+              backgroundColor: colors[subject_id - 1] ?? "#FAFAD2",
+              padding: "10px",
+            }}
+          >
+            <h2>
+              {`Test de ${subject.name}`}{" "}
+              {userTest.completed && user?.id == userTest.user_id ? (
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={handleResetTest}
+                >
+                  Reiniciar test
+                </Button>
+              ) : null}
+            </h2>
+            {userTest.completed && testId > 0 ? (
+              <Typography variant="h4" component={"span"}>
+                Calificación: {userTest.grade} / {userTest.points} (
+                {((userTest.grade * 100) / userTest.points).toFixed(2)}%)
+              </Typography>
             ) : null}
-          </h2>
-          {userTest.completed && testId > 0 ? (
-            <Typography variant="h4" component={"span"}>
-              Calificación: {userTest.grade} / {userTest.points} (
-              {((userTest.grade * 100) / userTest.points).toFixed(2)}%)
-            </Typography>
-          ) : null}
-          <LinearProgress
-            variant="determinate"
-            value={userTest.percentage ?? 0}
-          />
+            <LinearProgress
+              variant="determinate"
+              value={userTest.percentage ?? 0}
+            />
+          </Box>
         </Box>
         <Box
           sx={{
@@ -181,7 +208,7 @@ function Tests() {
           elevation={3}
         >
           <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-            {testQuestions.length > 0 ? (
+            {testQuestions.length > 0 && userTest.questions[activeStep] ? (
               <Question
                 key={testQuestions[activeStep].id}
                 question={testQuestions[activeStep]}
@@ -273,7 +300,28 @@ function Tests() {
             sx={{ margin: "0 auto", marginTop: "20px" }}
             component={"span"}
           >
-            {testQuestions[activeStep].explanation ?? "Sin explicación..."}
+            <Divider
+              sx={{
+                backgroundColor: "gold",
+                padding: "2px",
+                marginBottom: "4px",
+              }}
+            />
+            <Divider
+              sx={{
+                backgroundColor: "gold",
+                padding: "2px",
+                marginBottom: "4px",
+              }}
+            />
+            <Divider
+              sx={{
+                backgroundColor: "gold",
+                padding: "2px",
+                marginBottom: "15px",
+              }}
+            />
+            {testQuestions[activeStep]?.explanation ?? "Sin explicación..."}
           </Typography>
         </Drawer>
       ) : null}

@@ -10,11 +10,12 @@ import {
   Home as HomeIcon,
   Launch as LaunchIcon,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 
 const NavbarSimple = ({ onDrawerToggle }) => {
   const navigate = useNavigate();
   const [isReadyForInstall, setIsReadyForInstall] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (event) => {
@@ -70,7 +71,10 @@ const NavbarSimple = ({ onDrawerToggle }) => {
         <BottomNavigationAction
           label="Test Simulacro"
           icon={<QuizIcon />}
-          onClick={() => navigate("/dashboardapp/test")}
+          onClick={() => {
+            navigate("/dashboardapp/test");
+            window.location.reload();
+          }}
         />
         <BottomNavigationAction
           label="Progreso y Resultados"
