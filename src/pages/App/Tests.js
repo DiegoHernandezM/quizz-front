@@ -33,6 +33,7 @@ import {
 import useAuth from "../../hooks/useAuth";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { set } from "date-fns";
+import { useTheme } from "@emotion/react";
 
 function Tests() {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ function Tests() {
   const [explainOpen, setExplainOpen] = React.useState(false);
   const [answered, setAnswered] = React.useState(false);
   const [activeStep, setActiveStep] = React.useState(0);
+  const theme = useTheme();
   const { testQuestions, userTest, subject } = useSelector(
     (state) => state.usertests
   );
@@ -169,20 +171,36 @@ function Tests() {
               padding: "5px",
             }}
           >
-            <h2>
-              {`Test de ${subject.name}`}{" "}
+            <h2
+              style={{
+                color:
+                  theme.palette.mode === "light"
+                    ? theme.palette.primary.light
+                    : theme.palette.primary.dark,
+              }}
+            >
+              {`Test de ${subject.name ?? ""}`}{" "}
               {userTest.completed && user?.id == userTest.user_id ? (
                 <Button
                   variant="outlined"
                   size="small"
                   onClick={handleResetTest}
+                  sx={{ marginLeft: "15px" }}
                 >
                   Reiniciar test
                 </Button>
               ) : null}
             </h2>
             {userTest.completed && testId > 0 ? (
-              <Typography variant="h4" component={"span"}>
+              <Typography
+                variant="h4"
+                component={"span"}
+                color={
+                  theme.palette.mode === "light"
+                    ? theme.palette.primary.light
+                    : theme.palette.primary.dark
+                }
+              >
                 Calificación: {userTest.grade} / {userTest.points} (
                 {((userTest.grade * 100) / userTest.points).toFixed(2)}%)
               </Typography>

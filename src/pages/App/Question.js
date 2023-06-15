@@ -19,6 +19,7 @@ const Question = ({
     <FormControl
       error={value !== question.answer && showAnswer === 1}
       fullWidth
+      sx={{ marginTop: "25px" }}
     >
       <FormLabel
         id="demo-row-radio-buttons-group-label"
