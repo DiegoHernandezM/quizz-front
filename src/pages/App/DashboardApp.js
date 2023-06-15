@@ -19,13 +19,8 @@ import {
   Toolbar,
   IconButton,
 } from "@mui/material";
-<<<<<<< HEAD
 import CloseIcon from '@mui/icons-material/Close';
 import backgroundJpe from "../../vendor/avatar.gif";
-=======
-import CloseIcon from "@mui/icons-material/Close";
-import backgroundJpe from "../../vendor/avatar.png";
->>>>>>> 848bc7885ea9625f3dad2f123d8264bbe5695856
 import checkImage from "../../vendor/checklist.png";
 import workingImage from "../../vendor/working.png";
 import subjectImage from "../../vendor/subject.png";
@@ -164,38 +159,18 @@ function DashboardApp() {
           </Toolbar>
         </AppBar>
         <DialogTitle>
-<<<<<<< HEAD
           <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
             <Typography variant="h1">
               {"Hola Capitán"}
             </Typography>
-=======
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            style={{ marginTop: "10%" }}
-          >
-            <Typography variant="h1">{"Hola Capitán"}</Typography>
->>>>>>> 848bc7885ea9625f3dad2f123d8264bbe5695856
           </Box>
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-<<<<<<< HEAD
             <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
               <Typography variant="h2">
                 Bienvenido a
               </Typography>
-=======
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              style={{ marginTop: "20px" }}
-            >
-              <Typography variant="h2">Bienvenido a</Typography>
->>>>>>> 848bc7885ea9625f3dad2f123d8264bbe5695856
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center">
               <Typography variant="h1">{"Aviation InSight"}</Typography>
@@ -204,37 +179,13 @@ function DashboardApp() {
           <Box display="flex" justifyContent="center" alignItems="center">
             <Image alt="App de aviacion" src={backgroundJpe} />
           </Box>
-<<<<<<< HEAD
           <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
-=======
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            style={{ marginTop: "20px" }}
-          >
->>>>>>> 848bc7885ea9625f3dad2f123d8264bbe5695856
             <Typography variant="subtitle1">
               ¿Que desea hacer hoy capitán {name} ?
             </Typography>
           </Box>
-<<<<<<< HEAD
           <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
             <Button variant="contained" autoFocus onClick={() => setOpen(false)} size="large">
-=======
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            style={{ marginTop: "20px" }}
-          >
-            <Button
-              variant="contained"
-              autoFocus
-              onClick={() => setOpen(false)}
-              size="large"
-            >
->>>>>>> 848bc7885ea9625f3dad2f123d8264bbe5695856
               Comenzar
             </Button>
           </Box>
