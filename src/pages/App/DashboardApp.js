@@ -77,7 +77,7 @@ function DashboardApp() {
         </Grid>
       </Grid>
       <Divider my={6} />
-      <Grid container spacing={6}>
+      <Grid container spacing={6} style={{marginBottom: '45px'}}>
         <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
           <BarChart
             labels={dataStudent?.aSubjects}

@@ -18,6 +18,7 @@ import { Menu as MenuIcon } from "@mui/icons-material";
 
 import NavbarConfigDropdown from "./NavbarConfigDropdown";
 import NavbarUserDropdown from "./NavbarUserDropdown";
+import backgroundJpe from "../../vendor/logoAviation.png";
 
 const AppBar = styled(MuiAppBar)`
   background: ${(props) => props.theme.header.background};
@@ -62,6 +63,23 @@ const SearchIconWrapper = styled.div`
   }
 `;
 
+const Image = styled.img`
+  max-width: 90px;
+  height: auto;
+  min-height: 10px;
+  display: block;
+  border-radius: 10px;
+  z-index: 0;
+  position: relative;
+  image-rendering: optimizequality;
+  image-rendering: -webkit-optimize-contrast;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  ${(props) => props.theme.breakpoints.up("md")} {
+    margin-top: 10px;
+  }
+`;
+
 const Input = styled(InputBase)`
   color: inherit;
   width: 100%;
@@ -85,7 +103,10 @@ const Navbar = ({ onDrawerToggle }) => {
       <AppBar position="sticky" elevation={0}>
         <Toolbar>
           {type === "3" ? (
-            <Typography variant="h5" gutterBottom>
+            <Image alt="App de aviacion" src={backgroundJpe} />
+          ): null}
+          {type === "3" ? (
+            <Typography variant="h4" gutterBottom style={{marginLeft: '10px'}}>
               Aviation In Sight
             </Typography>
           ): null}

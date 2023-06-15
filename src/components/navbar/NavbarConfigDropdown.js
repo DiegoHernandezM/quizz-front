@@ -154,7 +154,7 @@ function NavbarLanguagesDropdown() {
           <Box px={4} my={3}>
             <Grid container spacing={3}>
               <Demo title="Dark" themeVariant={THEMES.DARK} />
-              <Demo title="Light" themeVariant={THEMES.LIGHT} />
+              <Demo title="Light" themeVariant={THEMES.DEFAULT} />
             </Grid>
           </Box>
 
