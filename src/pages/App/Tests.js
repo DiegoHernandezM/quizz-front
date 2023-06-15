@@ -159,14 +159,14 @@ function Tests() {
             right: 0,
             width: "100%",
             padding: "6px",
-            marginTop: "45px",
+            marginTop: "65px",
           }}
           elevation={3}
         >
           <Box
             style={{
               backgroundColor: colors[subject_id - 1] ?? "#FAFAD2",
-              padding: "10px",
+              padding: "5px",
             }}
           >
             <h2>
