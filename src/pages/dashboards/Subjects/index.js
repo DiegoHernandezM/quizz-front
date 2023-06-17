@@ -16,8 +16,12 @@ import {
   Paper as MuiPaper,
   Typography,
   Tooltip,
-  IconButton
+  IconButton,
+  Tab,
+  Box
 } from "@mui/material";
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
 import { Delete, RestoreFromTrash } from '@mui/icons-material';
 import { red } from '@mui/material/colors';
 import { DataGrid, esES } from "@mui/x-data-grid";
@@ -38,16 +42,16 @@ const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
 const Paper = styled(MuiPaper)(spacing);
 
 const filters = {
-    pinter: {
-      cursor: 'pointer',
-      marginLeft: '5px',
-      textAlign: 'center'
-    },
-    nopinter: {
-      marginLeft: '5px',
-      textAlign: 'center',
-      color: 'grey'
-    }
+  pinter: {
+    cursor: 'pointer',
+    marginLeft: '5px',
+    textAlign: 'center'
+  },
+  nopinter: {
+    marginLeft: '5px',
+    textAlign: 'center',
+    color: 'grey'
+  }
 };
 
 function escapeRegExp(value) {
@@ -69,9 +73,10 @@ function Subjects() {
   const [modeUpdate, setModeUpdate] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [subjectSelected, setSubjectSelected] = useState({});
+  const [value, setValue] = useState('1');
 
   useEffect(() => {
-    dispatch(getSubjects());
+    dispatch(getSubjects(false));
   }, []);
 
   const handleRestore = (id) => {
@@ -80,7 +85,7 @@ function Subjects() {
   };
 
   const handleDelete = (id) => {
-    
+
     console.log(id);
   };
 
@@ -97,6 +102,11 @@ function Subjects() {
     const searchRegex = new RegExp(escapeRegExp(searchValue), 'i');
     const filteredRows = allSubjects.filter((row) => Object.keys(row).some((field) => searchRegex.test(row[field])));
     setRows(filteredRows);
+  };
+
+  const handleChange = (e, newValue) => {
+    dispatch(getSubjects(newValue === '1' ? false : true));
+    setValue(newValue);
   };
 
   const columns = [
@@ -205,7 +215,7 @@ function Subjects() {
         resolve(dispatch(getDeleteSubject(id)));
       })
         .then(() => {
-          dispatch(getSubjects());
+          dispatch(getSubjects(false));
         })
         .catch((error) => {
           console.log(error);
@@ -218,7 +228,7 @@ function Subjects() {
         resolve(dispatch(getRestoreSubject(id)));
       })
         .then(() => {
-          dispatch(getSubjects());
+          dispatch(getSubjects(false));
         })
         .catch((error) => {
           console.log(error);
@@ -244,7 +254,7 @@ function Subjects() {
         resolve(dispatch(update(id, values, image)));
       })
         .then((response) => {
-          dispatch(getSubjects());
+          dispatch(getSubjects(false));
           setOpenForm(false);
           setModeUpdate(false);
         })
@@ -259,7 +269,7 @@ function Subjects() {
         resolve(dispatch(create(values, image)));
       })
         .then((response) => {
-          dispatch(getSubjects());
+          dispatch(getSubjects(false));
           setOpenForm(false);
           setModeUpdate(false);
         })
@@ -280,48 +290,57 @@ function Subjects() {
     <>
       <Card mb={6}>
         <CardContent pb={1}>
-          <Button variant="contained" sx={{ marginBottom: "10px" }} onClick={()=> {
-              setOpenForm(true);
-              setModeUpdate(false);
-            }}>
+          <Button variant="contained" sx={{ marginBottom: "10px" }} onClick={() => {
+            setOpenForm(true);
+            setModeUpdate(false);
+          }}>
             Nueva materia
           </Button>
         </CardContent>
         <Paper>
-          <div style={{ height: 400, width: "100%" }}>
-            <DataGrid
-              components={{
-                Toolbar: QuickSearch
-              }}
-              initialState={{
-                pagination: { paginationModel: { page: 0, pageSize: 5 } },
-              }}
-              localeText={esES.components.MuiDataGrid.defaultProps.localeText}
-              pageSizeOptions={[5, 10, 25]}
-              rows={rows.length > 0 ? rows : allSubjects}
-              rowHeight={40}
-              columns={columns}
-              onRowDoubleClick={(params) => {
-                setId(params.row.id);
-                dispatch(getSubject(params.row.id));
-                setModeUpdate(true);
-                setOpenForm(true);
-              }}
-              componentsProps={{
-                hideFooterPagination: false,
-                toolbar: {
-                  export: false,
-                  columns: true,
-                  density: true,
-                  search: true,
-                  value: searchText,
-                  onChange: (event) => requestSearch(event.target.value),
-                  clearSearch: () => requestSearch('')
-                }
-              }}
-              pageSize={10}
-            />
-          </div>
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }} display="flex" justifyContent="center" alignItems="center">
+              <TabList onChange={handleChange}>
+                <Tab label="Activas" value="1" />
+                <Tab label="Inactivas" value="2" />
+              </TabList>
+            </Box>
+            <div style={{ height: 400, width: "100%" }}>
+
+              <DataGrid
+                components={{
+                  Toolbar: QuickSearch
+                }}
+                initialState={{
+                  pagination: { paginationModel: { page: 0, pageSize: 5 } },
+                }}
+                localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+                pageSizeOptions={[5, 10, 25]}
+                rows={rows.length > 0 ? rows : allSubjects}
+                rowHeight={40}
+                columns={columns}
+                onRowDoubleClick={(params) => {
+                  setId(params.row.id);
+                  dispatch(getSubject(params.row.id));
+                  setModeUpdate(true);
+                  setOpenForm(true);
+                }}
+                componentsProps={{
+                  hideFooterPagination: false,
+                  toolbar: {
+                    export: false,
+                    columns: true,
+                    density: true,
+                    search: true,
+                    value: searchText,
+                    onChange: (event) => requestSearch(event.target.value),
+                    clearSearch: () => requestSearch('')
+                  }
+                }}
+                pageSize={10}
+              />
+            </div>
+          </TabContext>
         </Paper>
       </Card>
       <Confirm

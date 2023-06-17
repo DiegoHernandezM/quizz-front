@@ -26,7 +26,7 @@ function App() {
   ];
 
   useEffect(() => {
-    dispatch(getSubjects());
+    dispatch(getSubjects(false));
   }, []);
 
   return (

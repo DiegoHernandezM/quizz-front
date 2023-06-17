@@ -272,7 +272,7 @@ function QuestionForm({ open, close }) {
   });
 
   useEffect(() => {
-    dispatch(getSubjects());
+    dispatch(getSubjects(false));
   }, []);
 
   useEffect(() => {
