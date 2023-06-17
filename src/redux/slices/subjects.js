@@ -28,10 +28,11 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-export function getSubjects() {
+export function getSubjects(trashed) {
   return async (dispatch) => {
     try {
-      const response = await axios.get(`/api/subject/list`);
+      const response = await axios.get(`/api/subject/list`,
+      { params: { trashed } });
       dispatch(slice.actions.setSubjects(response));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -56,6 +57,7 @@ export function create(values, image) {
     const formData = new FormData();
     formData.append("image", image);
     formData.append("name", values.name);
+    formData.append("questions_to_test", values.questions_to_test);
     // formData.append("description", values.description);
     try {
       const response = await axios.post("/api/subject/create", formData, {
@@ -74,7 +76,7 @@ export function update(id, values, image) {
     const formData = new FormData();
     formData.append("image", image);
     formData.append("name", values.name);
-    // formData.append("description", values.description);
+    formData.append("questions_to_test", values.questions_to_test);
     try {
       const response = await axios.post(`/api/subject/update/${id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },

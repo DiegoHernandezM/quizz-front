@@ -44,28 +44,23 @@ export default function SubjectForm({
   const formik = useFormik({
     initialValues: {
       name: "",
-      // description: "",
+      questions_to_test: "0",
     },
     validationSchema,
     onSubmit: (values, { resetForm }) => {
       if (!update) {
         if (image !== null) {
           parentCallback(values, image);
+          resetForm(formik.initialValues);
         } else {
           setMessage("Debe agregar una imagen");
           setTypeMessage("error");
           setOpenMessage(true);
         }
       } else {
-        if (image !== null) {
-          updateRegister(values, image);
-        } else {
-          setMessage("Debe agregar una imagen");
-          setTypeMessage("error");
-          setOpenMessage(true);
-        }
+        updateRegister(values, null);
+        resetForm(formik.initialValues);
       }
-      resetForm(formik.initialValues);
     },
   });
 
@@ -74,10 +69,10 @@ export default function SubjectForm({
       "name",
       update ? subject.name : formik.initialValues.name
     );
-    /*formik.setFieldValue(
-      "description",
-      update ? subject.description : formik.initialValues.description
-    );*/
+    formik.setFieldValue(
+      "questions_to_test",
+      update ? subject.questions_to_test : formik.initialValues.questions_to_test
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [update, subject]);
 
@@ -147,21 +142,21 @@ export default function SubjectForm({
               size="small"
             />
           </FormControl>
-          {/*<FormControl style={{ marginTop: "8px", width: "100%" }}>
+          <FormControl style={{ marginTop: "8px", width: "100%" }}>
             <TextField
-              id="description"
-              label="Descripción"
-              placeholder="Descripción"
-              multiline
-              name="description"
-              value={formik.values.description || ""}
+              id="questions_to_test"
+              label="Número de preguntas para simulacro"
+              placeholder="Número de preguntas para simulacro"              
+              name="questions_to_test"
+              value={formik.values.questions_to_test || ""}
               onChange={formik.handleChange}
               error={
-                formik.touched.description && Boolean(formik.errors.description)
+                formik.touched.questions_to_test && Boolean(formik.errors.questions_to_test)
               }
               fullWidth
+              size="small"
             />
-          </FormControl>*/}
+          </FormControl>
           <FormControl style={{ marginTop: "8px", width: "100%" }}>
             <TextField
               id="image"
