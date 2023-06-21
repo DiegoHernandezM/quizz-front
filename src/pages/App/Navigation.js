@@ -56,13 +56,11 @@ const NavbarSimple = ({ onDrawerToggle }) => {
           icon={<HomeIcon />}
           onClick={() => navigate("/dashboardapp")}
         />
-        {isReadyForInstall && (
-          <BottomNavigationAction
-            label="Crear Acceso Directo"
-            icon={<LaunchIcon />}
-            onClick={downloadApp}
-          />
-        )}
+        <BottomNavigationAction
+          label="Crear Acceso Directo"
+          icon={<LaunchIcon />}
+          onClick={downloadApp}
+        />
         <BottomNavigationAction
           label="Materias"
           icon={<SubjectIcon />}
