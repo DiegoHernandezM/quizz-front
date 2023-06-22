@@ -19,20 +19,25 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
 
   useEffect(() => {
+    console.log('entro a useEffect');
+
     window.addEventListener("beforeinstallprompt", (event) => {
       window.deferredPrompt = event;
       setIsReadyForInstall(true);
     });
-    window.addEventListener('beforeinstallprompt', (e) => {
-      // Previene a la mini barra de información que aparezca en smartphones
-      e.preventDefault();
-      // Guarda el evento para que se dispare más tarde
-      setDeferredInstallPrompt(e);
-      // Actualizar la IU para notificarle al usuario que se puede instalar tu PWA
-      
-      // De manera opcional, envía el evento de analíticos para saber si se mostró la promoción a a instalación del PWA
-      console.log(`'beforeinstallprompt' event was fired.`);
-    });
+    if (deferredInstallPrompt === null) {
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Previene a la mini barra de información que aparezca en smartphones
+        e.preventDefault();
+        // Guarda el evento para que se dispare más tarde
+        setDeferredInstallPrompt(e);
+        // Actualizar la IU para notificarle al usuario que se puede instalar tu PWA
+
+        // De manera opcional, envía el evento de analíticos para saber si se mostró la promoción a a instalación del PWA
+        console.log(`'beforeinstallprompt' event was fired.`);
+      });
+    }
+
   }, []);
 
   async function downloadApp() {
