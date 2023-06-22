@@ -22,6 +22,7 @@ const NavbarSimple = ({ onDrawerToggle }) => {
     console.log('entro a useEffect');
 
     window.addEventListener("beforeinstallprompt", (event) => {
+      console.log('entro al primer window', event);
       window.deferredPrompt = event;
       setIsReadyForInstall(true);
     });
@@ -134,11 +135,6 @@ function logAppInstalled(evt) {
           label="Inicio"
           icon={<HomeIcon />}
           onClick={() => navigate("/dashboardapp")}
-        />
-        <BottomNavigationAction
-          label="Crear Acceso Directo"
-          icon={<LaunchIcon />}
-          onClick={press}
         />
         <BottomNavigationAction
           label="Materias"
