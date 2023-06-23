@@ -41,7 +41,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const Image = styled.img`
-  max-width: 20%;
+  max-width: 40%;
   height: auto;
   min-height: 10px;
   display: block;
@@ -99,7 +99,7 @@ function DashboardApp() {
         </Grid>
       </Grid>
       <Divider my={6} />
-      <Grid container spacing={6} style={{marginBottom: '45px'}}>
+      <Grid container spacing={6} style={{ marginBottom: '45px' }}>
         <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
           <BarChart
             labels={dataStudent?.aSubjects}
@@ -181,52 +181,53 @@ function DashboardApp() {
           </Toolbar>
         </AppBar>
         <DialogTitle>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
-            <Typography variant="h1">
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
+            <Typography variant="h2">
               {"Hola Capitán"}
             </Typography>
           </Box>
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
+            <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
               <Typography variant="h2">
                 Bienvenido a
               </Typography>
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography variant="h1">{"Aviation InSight"}</Typography>
+              <Image alt="App de aviacion" src={backgroundJpe} />
+            </Box>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <Typography variant="h2">{"Aviation InSight"}</Typography>
             </Box>
           </DialogContentText>
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <Image alt="App de aviacion" src={backgroundJpe} />
-          </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
+
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '70px' }}>
             <Typography variant="subtitle1" justifyContent="center">
               ¿Que desea hacer hoy capitán
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
             <Typography variant="subtitle1" justifyContent="center">
               {name}?
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
             <Typography variant="subtitle1" justifyContent="center">
               Tutorial de instalación
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
             <Button variant="contained" autoFocus onClick={() => setOpenAndroid(true)} size="large">
               ANDROID
             </Button>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
             <Button variant="contained" autoFocus onClick={() => setOpenIos(true)} size="large">
               IOS
             </Button>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
             <Button variant="contained" autoFocus onClick={() => setOpen(false)} size="large">
               Comenzar
             </Button>
@@ -235,7 +236,7 @@ function DashboardApp() {
       </Dialog>
       <Dialog
         open={openAndroid}
-        onClose={() => {setOpenAndroid(false)}}
+        onClose={() => { setOpenAndroid(false) }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -248,7 +249,7 @@ function DashboardApp() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => {setOpenAndroid(false)}} autoFocus>
+          <Button onClick={() => { setOpenAndroid(false) }} autoFocus>
             Aceptar
           </Button>
         </DialogActions>
