@@ -240,7 +240,7 @@ function DashboardApp() {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Instalación en dispoditios Android"}
+          {"Instalación en dispositivos Android"}
         </DialogTitle>
         <DialogContent>
           <Box display="flex" justifyContent="center" alignItems="center">
@@ -260,7 +260,7 @@ function DashboardApp() {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Instalación en dispoditios IOS"}
+          {"Instalación en dispositivos IOS"}
         </DialogTitle>
         <DialogContent>
           <Box display="flex" justifyContent="center" alignItems="center">
