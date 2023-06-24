@@ -166,7 +166,7 @@ function DashboardApp() {
                 localStorage.setItem("dashone", false);
               }}
             >
-              Aviation In InSight
+              Aviation In Sight
             </Typography>
             <Button
               autoFocus
@@ -198,7 +198,7 @@ function DashboardApp() {
               <Image alt="App de aviacion" src={backgroundJpe} />
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography variant="h2">{"Aviation InSight"}</Typography>
+              <Typography variant="h2">{"Aviation In Sight"}</Typography>
             </Box>
           </DialogContentText>
 
