@@ -167,7 +167,7 @@ function Tests() {
         >
           <Box
             style={{
-              backgroundColor: colors[subject_id - 1] ?? "#FAFAD2",
+              backgroundColor: colors[subject_id - 15] ?? "#FAFAD2",
               padding: "5px",
             }}
           >
