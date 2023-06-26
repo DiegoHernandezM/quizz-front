@@ -19,7 +19,6 @@ import { CLIENT_PAYPAL } from "./config";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
-console.log(CLIENT_PAYPAL);
 const initialOptions = {
   "client-id": CLIENT_PAYPAL,
   currency: "MXN",

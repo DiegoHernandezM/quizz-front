@@ -18,9 +18,12 @@ import {
   AppBar,
   Toolbar,
   IconButton,
+  DialogActions
 } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import backgroundJpe from "../../vendor/avatar.gif";
+import installAndroid from "../../vendor/android-install.gif";
+import installIos from "../../vendor/ios-install.gif";
 import checkImage from "../../vendor/checklist.png";
 import workingImage from "../../vendor/working.png";
 import subjectImage from "../../vendor/subject.png";
@@ -38,7 +41,24 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const Image = styled.img`
-  max-width: 20%;
+  max-width: 40%;
+  height: auto;
+  min-height: 10px;
+  display: block;
+  border-radius: 10px;
+  z-index: 0;
+  position: relative;
+  image-rendering: optimizequality;
+  image-rendering: -webkit-optimize-contrast;
+  margin-bottom: 10px;
+  margin-top: 5px;
+  ${(props) => props.theme.breakpoints.up("md")} {
+    margin-top: 10px;
+  }
+`;
+
+const ImageInstall = styled.img`
+  max-width: 80%;
   height: auto;
   min-height: 10px;
   display: block;
@@ -61,6 +81,8 @@ function DashboardApp() {
   const navigate = useNavigate();
   const name = localStorage.getItem("user");
   const [open, setOpen] = useState(localStorage.getItem("dashone") === "true");
+  const [openIos, setOpenIos] = useState(false);
+  const [openAndroid, setOpenAndroid] = useState(false);
 
   useEffect(() => {
     dispatch(getDataStudent());
@@ -77,7 +99,7 @@ function DashboardApp() {
         </Grid>
       </Grid>
       <Divider my={6} />
-      <Grid container spacing={6} style={{marginBottom: '45px'}}>
+      <Grid container spacing={6} style={{ marginBottom: '45px' }}>
         <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
           <BarChart
             labels={dataStudent?.aSubjects}
@@ -144,7 +166,7 @@ function DashboardApp() {
                 localStorage.setItem("dashone", false);
               }}
             >
-              Aviation In InSight
+              Aviation In Sight
             </Typography>
             <Button
               autoFocus
@@ -159,37 +181,98 @@ function DashboardApp() {
           </Toolbar>
         </AppBar>
         <DialogTitle>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
-            <Typography variant="h1">
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
+            <Typography variant="h2">
               {"Hola Capitán"}
             </Typography>
           </Box>
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
-            <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
+            <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
               <Typography variant="h2">
                 Bienvenido a
               </Typography>
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography variant="h1">{"Aviation InSight"}</Typography>
+              <Image alt="App de aviacion" src={backgroundJpe} />
+            </Box>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <Typography variant="h2">{"Aviation In Sight"}</Typography>
             </Box>
           </DialogContentText>
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <Image alt="App de aviacion" src={backgroundJpe} />
-          </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
-            <Typography variant="subtitle1">
-              ¿Que desea hacer hoy capitán {name} ?
+
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '70px' }}>
+            <Typography variant="subtitle1" justifyContent="center">
+              ¿Que desea hacer hoy capitán
             </Typography>
           </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px'}}>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
+            <Typography variant="subtitle1" justifyContent="center">
+              {name}?
+            </Typography>
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
+            <Typography variant="subtitle1" justifyContent="center">
+              Tutorial de instalación
+            </Typography>
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
+            <Button variant="contained" autoFocus onClick={() => setOpenAndroid(true)} size="large">
+              ANDROID
+            </Button>
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
+            <Button variant="contained" autoFocus onClick={() => setOpenIos(true)} size="large">
+              IOS
+            </Button>
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
             <Button variant="contained" autoFocus onClick={() => setOpen(false)} size="large">
               Comenzar
             </Button>
           </Box>
         </DialogContent>
+      </Dialog>
+      <Dialog
+        open={openAndroid}
+        onClose={() => { setOpenAndroid(false) }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Instalación en dispositivos Android"}
+        </DialogTitle>
+        <DialogContent>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <ImageInstall alt="App de aviacion" src={installAndroid} />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => { setOpenAndroid(false) }} autoFocus>
+            Aceptar
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={openIos}
+        onClose={() => setOpenIos(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Instalación en dispositivos IOS"}
+        </DialogTitle>
+        <DialogContent>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <ImageInstall alt="App de aviacion" src={installIos} />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenIos(false)} autoFocus>
+            Aceptar
+          </Button>
+        </DialogActions>
       </Dialog>
     </React.Fragment>
   );
