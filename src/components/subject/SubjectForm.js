@@ -58,7 +58,7 @@ export default function SubjectForm({
           setOpenMessage(true);
         }
       } else {
-        updateRegister(values, null);
+        updateRegister(values, image ?? null);
         resetForm(formik.initialValues);
       }
     },
