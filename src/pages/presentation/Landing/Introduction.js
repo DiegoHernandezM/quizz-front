@@ -161,9 +161,9 @@ const Version = styled(MuiTypography)`
 
 const ContainerFrame = styled.div`
   overflow: hidden;
-  padding-bottom: 56.25%;
+  padding-bottom: 1%;
   position: relative;
-  height: 0;
+  height: 1;
 `;
 
 function Introduction() {
@@ -189,9 +189,9 @@ function Introduction() {
             <Grid item xs={12} sm={6} md={6} lg={6}>
               <ContainerFrame>
                 <iframe
-                  width="560"
-                  height="315"
-                  src="https://www.youtube.com/embed/EkruPJwD8XQ"
+                  width="420"
+                  height="320"
+                  src="https://www.youtube.com/embed/H6K9QtaJCWQ"
                   title="YouTube video player"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
