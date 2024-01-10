@@ -3,6 +3,7 @@ import axios from "../../utils/axios";
 
 const initialState = {
   questionsCatalogue: [],
+  questionsPreload: [],
   questionData: {
     id: "",
     subject_id: "",
@@ -63,6 +64,17 @@ export function getQuestionsCatalogue() {
     try {
       const response = await axios.get(`/api/questions/catalogue`);
       dispatch(slice.actions.setCatalogue(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getQuestionsPreload() {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`/api/questions/preload`);
+      return Promise.resolve(response.data);
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

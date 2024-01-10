@@ -95,6 +95,8 @@ function Tests() {
     formik.setValues(userTest.questions);
     if (userTest.completed && testId === null) {
       setOpen(true);
+    } else {
+      setOpen(false);
     }
 
     if (userTest.questions) {
@@ -103,7 +105,7 @@ function Tests() {
       let a = Object.keys(pre);
       let step = a.find((k) => Object.values(pre[k])[0] === "");
       console.log(step);
-      if (step === undefined) {
+      if (step === undefined || step === null) {
         step = maxSteps - 1;
         setAnswered(true);
       } else {
@@ -161,7 +163,7 @@ function Tests() {
             right: 0,
             width: "100%",
             padding: "6px",
-            marginTop: "105px",
+            marginTop: "65px",
           }}
           elevation={3}
         >
@@ -221,7 +223,7 @@ function Tests() {
             width: "100%",
             overflow: "scroll",
             padding: "12px",
-            marginTop: "45px",
+            marginTop: "65px",
           }}
           elevation={3}
         >
@@ -275,7 +277,6 @@ function Tests() {
           </Box>
           <br />
           {testQuestions[activeStep] &&
-          Object.values(userTest.questions[activeStep])[0] &&
           testQuestions[activeStep].explanation ? (
             <Button
               size="small"

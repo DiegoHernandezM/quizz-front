@@ -2,6 +2,8 @@ import React from "react";
 import useAuth from "./hooks/useAuth";
 import async from "./components/Async";
 import { Navigate, useRoutes } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getQuestionsPreload } from "./redux/slices/questions";
 
 // All pages that rely on 3rd party components (other than MUI) are
 // loaded asynchronously, to keep the initial JS bundle to a minimum size
@@ -22,6 +24,7 @@ import SignUp from "./pages/auth/SignUp";
 import ResetPassword from "./pages/auth/ResetPassword";
 import Page404 from "./pages/auth/Page404";
 import Page500 from "./pages/auth/Page500";
+import db from "./database";
 
 // Landing
 import Landing from "./pages/presentation/Landing";
@@ -47,9 +50,23 @@ const Profile = async(() => import("./pages/dashboards/Users/Profile"));
 
 //Users
 const Users = async(() => import("./pages/dashboards/Users"));
+
+const preloadQuestions = async (questions) => {
+  await db.questions.bulkPut(questions);
+};
+
+// Call this function when you want to preload questions
+
 export default function Router() {
+  const dispatch = useDispatch();
   const { user } = useAuth();
   const type = localStorage.getItem("usertype");
+
+  // if (type !== "3") {
+  //   dispatch(getQuestionsPreload()).then((data) => {
+  //     preloadQuestions(data.data);
+  //   });
+  // }
   return useRoutes([
     {
       path: "/",
