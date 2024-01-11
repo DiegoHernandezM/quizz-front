@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,10 +33,13 @@ import {
 } from "@mui/material";
 import useAuth from "../../hooks/useAuth";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
-import { set } from "date-fns";
 import { useTheme } from "@emotion/react";
+import { db } from "../../database";
+import { useLiveQuery } from "dexie-react-hooks";
+import { getQuestionsPreload } from "../../redux/slices/questions";
 
 function Tests() {
+  const questions = useLiveQuery(() => db.questions.toArray());
   const dispatch = useDispatch();
   const { user } = useAuth();
   const [open, setOpen] = React.useState(false);
@@ -68,6 +72,10 @@ function Tests() {
     "#E5E8E8",
   ];
 
+  const preloadQuestions = async (questions) => {
+    await db.questions.bulkPut(questions);
+  };
+
   useEffect(() => {
     if (testId > 0) {
       dispatch(setTestFromId(testId));
@@ -75,6 +83,18 @@ function Tests() {
       dispatch(getUserTest(subject_id));
     }
   }, []);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      dispatch(getQuestionsPreload()).then((data) => {
+        preloadQuestions(data.data);
+      });
+    }, 1000);
+    if (questions?.length) {
+      console.log(questions);
+      clearTimeout(timeoutId);
+    }
+  }, [questions]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -101,7 +121,6 @@ function Tests() {
 
     if (userTest.questions) {
       let pre = userTest.questions;
-      console.log(pre);
       let a = Object.keys(pre);
       let step = a.find((k) => Object.values(pre[k])[0] === "");
       console.log(step);
