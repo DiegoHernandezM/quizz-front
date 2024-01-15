@@ -34,6 +34,7 @@ export function getSubjects(trashed) {
       const response = await axios.get(`/api/subject/list`,
       { params: { trashed } });
       dispatch(slice.actions.setSubjects(response));
+      return Promise.resolve(response);
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

@@ -4,6 +4,7 @@ import { HOST_API } from "../config";
 // utils
 import axios from "../utils/axios";
 import { isValidToken, setSession } from "../utils/jwt";
+import { db } from "../database";
 // ----------------------------------------------------------------------
 
 const initialState = {
@@ -74,6 +75,9 @@ function AuthProvider({ children }) {
           setSession(accessToken);
           const response = await axios.get(`${HOST_API}/api/user`);
           const u = response.data;
+          if (localStorage.getItem("accessToken") === "true") {
+            preloadUser(u)
+          }
           dispatch({
             type: "INITIALIZE",
             payload: {
@@ -82,15 +86,25 @@ function AuthProvider({ children }) {
             },
           });
         } else {
-          dispatch({
-            type: "INITIALIZE",
-            payload: {
-              isAuthenticated: false,
-              user: null,
-            },
-          });
+          // Aqui consulta el usuario dentro de la db local para setearlo y que sea persistente
+          db.user.toArray()
+            .then(firstUser => {
+              if (firstUser) {
+                dispatch({
+                  type: "INITIALIZE",
+                  payload: {
+                    isAuthenticated: true,
+                    user: firstUser,
+                  },
+                });
+              }
+            })
+            .catch(error => {
+              console.error('Error al obtener el primer registro:', error);
+            });
         }
       } catch (err) {
+        console.error('entra aqui');
         console.error(err);
         dispatch({
           type: "INITIALIZE",
@@ -104,6 +118,20 @@ function AuthProvider({ children }) {
 
     initialize();
   }, []);
+
+  const preloadUser = (user) => {
+    if (user) {
+      db.items.where('id').equals(user.id).first()
+        .then(existingItem => {
+          if (!existingItem) {
+            db.user.add(user);
+          }
+        })
+        .catch(error => {
+          console.error('Error al validar la clave:', error);
+        });
+    }
+  };
 
   const signIn = async (email, password) => {
     console.log(navigator.userAgent);
