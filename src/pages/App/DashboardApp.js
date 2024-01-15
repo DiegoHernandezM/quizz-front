@@ -31,6 +31,7 @@ import useAuth from "../../hooks/useAuth";
 import { spacing } from "@mui/system";
 import Stats from "../dashboards/Administrators/Stats";
 import BarChart from "../dashboards/Administrators/BarChart";
+import useBulkData from "../../pluckDatabase";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -83,6 +84,7 @@ function DashboardApp() {
   const [open, setOpen] = useState(localStorage.getItem("dashone") === "true");
   const [openIos, setOpenIos] = useState(false);
   const [openAndroid, setOpenAndroid] = useState(false);
+  const bulk = useBulkData();
 
   useEffect(() => {
     dispatch(getDataStudent());
