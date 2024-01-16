@@ -94,6 +94,7 @@ export function getUserTests() {
     try {
       const response = await axios.get(`/api/usertest/getfromuser`);
       dispatch(slice.actions.setUserTests(response.data));
+      return Promise.resolve(response.data);
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
