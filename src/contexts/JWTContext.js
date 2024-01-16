@@ -105,13 +105,22 @@ function AuthProvider({ children }) {
         }
       } catch (err) {
         console.error(err);
-        dispatch({
-          type: "INITIALIZE",
-          payload: {
-            isAuthenticated: false,
-            user: null,
-          },
-        });
+        console.log('fdadas');
+        db.user.toArray()
+          .then(firstUser => {
+            if (firstUser) {
+              dispatch({
+                type: "INITIALIZE",
+                payload: {
+                  isAuthenticated: true,
+                  user: firstUser,
+                },
+              });
+            }
+          })
+          .catch(error => {
+            console.error('Error al obtener el primer registro:', error);
+          });
       }
     };
 
