@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "../../utils/axios";
+import {db} from "../../database";
 
 const initialState = {
   allSubjects: [],
@@ -13,7 +14,8 @@ const slice = createSlice({
   initialState,
   reducers: {
     setSubjects(state, payload) {
-      state.allSubjects = payload.payload.data;
+      console.log(payload.payload);
+      state.allSubjects = payload.payload;
       state.isLoading = false;
     },
     setSubject(state, payload) {
@@ -33,10 +35,19 @@ export function getSubjects(trashed) {
     try {
       const response = await axios.get(`/api/subject/list`,
       { params: { trashed } });
-      dispatch(slice.actions.setSubjects(response));
-      return Promise.resolve(response);
+      dispatch(slice.actions.setSubjects(response.data));
+      return Promise.resolve(response.data);
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      db.subjects.toArray()
+        .then(data => {
+          // console.log(data);
+          dispatch(slice.actions.setSubjects(data));
+          return Promise.resolve(data);
+        })
+        .catch(error => {
+          console.error('Error al obtener el primer registro:', error);
+        });
+      // dispatch(slice.actions.hasError(error));
     }
   };
 }

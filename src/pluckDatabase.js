@@ -17,7 +17,7 @@ function useBulkData() {
         preloadUserTest(data);
       });
       dispatch(getSubjects()).then((data) => {
-        preloadSubjects(data.data);
+        preloadSubjects(data);
         preloadUser(user);
       });
     }, 1000);

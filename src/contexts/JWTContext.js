@@ -86,7 +86,6 @@ function AuthProvider({ children }) {
             },
           });
         } else {
-          // Aqui consulta el usuario dentro de la db local para setearlo y que sea persistente
           db.user.toArray()
             .then(firstUser => {
               if (firstUser) {
@@ -105,7 +104,6 @@ function AuthProvider({ children }) {
         }
       } catch (err) {
         console.error(err);
-        console.log('fdadas');
         db.user.toArray()
           .then(firstUser => {
             if (firstUser) {
@@ -119,7 +117,13 @@ function AuthProvider({ children }) {
             }
           })
           .catch(error => {
-            console.error('Error al obtener el primer registro:', error);
+            dispatch({
+              type: "INITIALIZE",
+              payload: {
+                isAuthenticated: false,
+                user: null,
+              },
+            });
           });
       }
     };
