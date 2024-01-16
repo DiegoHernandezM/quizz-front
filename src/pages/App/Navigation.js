@@ -19,8 +19,6 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
 
   useEffect(() => {
-    console.log('entro a useEffect');
-
     window.addEventListener("beforeinstallprompt", (event) => {
       console.log('entro al primer window', event);
       window.deferredPrompt = event;

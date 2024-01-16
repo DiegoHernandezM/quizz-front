@@ -75,7 +75,7 @@ function AuthProvider({ children }) {
           setSession(accessToken);
           const response = await axios.get(`${HOST_API}/api/user`);
           const u = response.data;
-          if (localStorage.getItem("accessToken") === "true") {
+          if (localStorage.getItem("dashone") === "true") {
             preloadUser(u)
           }
           dispatch({
@@ -104,7 +104,6 @@ function AuthProvider({ children }) {
             });
         }
       } catch (err) {
-        console.error('entra aqui');
         console.error(err);
         dispatch({
           type: "INITIALIZE",
@@ -121,7 +120,7 @@ function AuthProvider({ children }) {
 
   const preloadUser = (user) => {
     if (user) {
-      db.items.where('id').equals(user.id).first()
+      db.user.where('id').equals(user.id).first()
         .then(existingItem => {
           if (!existingItem) {
             db.user.add(user);
