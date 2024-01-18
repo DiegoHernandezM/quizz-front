@@ -18,9 +18,9 @@ import {
   AppBar,
   Toolbar,
   IconButton,
-  DialogActions
+  DialogActions,
 } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import backgroundJpe from "../../vendor/avatar.gif";
 import installAndroid from "../../vendor/android-install.gif";
 import installIos from "../../vendor/ios-install.gif";
@@ -32,6 +32,7 @@ import { spacing } from "@mui/system";
 import Stats from "../dashboards/Administrators/Stats";
 import BarChart from "../dashboards/Administrators/BarChart";
 import useBulkData from "../../pluckDatabase";
+import CheckConnection from "../../components/check-offline/CheckConnection";
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -91,192 +92,252 @@ function DashboardApp() {
   }, [dispatch]);
 
   return (
-    <React.Fragment>
-      <Helmet title="Dashboard" />
-      <Grid justifyContent="space-between" container spacing={6}>
-        <Grid item>
-          <Typography variant="h3" gutterBottom>
-            {"Bienvenido Capitán:"} {name}
-          </Typography>
+    <CheckConnection>
+      <React.Fragment>
+        <Helmet title="Dashboard" />
+        <Grid justifyContent="space-between" container spacing={6}>
+          <Grid item>
+            <Typography variant="h3" gutterBottom>
+              {"Bienvenido Capitán:"} {name}
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
-      <Divider my={6} />
-      <Grid container spacing={6} style={{ marginBottom: '45px' }}>
-        <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
-          <BarChart
-            labels={dataStudent?.aSubjects}
-            info={dataStudent?.aReps}
-            title="Conteo de test por materia"
-            label="Repeticiones"
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
-          <Grid container spacing={5}>
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              <Stats
-                title="Materias en curso"
-                amount={dataStudent?.subjectsActives}
-                illustration={subjectImage}
-                additionalText="&nbsp;"
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              <Stats
-                title="Test simulacro"
-                amount={dataStudent?.test}
-                illustration={workingImage}
-                additionalText="&nbsp;"
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              <Stats
-                title="Materias terminadas"
-                amount={dataStudent?.subjects}
-                illustration={checkImage}
-                additionalText="&nbsp;"
-              />
+        <Divider my={6} />
+        <Grid container spacing={6} style={{ marginBottom: "45px" }}>
+          <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
+            <BarChart
+              labels={dataStudent?.aSubjects}
+              info={dataStudent?.aReps}
+              title="Conteo de test por materia"
+              label="Repeticiones"
+            />
+          </Grid>
+          <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
+            <Grid container spacing={5}>
+              <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                <Stats
+                  title="Materias en curso"
+                  amount={dataStudent?.subjectsActives}
+                  illustration={subjectImage}
+                  additionalText="&nbsp;"
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                <Stats
+                  title="Test simulacro"
+                  amount={dataStudent?.test}
+                  illustration={workingImage}
+                  additionalText="&nbsp;"
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                <Stats
+                  title="Materias terminadas"
+                  amount={dataStudent?.subjects}
+                  illustration={checkImage}
+                  additionalText="&nbsp;"
+                />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={() => {
-          setOpen(false);
-          localStorage.setItem("dashone", false);
-        }}
-        aria-describedby="alert-dialog-slide-description"
-        style={{ background: "white" }}
-        fullScreen
-      >
-        <AppBar sx={{ position: "relative" }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              onClick={() => setOpen(false)}
-              aria-label="close"
-            ></IconButton>
-            <Typography
-              sx={{ ml: 2, flex: 1 }}
-              variant="h3"
-              component="div"
-              onClick={() => {
-                setOpen(false);
-                localStorage.setItem("dashone", false);
-              }}
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={() => {
+            setOpen(false);
+            localStorage.setItem("dashone", false);
+          }}
+          aria-describedby="alert-dialog-slide-description"
+          style={{ background: "white" }}
+          fullScreen
+        >
+          <AppBar sx={{ position: "relative" }}>
+            <Toolbar>
+              <IconButton
+                edge="start"
+                color="inherit"
+                onClick={() => setOpen(false)}
+                aria-label="close"
+              ></IconButton>
+              <Typography
+                sx={{ ml: 2, flex: 1 }}
+                variant="h3"
+                component="div"
+                onClick={() => {
+                  setOpen(false);
+                  localStorage.setItem("dashone", false);
+                }}
+              >
+                Aviation In Sight
+              </Typography>
+              <Button
+                autoFocus
+                color="inherit"
+                onClick={() => {
+                  setOpen(false);
+                  localStorage.setItem("dashone", false);
+                }}
+              >
+                Comenzar
+              </Button>
+            </Toolbar>
+          </AppBar>
+          <DialogTitle>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ marginTop: "10px" }}
             >
-              Aviation In Sight
-            </Typography>
-            <Button
-              autoFocus
-              color="inherit"
-              onClick={() => {
-                setOpen(false);
-                localStorage.setItem("dashone", false);
-              }}
+              <Typography variant="h2">{"Hola Capitán"}</Typography>
+            </Box>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                style={{ marginTop: "10px" }}
+              >
+                <Typography variant="h2">Bienvenido a</Typography>
+              </Box>
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <Image alt="App de aviacion" src={backgroundJpe} />
+              </Box>
+              <Box display="flex" justifyContent="center" alignItems="center">
+                <Typography variant="h2">{"Aviation In Sight"}</Typography>
+              </Box>
+            </DialogContentText>
+
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ marginTop: "70px" }}
             >
-              Comenzar
-            </Button>
-          </Toolbar>
-        </AppBar>
-        <DialogTitle>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
-            <Typography variant="h2">
-              {"Hola Capitán"}
-            </Typography>
-          </Box>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
-              <Typography variant="h2">
-                Bienvenido a
+              <Typography variant="subtitle1" justifyContent="center">
+                ¿Que desea hacer hoy capitán
               </Typography>
             </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Image alt="App de aviacion" src={backgroundJpe} />
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ marginTop: "10px" }}
+            >
+              <Typography variant="subtitle1" justifyContent="center">
+                {name}?
+              </Typography>
             </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography variant="h2">{"Aviation In Sight"}</Typography>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ marginTop: "10px" }}
+            >
+              <Typography variant="subtitle1" justifyContent="center">
+                Tutorial de instalación
+              </Typography>
             </Box>
-          </DialogContentText>
-
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '70px' }}>
-            <Typography variant="subtitle1" justifyContent="center">
-              ¿Que desea hacer hoy capitán
-            </Typography>
-          </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
-            <Typography variant="subtitle1" justifyContent="center">
-              {name}?
-            </Typography>
-          </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
-            <Typography variant="subtitle1" justifyContent="center">
-              Tutorial de instalación
-            </Typography>
-          </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
-            <Button variant="contained" autoFocus onClick={() => setOpenAndroid(true)} size="large">
-              ANDROID
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ marginTop: "10px" }}
+            >
+              <Button
+                variant="contained"
+                autoFocus
+                onClick={() => setOpenAndroid(true)}
+                size="large"
+              >
+                ANDROID
+              </Button>
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ marginTop: "10px" }}
+            >
+              <Button
+                variant="contained"
+                autoFocus
+                onClick={() => setOpenIos(true)}
+                size="large"
+              >
+                IOS
+              </Button>
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ marginTop: "10px" }}
+            >
+              <Button
+                variant="contained"
+                autoFocus
+                onClick={() => setOpen(false)}
+                size="large"
+              >
+                Comenzar
+              </Button>
+            </Box>
+          </DialogContent>
+        </Dialog>
+        <Dialog
+          open={openAndroid}
+          onClose={() => {
+            setOpenAndroid(false);
+          }}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Instalación en dispositivos Android"}
+          </DialogTitle>
+          <DialogContent>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <ImageInstall alt="App de aviacion" src={installAndroid} />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                setOpenAndroid(false);
+              }}
+              autoFocus
+            >
+              Aceptar
             </Button>
-          </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
-            <Button variant="contained" autoFocus onClick={() => setOpenIos(true)} size="large">
-              IOS
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={openIos}
+          onClose={() => setOpenIos(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Instalación en dispositivos IOS"}
+          </DialogTitle>
+          <DialogContent>
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <ImageInstall alt="App de aviacion" src={installIos} />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenIos(false)} autoFocus>
+              Aceptar
             </Button>
-          </Box>
-          <Box display="flex" justifyContent="center" alignItems="center" style={{ marginTop: '10px' }}>
-            <Button variant="contained" autoFocus onClick={() => setOpen(false)} size="large">
-              Comenzar
-            </Button>
-          </Box>
-        </DialogContent>
-      </Dialog>
-      <Dialog
-        open={openAndroid}
-        onClose={() => { setOpenAndroid(false) }}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Instalación en dispositivos Android"}
-        </DialogTitle>
-        <DialogContent>
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <ImageInstall alt="App de aviacion" src={installAndroid} />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => { setOpenAndroid(false) }} autoFocus>
-            Aceptar
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog
-        open={openIos}
-        onClose={() => setOpenIos(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Instalación en dispositivos IOS"}
-        </DialogTitle>
-        <DialogContent>
-          <Box display="flex" justifyContent="center" alignItems="center">
-            <ImageInstall alt="App de aviacion" src={installIos} />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenIos(false)} autoFocus>
-            Aceptar
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </React.Fragment>
+          </DialogActions>
+        </Dialog>
+      </React.Fragment>
+    </CheckConnection>
   );
 }
 
