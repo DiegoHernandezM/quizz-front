@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "../../utils/axios";
+import { db } from "../../database";
 
 const initialState = {
   userTest: {},
@@ -16,6 +17,7 @@ const slice = createSlice({
   initialState,
   reducers: {
     setUserTest(state, payload) {
+      console.log(payload.payload);
       state.userTest = payload.payload.userTest;
       state.userTest.questions = payload.payload.userTest.parsed;
       state.subject = payload.payload.subject;
@@ -49,22 +51,51 @@ const slice = createSlice({
 
 export default slice.reducer;
 
+async function reformUserTest(subject_id = null) {
+  const test = await db.infotest
+    .where({
+      subject_id: subject_id ? parseInt(subject_id) : 0,
+      completed: 0,
+    })
+    .toArray();
+
+  const questionIds = test[0].parsed.map((item) =>
+    parseInt(Object.keys(item)[0])
+  );
+  const questions = await getQuestions(questionIds);
+
+  const subject = subject_id
+    ? await db.subjects.where("id").equals(parseInt(subject_id)).toArray()
+    : [{ name: "Simulacro" }];
+  const payload = { userTest: test[0], questions, subject: subject[0] };
+  return Promise.resolve(payload);
+}
+
+async function getQuestions(ids) {
+  const q = await db.questions.toArray();
+  return q.filter((item) => ids.includes(item.id));
+}
+
 export function getUserTest(subject_id = null) {
   return async (dispatch) => {
     try {
-      if (!subject_id) {
-        const response = await axios.get(`/api/usertest/simulation/create`);
-        dispatch(slice.actions.setUserTest(response.data));
-      } else {
-        const response = await axios.get(`/api/usertest/singlesubject/create`, {
-          params: {
-            subject_id,
-          },
-        });
-        dispatch(slice.actions.setUserTest(response.data));
-      }
+      // if (!subject_id) {
+      //   const response = await axios.get(`/api/usertest/simulation/create`);
+      //   dispatch(slice.actions.setUserTest(response.data));
+      // } else {
+      //   const response = await axios.get(`/api/usertest/singlesubject/create`, {
+      //     params: {
+      //       subject_id,
+      //     },
+      //   });
+      //   dispatch(slice.actions.setUserTest(response.data));
+      // }
+
+      reformUserTest(subject_id).then((payload) => {
+        dispatch(slice.actions.setUserTest(payload));
+      });
     } catch (error) {
-      dispatch(slice.actions.hasError(error));
+      console.log(error);
     }
   };
 }

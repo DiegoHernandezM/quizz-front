@@ -72,10 +72,6 @@ function Tests() {
     "#E5E8E8",
   ];
 
-  const preloadQuestions = async (questions) => {
-    await db.questions.bulkPut(questions);
-  };
-
   useEffect(() => {
     if (testId > 0) {
       dispatch(setTestFromId(testId));
@@ -83,18 +79,6 @@ function Tests() {
       dispatch(getUserTest(subject_id));
     }
   }, []);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      dispatch(getQuestionsPreload()).then((data) => {
-        preloadQuestions(data.data);
-      });
-    }, 1000);
-    if (questions?.length) {
-      console.log(questions);
-      clearTimeout(timeoutId);
-    }
-  }, [questions]);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
