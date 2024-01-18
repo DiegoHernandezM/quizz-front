@@ -8,4 +8,5 @@ db.version(2).stores({
   subjects: "++id, name, description, created_at, deleted_at, image, questions_to_test, questions_count, latest_user_test",
   infotest: "++id, completed, created_at, duration, grade, parsed, percentage, points, questions, subject_id," +
     "subject_name, updated_at, user_id",
+  dashboard: "++id, aReps, aSubjects, subjects, subjectsActives, test",
 });

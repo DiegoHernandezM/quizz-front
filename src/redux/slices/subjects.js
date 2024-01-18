@@ -40,14 +40,13 @@ export function getSubjects(trashed) {
     } catch (error) {
       db.subjects.toArray()
         .then(data => {
-          // console.log(data);
           dispatch(slice.actions.setSubjects(data));
           return Promise.resolve(data);
         })
         .catch(error => {
           console.error('Error al obtener el primer registro:', error);
+          dispatch(slice.actions.hasError(error));
         });
-      // dispatch(slice.actions.hasError(error));
     }
   };
 }
