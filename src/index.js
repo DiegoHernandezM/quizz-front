@@ -1,12 +1,14 @@
 import "react-app-polyfill/stable";
 
 import React from "react";
+import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
 import "chart.js/auto";
 
 import App from "./App";
+import { store } from "./redux/store";
 import reportWebVitals from "./utils/reportWebVitals";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
@@ -31,7 +33,9 @@ root.render(
     <BrowserRouter>
       <ThemeProvider>
         <PayPalScriptProvider options={initialOptions}>
-          <App />
+          <Provider store={store}>
+            <App />
+          </Provider>
         </PayPalScriptProvider>
       </ThemeProvider>
     </BrowserRouter>

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import { Provider } from "react-redux";
+import { useDispatch } from "react-redux";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import { CacheProvider } from "@emotion/react";
+import { goOnline, goOffline } from "./redux/slices/onlinestatus";
 
 import { ThemeProvider as MuiThemeProvider } from "@mui/material/styles";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -14,7 +15,7 @@ import createTheme from "./theme";
 import Router from "./routes";
 
 import useTheme from "./hooks/useTheme";
-import { store, persistor } from "./redux/store";
+import { persistor } from "./redux/store";
 import createEmotionCache from "./utils/createEmotionCache";
 
 import { AuthProvider } from "./contexts/JWTContext";
@@ -24,24 +25,37 @@ import { PersistGate } from "redux-persist/integration/react";
 const clientSideEmotionCache = createEmotionCache();
 
 function App({ emotionCache = clientSideEmotionCache }) {
+  const dispatch = useDispatch();
   const { isInitialized, user } = useAuth();
   const { theme } = useTheme();
+
+  useEffect(() => {
+    const handleOnline = () => dispatch(goOnline());
+    const handleOffline = () => dispatch(goOffline());
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    // Cleanup listeners when component unmounts
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, [dispatch]);
 
   return (
     <CacheProvider value={emotionCache}>
       <HelmetProvider>
         <Helmet titleTemplate="%s | App" defaultTitle="App - Aviación" />
-        <Provider store={store}>
-          <PersistGate loading={<Progress />} persistor={persistor}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <MuiThemeProvider theme={createTheme(theme)}>
-                <AuthProvider>
-                  {isInitialized ? <Router /> : <Progress />}
-                </AuthProvider>
-              </MuiThemeProvider>
-            </LocalizationProvider>
-          </PersistGate>
-        </Provider>
+        <PersistGate loading={<Progress />} persistor={persistor}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <MuiThemeProvider theme={createTheme(theme)}>
+              <AuthProvider>
+                {isInitialized ? <Router /> : <Progress />}
+              </AuthProvider>
+            </MuiThemeProvider>
+          </LocalizationProvider>
+        </PersistGate>
       </HelmetProvider>
     </CacheProvider>
   );

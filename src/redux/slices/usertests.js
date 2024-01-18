@@ -17,7 +17,6 @@ const slice = createSlice({
   initialState,
   reducers: {
     setUserTest(state, payload) {
-      console.log(payload.payload);
       state.userTest = payload.payload.userTest;
       state.userTest.questions = payload.payload.userTest.parsed;
       state.subject = payload.payload.subject;
@@ -77,23 +76,28 @@ async function getQuestions(ids) {
 }
 
 export function getUserTest(subject_id = null) {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      // if (!subject_id) {
-      //   const response = await axios.get(`/api/usertest/simulation/create`);
-      //   dispatch(slice.actions.setUserTest(response.data));
-      // } else {
-      //   const response = await axios.get(`/api/usertest/singlesubject/create`, {
-      //     params: {
-      //       subject_id,
-      //     },
-      //   });
-      //   dispatch(slice.actions.setUserTest(response.data));
-      // }
-
-      reformUserTest(subject_id).then((payload) => {
-        dispatch(slice.actions.setUserTest(payload));
-      });
+      if (getState().onlinestatus.isOnline) {
+        if (!subject_id) {
+          const response = await axios.get(`/api/usertest/simulation/create`);
+          dispatch(slice.actions.setUserTest(response.data));
+        } else {
+          const response = await axios.get(
+            `/api/usertest/singlesubject/create`,
+            {
+              params: {
+                subject_id,
+              },
+            }
+          );
+          dispatch(slice.actions.setUserTest(response.data));
+        }
+      } else {
+        reformUserTest(subject_id).then((payload) => {
+          dispatch(slice.actions.setUserTest(payload));
+        });
+      }
     } catch (error) {
       console.log(error);
     }
