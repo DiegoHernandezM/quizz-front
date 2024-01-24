@@ -46,20 +46,17 @@ const preloadUserTest = async (info) => {
 };
 
 const preloadUser = async (us) => {
-  if (us) {
-    await db.user
-      .where("id")
-      .equals(us.id)
-      .first()
-      .then((existingItem) => {
-        if (!existingItem) {
-          console.log(us);
-          db.user.add(us);
-        }
-      })
-      .catch((error) => {
-        console.error("Error al validar la clave:", error);
-      });
+  if (us && (typeof us.id === "string" || typeof us.id === "number")) {
+    try {
+      const existingItem = await db.user.where("id").equals(us.id).first();
+      if (!existingItem) {
+        await db.user.add(us);
+      }
+    } catch (error) {
+      console.error("Error al pre-cargar datos de usuario:", error);
+    }
+  } else {
+    console.warn("Datos de usuario no válidos para pre-cargar.");
   }
 };
 
