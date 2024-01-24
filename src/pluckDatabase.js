@@ -24,6 +24,9 @@ function useBulkData() {
       dispatch(getQuestionsPreload()).then((data) => {
         preloadQuestions(data.data);
       });
+      dispatch(getDataStudent()).then((data) => {
+        preloadDashboard(data);
+      });
     }, 1000);
     if (subjs?.length) {
       clearTimeout(timeoutId);
@@ -43,6 +46,14 @@ const preloadSubjects = async (sub) => {
 
 const preloadUserTest = async (info) => {
   await db.infotest.bulkPut(info);
+};
+
+const preloadDashboard = async (info) => {
+  await db.dashboard.toArray().then((result) => {
+    if (result.length === 0) {
+      db.dashboard.add(info);
+    }
+  });
 };
 
 const preloadUser = async (us) => {

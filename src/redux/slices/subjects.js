@@ -30,25 +30,27 @@ const slice = createSlice({
 export default slice.reducer;
 
 export function getSubjects(trashed) {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      const response = await axios.get(`/api/subject/list`, {
-        params: { trashed },
-      });
-      dispatch(slice.actions.setSubjects(response.data));
-      return Promise.resolve(response.data);
-    } catch (error) {
-      db.subjects
-        .toArray()
-        .then((data) => {
-          // console.log(data);
-          dispatch(slice.actions.setSubjects(data));
-          return Promise.resolve(data);
-        })
-        .catch((error) => {
-          console.error("Error al obtener el primer registro:", error);
+      if (getState().onlinestatus.isOnline) {
+        const response = await axios.get(`/api/subject/list`, {
+          params: { trashed },
         });
-      // dispatch(slice.actions.hasError(error));
+        dispatch(slice.actions.setSubjects(response.data));
+        return Promise.resolve(response.data);
+      } else {
+        db.subjects
+          .toArray()
+          .then((data) => {
+            dispatch(slice.actions.setSubjects(data));
+            return Promise.resolve(data);
+          })
+          .catch((error) => {
+            console.error("Error al obtener el primer registro:", error);
+          });
+      }
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
     }
   };
 }
