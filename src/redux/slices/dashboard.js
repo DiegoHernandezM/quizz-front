@@ -137,13 +137,14 @@ export function getDataLinearChart(date) {
 
 export function getDataStudent() {
   return async (dispatch, getState) => {
-    dispatch(slice.actions.startLoading());
     try {
+      dispatch(slice.actions.startLoading());
       if (getState().onlinestatus.isOnline) {
         const response = await axios.get(`/api/dashboardstudent/data`);
         dispatch(slice.actions.getDataStudentSuccess(response.data));
+        return Promise.resolve(response.data);
       } else {
-        db.subjects
+        db.dashboard
           .toArray()
           .then((data) => {
             dispatch(slice.actions.getDataStudentSuccess(data));
@@ -151,9 +152,9 @@ export function getDataStudent() {
           })
           .catch((error) => {
             console.error("Error al obtener el primer registro:", error);
+            return Promise.reject(error);
           });
       }
-
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

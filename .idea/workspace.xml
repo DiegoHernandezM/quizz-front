@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5c74c0c7-3991-4e12-a29e-70f0bbf2d9af" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/database.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/database.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pluckDatabase.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/pluckDatabase.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/redux/slices/dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/slices/dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/slices/subjects.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/slices/subjects.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
