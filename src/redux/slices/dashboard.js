@@ -147,8 +147,8 @@ export function getDataStudent() {
         db.dashboard
           .toArray()
           .then((data) => {
-            dispatch(slice.actions.getDataStudentSuccess(data));
-            return Promise.resolve(data);
+            dispatch(slice.actions.getDataStudentSuccess(data[0]));
+            return Promise.resolve(data[0]);
           })
           .catch((error) => {
             console.error("Error al obtener el primer registro:", error);

@@ -41,19 +41,21 @@ const preloadQuestions = async (questions) => {
 };
 
 const preloadSubjects = async (sub) => {
+  console.log(sub);
   await db.subjects.bulkPut(sub);
 };
 
 const preloadUserTest = async (info) => {
-  await db.infotest.bulkPut(info);
+  // await db.infotest.bulkPut(info);
 };
 
 const preloadDashboard = async (info) => {
   await db.dashboard.toArray().then((result) => {
+    console.log(result.length);
     if (result.length === 0) {
       db.dashboard.add(info);
     }
-  });
+  })
 };
 
 const preloadUser = async (us) => {
