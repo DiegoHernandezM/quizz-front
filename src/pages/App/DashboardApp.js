@@ -211,7 +211,6 @@ function DashboardApp() {
                 <Typography variant="h2">{"Aviation In Sight"}</Typography>
               </Box>
             </DialogContentText>
-
             <Box
               display="flex"
               justifyContent="center"
