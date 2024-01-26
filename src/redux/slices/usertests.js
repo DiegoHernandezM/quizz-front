@@ -23,6 +23,10 @@ const slice = createSlice({
       state.testQuestions = payload.payload.questions;
       state.isLoading = false;
     },
+    setUserTestOffline(state, payload) {
+      state.userTest.questions = payload;
+      state.isLoading = false;
+    },
     showUserTest(state, payload) {
       state.userTest = payload.payload.userTest;
       state.userTest.questions = payload.payload.userTest.parsed;
@@ -148,9 +152,35 @@ export function setTestFromId(id) {
 }
 
 export function saveAnswer(data) {
+  return async (dispatch, getState) => {
+    try {
+      if (getState().onlinestatus.isOnline) { 
+        const response = await axios.post(`/api/usertest/saveanswer`, data);
+        dispatch(slice.actions.setUserAnswer(response.data));
+      } else {
+        console.log(data);
+        const test = await db.infotest
+        .where({
+        id: data.user_test_id ? parseInt(data.user_test_id) : 0,
+        completed: 0,
+        })
+        .toArray();
+      console.log(JSON.parse(test[0].questions));
+      let dataFind = JSON.parse(test[0].questions);
+      dataFind[data.question_id] = data.answer
+      dispatch(slice.actions.setUserTestOffline(JSON.stringify(dataFind)))
+      console.log(dataFind);
+      }
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function saveAnswerOffline(data) {
   return async (dispatch) => {
     try {
-      const response = await axios.post(`/api/usertest/saveanswer`, data);
+      const response = await axios.post(`/api/usertest/saveansweroffline`, data);
       dispatch(slice.actions.setUserAnswer(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Navigation from "./Navigation";
@@ -11,6 +11,7 @@ import {
   resetTest,
   setTestFromId,
   endTest,
+  saveAnswerOffline
 } from "../../redux/slices/usertests";
 import { useFormik } from "formik";
 import {
@@ -50,7 +51,7 @@ function Tests() {
   const { testQuestions, userTest, subject } = useSelector(
     (state) => state.usertests
   );
-
+  const { isOnline } = useSelector((state) => state.onlinestatus);
   const maxSteps = testQuestions.length;
   const queryParameters = new URLSearchParams(window.location.search);
   const subject_id = queryParameters.get("subject_id");
@@ -71,6 +72,7 @@ function Tests() {
     "#FEF9E7",
     "#E5E8E8",
   ];
+  const[dataArray, setDataArray] = useState([]);
 
   useEffect(() => {
     if (testId > 0) {
@@ -108,6 +110,7 @@ function Tests() {
       let a = Object.keys(pre);
       let step = a.find((k) => Object.values(pre[k])[0] === "");
       console.log(step);
+      console.log(pre)
       if (step === undefined || step === null) {
         step = maxSteps - 1;
         setAnswered(true);
@@ -120,16 +123,71 @@ function Tests() {
     }
   }, [userTest]);
 
+  useEffect(() => {
+    if (isOnline) {
+      const sendRequestsWhenOnline = async () => {
+        const records = await db.table('requests').toArray();
+        if (records.length > 0) {
+          dispatch(saveAnswerOffline(records[0].params))
+        }
+    };
+    sendRequestsWhenOnline();
+
+    const deleteTable = async () => {
+        if (await db.table('requests').count() > 0) {
+          await db.table('requests').clear();
+        }
+    };
+    deleteTable();
+  }
+  },[isOnline]);
+
+  const createOrUpdateRecord = async (data) => {
+    const isFirstTime = await db.table('requests').count() === 0;
+    if (isFirstTime) {
+      const newRecord = { params: data};
+      const id = await db.requests.add(newRecord);
+      console.log(`Registro creado con ID: ${id}`);
+    } else {
+      const records = await db.requests.toArray();
+      if (records.length > 0) {
+        const firstRecord = records[0];
+        firstRecord.params = data;
+        await db.requests.put(firstRecord);
+        console.log(`Registro actualizado con ID: ${firstRecord.id}`);
+      }
+    }
+  };
+
   const handleSaveAnswer = (event) => {
     const { name, value } = event.target;
     formik.setFieldValue(parseInt(name), value);
-    dispatch(
-      saveAnswer({
+    if(isOnline) {
+      dispatch(
+        saveAnswer({
+          user_test_id: userTest.id,
+          question_id: name,
+          answer: value,
+        })
+      );
+    } else {
+      const array = [...dataArray]; 
+      array.push({
         user_test_id: userTest.id,
         question_id: name,
         answer: value,
       })
-    );
+      setDataArray (array);
+      createOrUpdateRecord(array);
+      dispatch(
+        saveAnswer({
+          user_test_id: userTest.id,
+          question_id: name,
+          answer: value,
+        })
+      );
+    } 
+
   };
 
   const handleResetTest = () => {
