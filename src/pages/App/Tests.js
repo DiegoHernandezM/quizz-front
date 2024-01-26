@@ -11,7 +11,7 @@ import {
   resetTest,
   setTestFromId,
   endTest,
-  saveAnswerOffline
+  saveAnswerOffline,
 } from "../../redux/slices/usertests";
 import { useFormik } from "formik";
 import {
@@ -72,7 +72,7 @@ function Tests() {
     "#FEF9E7",
     "#E5E8E8",
   ];
-  const[dataArray, setDataArray] = useState([]);
+  const [dataArray, setDataArray] = useState([]);
 
   useEffect(() => {
     if (testId > 0) {
@@ -109,8 +109,6 @@ function Tests() {
       let pre = userTest.questions;
       let a = Object.keys(pre);
       let step = a.find((k) => Object.values(pre[k])[0] === "");
-      console.log(step);
-      console.log(pre)
       if (step === undefined || step === null) {
         step = maxSteps - 1;
         setAnswered(true);
@@ -126,26 +124,26 @@ function Tests() {
   useEffect(() => {
     if (isOnline) {
       const sendRequestsWhenOnline = async () => {
-        const records = await db.table('requests').toArray();
+        const records = await db.table("requests").toArray();
         if (records.length > 0) {
-          dispatch(saveAnswerOffline(records[0].params))
+          dispatch(saveAnswerOffline(records[0].params));
         }
-    };
-    sendRequestsWhenOnline();
+      };
+      sendRequestsWhenOnline();
 
-    const deleteTable = async () => {
-        if (await db.table('requests').count() > 0) {
-          await db.table('requests').clear();
+      const deleteTable = async () => {
+        if ((await db.table("requests").count()) > 0) {
+          await db.table("requests").clear();
         }
-    };
-    deleteTable();
-  }
-  },[isOnline]);
+      };
+      deleteTable();
+    }
+  }, [isOnline]);
 
   const createOrUpdateRecord = async (data) => {
-    const isFirstTime = await db.table('requests').count() === 0;
+    const isFirstTime = (await db.table("requests").count()) === 0;
     if (isFirstTime) {
-      const newRecord = { params: data};
+      const newRecord = { params: data };
       const id = await db.requests.add(newRecord);
       console.log(`Registro creado con ID: ${id}`);
     } else {
@@ -162,7 +160,7 @@ function Tests() {
   const handleSaveAnswer = (event) => {
     const { name, value } = event.target;
     formik.setFieldValue(parseInt(name), value);
-    if(isOnline) {
+    if (isOnline) {
       dispatch(
         saveAnswer({
           user_test_id: userTest.id,
@@ -171,13 +169,13 @@ function Tests() {
         })
       );
     } else {
-      const array = [...dataArray]; 
+      const array = [...dataArray];
       array.push({
         user_test_id: userTest.id,
         question_id: name,
         answer: value,
-      })
-      setDataArray (array);
+      });
+      setDataArray(array);
       createOrUpdateRecord(array);
       dispatch(
         saveAnswer({
@@ -186,8 +184,7 @@ function Tests() {
           answer: value,
         })
       );
-    } 
-
+    }
   };
 
   const handleResetTest = () => {
