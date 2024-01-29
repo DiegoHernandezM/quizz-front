@@ -46,7 +46,7 @@ const preloadSubjects = async (sub) => {
 };
 
 const preloadUserTest = async (info) => {
-  // await db.infotest.bulkPut(info);
+  await db.infotest.bulkPut(info);
 };
 
 const preloadDashboard = async (info) => {
