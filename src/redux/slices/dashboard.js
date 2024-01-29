@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "../../utils/axios";
 import moment from "moment";
+import {db} from "../../database";
 
 const initialState = {
   loading: false,
@@ -135,11 +136,25 @@ export function getDataLinearChart(date) {
 }
 
 export function getDataStudent() {
-  return async (dispatch) => {
-    dispatch(slice.actions.startLoading());
+  return async (dispatch, getState) => {
     try {
-      const response = await axios.get(`/api/dashboardstudent/data`);
-      dispatch(slice.actions.getDataStudentSuccess(response.data));
+      dispatch(slice.actions.startLoading());
+      if (getState().onlinestatus.isOnline) {
+        const response = await axios.get(`/api/dashboardstudent/data`);
+        dispatch(slice.actions.getDataStudentSuccess(response.data));
+        return Promise.resolve(response.data);
+      } else {
+        db.dashboard
+          .toArray()
+          .then((data) => {
+            dispatch(slice.actions.getDataStudentSuccess(data[0]));
+            return Promise.resolve(data[0]);
+          })
+          .catch((error) => {
+            console.error("Error al obtener el primer registro:", error);
+            return Promise.reject(error);
+          });
+      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
