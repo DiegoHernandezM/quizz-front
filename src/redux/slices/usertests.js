@@ -23,6 +23,11 @@ const slice = createSlice({
       state.testQuestions = payload.payload.questions;
       state.isLoading = false;
     },
+    setUserTestOffline(state, payload) {
+      state.userTest.questions = payload.payload;
+      //  state.userTest = payload.payload;
+      state.isLoading = false;
+    },
     showUserTest(state, payload) {
       state.userTest = payload.payload.userTest;
       state.userTest.questions = payload.payload.userTest.parsed;
@@ -38,6 +43,9 @@ const slice = createSlice({
     setUserTests(state, payload) {
       state.userTests = payload.payload;
       state.isLoading = false;
+      state.userTests.forEach((u, k) => {
+        state.userTests[k].questions = u.parsed;
+      });
     },
 
     setUserAnswer(state, payload) {
@@ -161,9 +169,38 @@ export function setTestFromId(id) {
 }
 
 export function saveAnswer(data) {
+  return async (dispatch, getState) => {
+    try {
+      if (getState().onlinestatus.isOnline) {
+        const response = await axios.post(`/api/usertest/saveanswer`, data);
+        dispatch(slice.actions.setUserAnswer(response.data));
+      } else {
+        const test = await db.infotest
+          .where({
+            id: data.user_test_id ? parseInt(data.user_test_id) : 0,
+            completed: 0,
+          })
+          .toArray();
+        let dataFind = test[0].questions;
+        let key = dataFind.findIndex((k) => k.hasOwnProperty(data.question_id));
+        dataFind[key] = { [data.question_id]: data.answer };
+        test[0].questions = dataFind;
+        await db.infotest.update(data.user_test_id, test[0]);
+        dispatch(slice.actions.setUserTestOffline(dataFind));
+      }
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function saveAnswerOffline(data) {
   return async (dispatch) => {
     try {
-      const response = await axios.post(`/api/usertest/saveanswer`, data);
+      const response = await axios.post(
+        `/api/usertest/saveansweroffline`,
+        data
+      );
       dispatch(slice.actions.setUserAnswer(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -172,19 +209,53 @@ export function saveAnswer(data) {
 }
 
 export function endTest(subject_id = null) {
+  return async (dispatch, getState) => {
+    try {
+      if (getState().onlinestatus.isOnline) {
+        if (!subject_id) {
+          const response = await axios.get(`/api/usertest/simulation/end`);
+          dispatch(slice.actions.setUserTest(response.data));
+        } else {
+          const response = await axios.get(`/api/usertest/singlesubject/end`, {
+            params: {
+              subject_id,
+            },
+          });
+          dispatch(slice.actions.setUserTest(response.data));
+        }
+      } else {
+        if (!subject_id) {
+          const test = await db.infotest
+          .where({
+            subject_id: 0,
+            completed: 0,
+          })
+          .first();
+          if (test) {
+            await db.infotest.update(test.id, { completed: 1 });
+            test.completed = 1;
+            dispatch(slice.actions.setUserTest(test));
+          }
+        } else {
+          const testToUpdate = await db.infotest.where({ subject_id: subject_id }).first();
+          if (testToUpdate) {
+            await db.infotest.update(testToUpdate.id, { completed: 1 });
+            testToUpdate.completed = 1;
+            dispatch(slice.actions.setUserTest(testToUpdate));
+          }
+        }
+      }
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function endTestOffline(data) {
   return async (dispatch) => {
     try {
-      if (!subject_id) {
-        const response = await axios.get(`/api/usertest/simulation/end`);
+        const response = await axios.post(`/api/usertest/endtests/offline`, data);
         dispatch(slice.actions.setUserTest(response.data));
-      } else {
-        const response = await axios.get(`/api/usertest/singlesubject/end`, {
-          params: {
-            subject_id,
-          },
-        });
-        dispatch(slice.actions.setUserTest(response.data));
-      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

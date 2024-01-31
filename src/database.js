@@ -6,10 +6,10 @@ db.version(2).stores({
     "++id, created_by_admin, created_at, deleted_at, email, email_verified_at, expires_at, name, school, stand_by," +
     "type_id, updated_at",
   questions: "++id, question, a, b, c, d, e, answer, explanation, subject_id",
-  subjects:
-    "++id, name, description, created_at, deleted_at, image, questions_to_test, questions_count, latest_user_test",
-  infotest:
-    "++id, completed, created_at, duration, grade, parsed, percentage, points, questions, subject_id," +
-    "subject_name, updated_at, user_id, offline",
+  subjects: "++id, name, description, created_at, deleted_at, image, questions_to_test, questions_count, latest_user_test",
+  infotest: "++id, completed, created_at, duration, grade, parsed, percentage, points, questions, subject_id," +
+    "subject_name, updated_at, user_id",
+  saveanswers: "++id, params",
+  endtest: "++id, subject_id",
   dashboard: "++id, aReps, aSubjects, subjects, subjectsActives, test"
 });

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Navigation from "./Navigation";
@@ -11,6 +11,8 @@ import {
   resetTest,
   setTestFromId,
   endTest,
+  saveAnswerOffline,
+  endTestOffline
 } from "../../redux/slices/usertests";
 import { useFormik } from "formik";
 import {
@@ -50,7 +52,7 @@ function Tests() {
   const { testQuestions, userTest, subject } = useSelector(
     (state) => state.usertests
   );
-
+  const { isOnline } = useSelector((state) => state.onlinestatus);
   const maxSteps = testQuestions.length;
   const queryParameters = new URLSearchParams(window.location.search);
   const subject_id = queryParameters.get("subject_id");
@@ -71,6 +73,7 @@ function Tests() {
     "#FEF9E7",
     "#E5E8E8",
   ];
+  const [dataArray, setDataArray] = useState([]);
 
   useEffect(() => {
     if (testId > 0) {
@@ -107,7 +110,6 @@ function Tests() {
       let pre = userTest.questions;
       let a = Object.keys(pre);
       let step = a.find((k) => Object.values(pre[k])[0] === "");
-      console.log(step);
       if (step === undefined || step === null) {
         step = maxSteps - 1;
         setAnswered(true);
@@ -120,16 +122,78 @@ function Tests() {
     }
   }, [userTest]);
 
+  useEffect(() => {
+    if (isOnline) {
+      const sendRequestsWhenOnline = async () => {
+        const records = await db.table("saveanswers").toArray();
+        const recordsEndTest = await db.table("endtest").toArray();
+        if (records.length > 0) {
+          dispatch(saveAnswerOffline(records[0].params));
+        }
+        if (recordsEndTest.length > 0) {
+          dispatch(saveAnswerOffline(recordsEndTest[0].subject_id));
+          dispatch(endTestOffline(recordsEndTest));
+        }
+      };
+      sendRequestsWhenOnline();
+
+      const deleteTable = async () => {
+        if ((await db.table("saveanswers").count()) > 0) {
+          await db.table("saveanswers").clear();
+        }
+        if ((await db.table("endtest").count()) > 0) {
+          await db.table("endtest").clear();
+        }
+      };
+      deleteTable();
+    }
+  }, [isOnline]);
+
+  const createOrUpdateRecord = async (data) => {
+    const isFirstTime = (await db.table("saveanswers").count()) === 0;
+    if (isFirstTime) {
+      const newRecord = { params: data };
+      const id = await db.saveanswers.add(newRecord);
+      console.log(`Registro creado con ID: ${id}`);
+    } else {
+      const records = await db.saveanswers.toArray();
+      if (records.length > 0) {
+        const firstRecord = records[0];
+        firstRecord.params = data;
+        await db.saveanswers.put(firstRecord);
+        console.log(`Registro actualizado con ID: ${firstRecord.id}`);
+      }
+    }
+  };
+
   const handleSaveAnswer = (event) => {
     const { name, value } = event.target;
     formik.setFieldValue(parseInt(name), value);
-    dispatch(
-      saveAnswer({
+    if (isOnline) {
+      dispatch(
+        saveAnswer({
+          user_test_id: userTest.id,
+          question_id: name,
+          answer: value,
+        })
+      );
+    } else {
+      const array = [...dataArray];
+      array.push({
         user_test_id: userTest.id,
         question_id: name,
         answer: value,
-      })
-    );
+      });
+      setDataArray(array);
+      createOrUpdateRecord(array);
+      dispatch(
+        saveAnswer({
+          user_test_id: userTest.id,
+          question_id: name,
+          answer: value,
+        })
+      );
+    }
   };
 
   const handleResetTest = () => {
@@ -138,9 +202,22 @@ function Tests() {
   };
 
   const handleEndTest = () => {
-    dispatch(endTest(userTest.subject_id ?? null)).then(() => {
-      setOpen(true);
-    });
+    if (isOnline) {
+      dispatch(endTest(userTest.subject_id ?? null)).then(() => {
+        setOpen(true);
+      });  
+    } else {
+      handleEndTestOffline();    
+      dispatch(endTest(userTest.subject_id ?? null)).then(() => {
+        setOpen(true);
+      });   
+    }
+  };
+
+  const handleEndTestOffline = async () => {
+    const newRecord = { subject_id: userTest.subject_id ?? null };
+    const id = await db.endtest.add(newRecord);
+    console.log(`Registro creado con ID: ${id}`);
   };
 
   const getColor = () => {
