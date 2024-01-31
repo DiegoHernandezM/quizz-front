@@ -57,7 +57,7 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-async function reformUserTest(subject_id = null) {
+async function reformUserTest(subject_id = null, getState) {
   const test = await db.infotest
     .where({
       subject_id: subject_id ? parseInt(subject_id) : 0,
@@ -65,16 +65,52 @@ async function reformUserTest(subject_id = null) {
     })
     .toArray();
 
-  const questionIds = test[0].parsed.map((item) =>
-    parseInt(Object.keys(item)[0])
-  );
-  const questions = await getQuestions(questionIds);
-
   const subject = subject_id
     ? await db.subjects.where("id").equals(parseInt(subject_id)).toArray()
     : [{ name: "Simulacro" }];
-  const payload = { userTest: test[0], questions, subject: subject[0] };
-  return Promise.resolve(payload);
+  if (test.length > 0) {
+    const questionIds = test[0].parsed.map((item) =>
+      parseInt(Object.keys(item)[0])
+    );
+    const questions = await getQuestions(questionIds);
+    const payload = { userTest: test[0], questions, subject: subject[0] };
+    return Promise.resolve(payload);
+  } else {
+    const newTest = {
+      id: 999999,
+      user_id: 0,
+      subject_id: parseInt(subject_id) ?? 0,
+      last_key: 1,
+      completed: 0,
+      created_at: null,
+      updated_at: null,
+      percentage: 0,
+      grade: 0,
+    };
+    if (subject_id > 0) {
+      const questionsDb = await db.questions
+        .where({
+          subject_id: parseInt(subject_id),
+        })
+        .toArray();
+      const parsedQuestions = questionsDb.map(({ id }) => ({ [id]: "" }));
+      newTest.questions = parsedQuestions;
+      newTest.parsed = parsedQuestions;
+      newTest.points = parsedQuestions.length;
+      const questionIds = parsedQuestions.map((item) =>
+        parseInt(Object.keys(item)[0])
+      );
+      const questions = await getQuestions(questionIds);
+
+      const payload = { userTest: newTest, questions, subject: subject[0] };
+      console.log(payload);
+      db.infotest.add(newTest);
+      return Promise.resolve(payload);
+    } else {
+      const subjects = getState().subject.allSubjects;
+      const questions = await db.questions.toArray();
+    }
+  }
 }
 
 async function getQuestions(ids) {
@@ -101,7 +137,7 @@ export function getUserTest(subject_id = null) {
           dispatch(slice.actions.setUserTest(response.data));
         }
       } else {
-        reformUserTest(subject_id).then((payload) => {
+        reformUserTest(subject_id, getState).then((payload) => {
           dispatch(slice.actions.setUserTest(payload));
         });
       }
