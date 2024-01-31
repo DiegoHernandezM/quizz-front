@@ -133,11 +133,24 @@ export function resetTest(subject_id = null) {
 }
 
 export function getUserTests() {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      const response = await axios.get(`/api/usertest/getfromuser`);
-      dispatch(slice.actions.setUserTests(response.data));
-      return Promise.resolve(response.data);
+      if (getState().onlinestatus.isOnline) {
+        const response = await axios.get(`/api/usertest/getfromuser`);
+        dispatch(slice.actions.setUserTests(response.data));
+        return Promise.resolve(response.data);
+      } else {
+        db.infotest
+          .toArray()
+          .then((data) => {
+            dispatch(slice.actions.setUserTests(data));
+            return Promise.resolve(data);
+          })
+          .catch((error) => {
+            console.error("Error: ", error);
+            return Promise.reject(error);
+          });
+      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
