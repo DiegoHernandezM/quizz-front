@@ -77,7 +77,7 @@ async function reformUserTest(subject_id = null, getState) {
     return Promise.resolve(payload);
   } else {
     const newTest = {
-      id: 999999,
+      id: 0,
       user_id: 0,
       subject_id: parseInt(subject_id) ?? 0,
       last_key: 1,
