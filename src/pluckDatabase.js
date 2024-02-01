@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDataStudent } from "./redux/slices/dashboard";
 import { getSubjects } from "./redux/slices/subjects";
 import { getUserTests } from "./redux/slices/usertests";
 import { getQuestionsPreload } from "./redux/slices/questions";
-import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "./database";
 import useAuth from "./hooks/useAuth";
 
 function useBulkData() {
   const { user } = useAuth();
   const dispatch = useDispatch();
-  const subjs = useLiveQuery(() => db.subjects.toArray());
-  try {
-    const timeoutId = setTimeout(() => {
+  const { isOnline } = useSelector((state) => state.onlinestatus);
+
+  useEffect(() => {
+    if (isOnline) {
       dispatch(getUserTests()).then((data) => {
         preloadUserTest(data);
       });
@@ -27,13 +27,8 @@ function useBulkData() {
       dispatch(getDataStudent()).then((data) => {
         preloadDashboard(data);
       });
-    }, 1000);
-    if (subjs?.length) {
-      clearTimeout(timeoutId);
     }
-  } catch (err) {
-    console.log(err);
-  }
+  }, [isOnline]);
 }
 
 const preloadQuestions = async (questions) => {
@@ -41,7 +36,6 @@ const preloadQuestions = async (questions) => {
 };
 
 const preloadSubjects = async (sub) => {
-  console.log(sub);
   await db.subjects.bulkPut(sub);
 };
 
@@ -51,7 +45,6 @@ const preloadUserTest = async (info) => {
 
 const preloadDashboard = async (info) => {
   await db.dashboard.toArray().then((result) => {
-    console.log(result.length);
     if (result.length === 0) {
       db.dashboard.add(info);
     }
