@@ -24,6 +24,9 @@ function useBulkData() {
       dispatch(getQuestionsPreload()).then((data) => {
         preloadQuestions(data.data);
       });
+      dispatch(getDataStudent()).then((data) => {
+        preloadDashboard(data);
+      });
     }, 1000);
     if (subjs?.length) {
       clearTimeout(timeoutId);
@@ -38,6 +41,7 @@ const preloadQuestions = async (questions) => {
 };
 
 const preloadSubjects = async (sub) => {
+  console.log(sub);
   await db.subjects.bulkPut(sub);
 };
 
@@ -45,21 +49,27 @@ const preloadUserTest = async (info) => {
   await db.infotest.bulkPut(info);
 };
 
+const preloadDashboard = async (info) => {
+  await db.dashboard.toArray().then((result) => {
+    console.log(result.length);
+    if (result.length === 0) {
+      db.dashboard.add(info);
+    }
+  })
+};
+
 const preloadUser = async (us) => {
-  if (us) {
-    await db.user
-      .where("id")
-      .equals(us.id)
-      .first()
-      .then((existingItem) => {
-        if (!existingItem) {
-          console.log(us);
-          db.user.add(us);
-        }
-      })
-      .catch((error) => {
-        console.error("Error al validar la clave:", error);
-      });
+  if (us && (typeof us.id === "string" || typeof us.id === "number")) {
+    try {
+      const existingItem = await db.user.where("id").equals(us.id).first();
+      if (!existingItem) {
+        await db.user.add(us);
+      }
+    } catch (error) {
+      console.error("Error al pre-cargar datos de usuario:", error);
+    }
+  } else {
+    console.warn("Datos de usuario no válidos para pre-cargar.");
   }
 };
 

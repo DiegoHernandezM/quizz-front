@@ -12,6 +12,7 @@ import {
   setTestFromId,
   endTest,
   saveAnswerOffline,
+  endTestOffline
 } from "../../redux/slices/usertests";
 import { useFormik } from "formik";
 import {
@@ -124,16 +125,24 @@ function Tests() {
   useEffect(() => {
     if (isOnline) {
       const sendRequestsWhenOnline = async () => {
-        const records = await db.table("requests").toArray();
+        const records = await db.table("saveanswers").toArray();
+        const recordsEndTest = await db.table("endtest").toArray();
         if (records.length > 0) {
           dispatch(saveAnswerOffline(records[0].params));
+        }
+        if (recordsEndTest.length > 0) {
+          dispatch(saveAnswerOffline(recordsEndTest[0].subject_id));
+          dispatch(endTestOffline(recordsEndTest));
         }
       };
       sendRequestsWhenOnline();
 
       const deleteTable = async () => {
-        if ((await db.table("requests").count()) > 0) {
-          await db.table("requests").clear();
+        if ((await db.table("saveanswers").count()) > 0) {
+          await db.table("saveanswers").clear();
+        }
+        if ((await db.table("endtest").count()) > 0) {
+          await db.table("endtest").clear();
         }
       };
       deleteTable();
@@ -141,17 +150,17 @@ function Tests() {
   }, [isOnline]);
 
   const createOrUpdateRecord = async (data) => {
-    const isFirstTime = (await db.table("requests").count()) === 0;
+    const isFirstTime = (await db.table("saveanswers").count()) === 0;
     if (isFirstTime) {
       const newRecord = { params: data };
-      const id = await db.requests.add(newRecord);
+      const id = await db.saveanswers.add(newRecord);
       console.log(`Registro creado con ID: ${id}`);
     } else {
-      const records = await db.requests.toArray();
+      const records = await db.saveanswers.toArray();
       if (records.length > 0) {
         const firstRecord = records[0];
         firstRecord.params = data;
-        await db.requests.put(firstRecord);
+        await db.saveanswers.put(firstRecord);
         console.log(`Registro actualizado con ID: ${firstRecord.id}`);
       }
     }
@@ -193,9 +202,22 @@ function Tests() {
   };
 
   const handleEndTest = () => {
-    dispatch(endTest(userTest.subject_id ?? null)).then(() => {
-      setOpen(true);
-    });
+    if (isOnline) {
+      dispatch(endTest(userTest.subject_id ?? null)).then(() => {
+        setOpen(true);
+      });  
+    } else {
+      handleEndTestOffline();    
+      dispatch(endTest(userTest.subject_id ?? null)).then(() => {
+        setOpen(true);
+      });   
+    }
+  };
+
+  const handleEndTestOffline = async () => {
+    const newRecord = { subject_id: userTest.subject_id ?? null };
+    const id = await db.endtest.add(newRecord);
+    console.log(`Registro creado con ID: ${id}`);
   };
 
   const getColor = () => {
