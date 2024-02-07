@@ -14,7 +14,7 @@ import onlinestatusReducer from "./slices/onlinestatus";
 const persistConfig = {
   key: "root",
   storage: storage("offlinebase"),
-  whitelist: ["questions"], // Add reducers that you want to persist here
+  whitelist: ["questions", "subjects"], // Add reducers that you want to persist here
 };
 
 // Create the persisted root reducer

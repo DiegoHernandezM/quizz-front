@@ -84,11 +84,7 @@ function DashboardApp() {
   const [open, setOpen] = useState(localStorage.getItem("dashone") === "true");
   const [openIos, setOpenIos] = useState(false);
   const [openAndroid, setOpenAndroid] = useState(false);
-  const { isOnline } = useSelector((state) => state.onlinestatus);
-  if (isOnline) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const bulk = useBulkData();
-  }
+  const bulk = useBulkData();
 
   useEffect(() => {
     dispatch(getDataStudent());
@@ -166,7 +162,6 @@ function DashboardApp() {
             <Typography
               sx={{ ml: 2, flex: 1 }}
               variant="h3"
-              component="div"
               onClick={() => {
                 setOpen(false);
                 localStorage.setItem("dashone", false);
@@ -197,22 +192,20 @@ function DashboardApp() {
           </Box>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              style={{ marginTop: "10px" }}
-            >
-              <Typography variant="h2">Bienvenido a</Typography>
-            </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Image alt="App de aviacion" src={backgroundJpe} />
-            </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Typography variant="h2">{"Aviation In Sight"}</Typography>
-            </Box>
-          </DialogContentText>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            style={{ marginTop: "10px" }}
+          >
+            <Typography variant="h2" component={'span'}>Bienvenido a</Typography>
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Image alt="App de aviacion" src={backgroundJpe} />
+          </Box>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <Typography variant="h2" component={'span'}>{"Aviation In Sight"}</Typography>
+          </Box>
           <Box
             display="flex"
             justifyContent="center"

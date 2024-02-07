@@ -24,8 +24,8 @@ const slice = createSlice({
       state.isLoading = false;
     },
     setUserTestOffline(state, payload) {
-      state.userTest.questions = payload.payload;
-      //  state.userTest = payload.payload;
+      state.userTest.questions = payload.payload.questions;
+      state.userTest = payload.payload;
       state.isLoading = false;
     },
     showUserTest(state, payload) {
@@ -58,7 +58,7 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-async function reformUserTest(subject_id = null) {
+async function reformUserTest(subject_id = null, getState) {
   const test = await db.infotest
     .where({
       subject_id: subject_id ? parseInt(subject_id) : 0,
@@ -66,21 +66,107 @@ async function reformUserTest(subject_id = null) {
     })
     .toArray();
 
-  const questionIds = test[0].parsed.map((item) =>
-    parseInt(Object.keys(item)[0])
-  );
-  const questions = await getQuestions(questionIds);
-
   const subject = subject_id
     ? await db.subjects.where("id").equals(parseInt(subject_id)).toArray()
     : [{ name: "Simulacro" }];
-  const payload = { userTest: test[0], questions, subject: subject[0] };
-  return Promise.resolve(payload);
+  if (test.length > 0) {
+    const questionIds = test[0].parsed.map((item) =>
+      parseInt(Object.keys(item)[0])
+    );
+    const questions = await getQuestions(questionIds);
+    const payload = { userTest: test[0], questions, subject: subject[0] };
+    console.log(payload);
+    return Promise.resolve(payload);
+  } else {
+    const newTest = {
+      id: (subject_id ? parseInt(subject_id) : 0) + 100000,
+      user_id: 0,
+      subject_id: subject_id ? parseInt(subject_id) : 0,
+      last_key: 1,
+      completed: 0,
+      created_at: null,
+      updated_at: null,
+      percentage: 0,
+      grade: 0,
+    };
+    if (subject_id > 0) {
+      const questionsDb = await db.questions
+        .where({
+          subject_id: parseInt(subject_id),
+        })
+        .toArray();
+      const parsedQuestions = questionsDb.map(({ id }) => ({ [id]: "" }));
+      newTest.questions = parsedQuestions;
+      newTest.parsed = parsedQuestions;
+      newTest.points = parsedQuestions.length;
+      const questionIds = parsedQuestions.map((item) =>
+        parseInt(Object.keys(item)[0])
+      );
+      const questions = await getQuestions(questionIds);
+
+      const payload = { userTest: newTest, questions, subject: subject[0] };
+      db.infotest.add(newTest);
+      return Promise.resolve(payload);
+    } else {
+      const subjects = getState().subjects.allSubjects;
+      const promises = await subjects.map((sub) =>
+        getRandomRecords("questions", sub.id, sub.questions_to_test)
+      );
+      const questions = [];
+      const questionsBySubject = await Promise.all(promises);
+      const parsedQuestions = [];
+      questionsBySubject.forEach((q) => {
+        q.forEach(({ id }) => {
+          parsedQuestions.push({ [id]: "" });
+        });
+        q.forEach((i) => {
+          questions.push(i);
+        });
+      });
+      newTest.questions = parsedQuestions;
+      newTest.parsed = parsedQuestions;
+      newTest.points = parsedQuestions.length;
+      const payload = {
+        userTest: newTest,
+        questions,
+        subject: { name: "Simulacro" },
+      };
+      db.infotest.add(newTest);
+      return Promise.resolve(payload);
+    }
+  }
+}
+
+async function getRandomRecords(table, subject, limit) {
+  const ids = [];
+  const q = await db.questions
+    .where({
+      subject_id: parseInt(subject),
+    })
+    .toArray();
+  console.log(q);
+  q.forEach((question) => {
+    ids.push(question.id);
+  });
+  const shuffledIds = ids.sort(() => 0.5 - Math.random());
+
+  const promises = Array.from(shuffledIds.slice(0, limit)).map((id) =>
+    db[table]
+      .where({
+        subject_id: subject,
+        id,
+      })
+      .first()
+  );
+  return Promise.all(promises);
 }
 
 async function getQuestions(ids) {
   const q = await db.questions.toArray();
-  return q.filter((item) => ids.includes(item.id));
+  const filteredQuestions = q.filter((item) => ids.includes(item.id));
+  return filteredQuestions.sort(
+    (a, b) => ids.indexOf(a.id) - ids.indexOf(b.id)
+  );
 }
 
 export function getUserTest(subject_id = null) {
@@ -102,7 +188,8 @@ export function getUserTest(subject_id = null) {
           dispatch(slice.actions.setUserTest(response.data));
         }
       } else {
-        reformUserTest(subject_id).then((payload) => {
+        console.log("reformed offline, getUserTest");
+        reformUserTest(subject_id, getState).then((payload) => {
           dispatch(slice.actions.setUserTest(payload));
         });
       }
@@ -170,23 +257,34 @@ export function setTestFromId(id) {
 
 export function saveAnswer(data) {
   return async (dispatch, getState) => {
+    console.log(data);
     try {
+      const test = await db.infotest
+        .where({
+          id: data.user_test_id ? parseInt(data.user_test_id) : 0,
+          completed: 0,
+        })
+        .toArray();
+      let dataFind = test[0].parsed;
+
+      let answered = 0;
+      test[0].parsed.forEach((a) => {
+        answered = answered + (Object.values(a)[0] !== "" ? 1 : 0);
+      });
+      test[0].last_key = data.question_id;
+      test[0].grade = test[0].grade + data.points;
+      test[0].percentage = ((answered * 100) / test[0].parsed.length).toFixed(
+        2
+      );
+      let key = dataFind.findIndex((k) => k.hasOwnProperty(data.question_id));
+      dataFind[key] = { [data.question_id]: data.answer };
+      test[0].parsed = dataFind;
+      await db.infotest.update(data.user_test_id, test[0]);
       if (getState().onlinestatus.isOnline) {
         const response = await axios.post(`/api/usertest/saveanswer`, data);
         dispatch(slice.actions.setUserAnswer(response.data));
       } else {
-        const test = await db.infotest
-          .where({
-            id: data.user_test_id ? parseInt(data.user_test_id) : 0,
-            completed: 0,
-          })
-          .toArray();
-        let dataFind = test[0].questions;
-        let key = dataFind.findIndex((k) => k.hasOwnProperty(data.question_id));
-        dataFind[key] = { [data.question_id]: data.answer };
-        test[0].questions = dataFind;
-        await db.infotest.update(data.user_test_id, test[0]);
-        dispatch(slice.actions.setUserTestOffline(dataFind));
+        dispatch(slice.actions.setUserTestOffline(test[0]));
       }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -202,6 +300,36 @@ export function saveAnswerOffline(data) {
         data
       );
       dispatch(slice.actions.setUserAnswer(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function saveFullTestOffline(data) {
+  return async (dispatch) => {
+    try {
+      const response = await axios.post(
+        `/api/usertest/savefulltestoffline`,
+        data
+      );
+      db.infotest.add(response.data.userTest);
+      const findOld = await db.saveanswers
+        .where("user_test_id")
+        .equals(response.data.userTest.subject_id + 100000)
+        .toArray();
+      if (findOld.length > 0) {
+        findOld.forEach(function (item) {
+          delete item.id;
+          item.params.user_test_id = response.data.userTest.id;
+        });
+      }
+      await db.saveanswers
+        .where("user_test_id")
+        .equals(response.data.userTest.subject_id + 100000)
+        .delete();
+      await db.saveanswers.bulkPut(findOld);
+      dispatch(slice.actions.setUserTest(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -226,18 +354,20 @@ export function endTest(subject_id = null) {
       } else {
         if (!subject_id) {
           const test = await db.infotest
-          .where({
-            subject_id: 0,
-            completed: 0,
-          })
-          .first();
+            .where({
+              subject_id: 0,
+              completed: 0,
+            })
+            .first();
           if (test) {
             await db.infotest.update(test.id, { completed: 1 });
             test.completed = 1;
             dispatch(slice.actions.setUserTest(test));
           }
         } else {
-          const testToUpdate = await db.infotest.where({ subject_id: subject_id }).first();
+          const testToUpdate = await db.infotest
+            .where({ subject_id: subject_id })
+            .first();
           if (testToUpdate) {
             await db.infotest.update(testToUpdate.id, { completed: 1 });
             testToUpdate.completed = 1;
@@ -254,8 +384,8 @@ export function endTest(subject_id = null) {
 export function endTestOffline(data) {
   return async (dispatch) => {
     try {
-        const response = await axios.post(`/api/usertest/endtests/offline`, data);
-        dispatch(slice.actions.setUserTest(response.data));
+      const response = await axios.post(`/api/usertest/endtests/offline`, data);
+      dispatch(slice.actions.setUserTest(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
