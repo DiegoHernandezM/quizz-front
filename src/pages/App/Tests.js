@@ -12,7 +12,8 @@ import {
   setTestFromId,
   endTest,
   saveAnswerOffline,
-  endTestOffline
+  endTestOffline,
+  saveFullTestOffline,
 } from "../../redux/slices/usertests";
 import { useFormik } from "formik";
 import {
@@ -92,22 +93,23 @@ function Tests() {
   };
 
   const formik = useFormik({
-    initialValues: userTest.questions,
+    initialValues: userTest.parsed,
     onSubmit: (values, { resetForm }) => {
       console.log(values);
     },
   });
 
   useEffect(() => {
-    formik.setValues(userTest.questions);
+    formik.setValues(userTest.parsed);
     if (userTest.completed && testId === null) {
       setOpen(true);
     } else {
       setOpen(false);
     }
 
-    if (userTest.questions) {
-      let pre = userTest.questions;
+    if (userTest.parsed) {
+      console.log(userTest);
+      let pre = userTest.parsed;
       let a = Object.keys(pre);
       let step = a.find((k) => Object.values(pre[k])[0] === "");
       if (step === undefined || step === null) {
@@ -127,6 +129,13 @@ function Tests() {
       const sendRequestsWhenOnline = async () => {
         const records = await db.table("saveanswers").toArray();
         const recordsEndTest = await db.table("endtest").toArray();
+        const fulltests = await db.infotest
+          .where("user_id")
+          .equals(0)
+          .toArray();
+        if (fulltests.length > 0) {
+          dispatch(saveFullTestOffline(fulltests));
+        }
         if (records.length > 0) {
           dispatch(saveAnswerOffline(records[0].params));
         }
@@ -144,6 +153,9 @@ function Tests() {
         if ((await db.table("endtest").count()) > 0) {
           await db.table("endtest").clear();
         }
+        if ((await db.infotest.where("user_id").equals(0).count()) > 0) {
+          await db.infotest.where("user_id").equals(0).delete();
+        }
       };
       deleteTable();
     }
@@ -159,6 +171,7 @@ function Tests() {
       const records = await db.saveanswers.toArray();
       if (records.length > 0) {
         const firstRecord = records[0];
+        firstRecord.user_test_id = data.user_test_id;
         firstRecord.params = data;
         await db.saveanswers.put(firstRecord);
         console.log(`Registro actualizado con ID: ${firstRecord.id}`);
@@ -185,7 +198,9 @@ function Tests() {
         answer: value,
       });
       setDataArray(array);
-      createOrUpdateRecord(array);
+      if (userTest.id < 100000) {
+        createOrUpdateRecord(array);
+      }
       dispatch(
         saveAnswer({
           user_test_id: userTest.id,
@@ -205,12 +220,12 @@ function Tests() {
     if (isOnline) {
       dispatch(endTest(userTest.subject_id ?? null)).then(() => {
         setOpen(true);
-      });  
+      });
     } else {
-      handleEndTestOffline();    
+      handleEndTestOffline();
       dispatch(endTest(userTest.subject_id ?? null)).then(() => {
         setOpen(true);
-      });   
+      });
     }
   };
 
@@ -248,6 +263,7 @@ function Tests() {
           elevation={3}
         >
           <Box
+            component="div"
             style={{
               backgroundColor: colors[subject_id - 15] ?? "#FAFAD2",
               padding: "5px",
@@ -308,19 +324,17 @@ function Tests() {
           elevation={3}
         >
           <form noValidate autoComplete="off" onSubmit={formik.handleSubmit}>
-            {testQuestions.length > 0 && userTest.questions[activeStep] ? (
+            {testQuestions.length > 0 && userTest.parsed[activeStep] ? (
               <Question
                 key={testQuestions[activeStep].id}
                 question={testQuestions[activeStep]}
                 value={
-                  Object.values(userTest.questions[activeStep])[0]
-                    ? Object.values(userTest.questions[activeStep])[0]
+                  Object.values(userTest.parsed[activeStep])[0]
+                    ? Object.values(userTest.parsed[activeStep])[0]
                     : ""
                 }
                 disabled={
-                  Object.values(userTest.questions[activeStep])[0]
-                    ? true
-                    : false
+                  Object.values(userTest.parsed[activeStep])[0] ? true : false
                 }
                 handleChange={handleSaveAnswer}
                 showAnswer={userTest.completed}
