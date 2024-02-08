@@ -5,6 +5,7 @@ import Subjects from "./Subjects";
 import { useDispatch, useSelector } from "react-redux";
 import { getSubjects } from "../../redux/slices/subjects";
 import { Grid, Paper } from "@mui/material";
+import SubjectOffLine from "../../components/check-offline/SubjectOffLine";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ function App() {
         <Grid container spacing={2}>
           {allSubjects.map((subject, i) => (
             <Grid key={subject.id} item xs={6} sm={6} md={4} lg={3}>
-              <Subjects
+              <SubjectOffLine
                 subjectName={subject.name}
                 // subjectDescription={subject.description}
                 subjectImage={subject.image}
@@ -43,7 +44,17 @@ function App() {
                 numberOfQuestions={subject.questions_count}
                 latestUserTest={subject.latest_user_test}
                 color={colors[i]}
-              />
+              >
+                <Subjects
+                  subjectName={subject.name}
+                  // subjectDescription={subject.description}
+                  subjectImage={subject.image}
+                  subjectId={subject.id}
+                  numberOfQuestions={subject.questions_count}
+                  latestUserTest={subject.latest_user_test}
+                  color={colors[i]}
+                />
+              </SubjectOffLine>
             </Grid>
           ))}
         </Grid>
