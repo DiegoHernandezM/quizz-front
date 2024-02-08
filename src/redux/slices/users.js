@@ -6,6 +6,7 @@ const initialState = {
   error: false,
   users: [],
   user: {},
+  logged: {}
 };
 
 const slice = createSlice({
@@ -30,6 +31,11 @@ const slice = createSlice({
     getUserSuccess(state, action) {
       state.loading = false;
       state.user = action.payload;
+      state.error = false;
+    },
+    getLoggedUserSuccess(state, action) {
+      state.loading = false;
+      state.logged = action.payload;
       state.error = false;
     },
     clearDataSuccess(state) {
@@ -169,6 +175,19 @@ export function getProfile() {
     try {
       const response = await axios.get(`/api/user/profile`);
       dispatch(slice.actions.getUserSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getLoggedUser() {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading)
+    try {
+      const response = await axios.get(`/api/user`);
+      dispatch(slice.actions.getLoggedUserSuccess(response.data));
+      return Promise.resolve(response.data);
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
