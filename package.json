@@ -6,11 +6,13 @@
   "private": true,
   "license": "https://mui.com/store/license/",
   "scripts": {
+    "deploy-dev": "aws s3 sync build/ s3://quizz-dev",
     "deploy": "aws s3 sync build/ s3://quizz-front",
     "deploy1": "aws s3 sync build/ s3://quizz-front --metadata-directive REPLACE --cache-control max-age=86400 --exclude index.html --exclude 'static/*'",
     "deploy2": "aws s3 sync build/static s3://quizz-front/static --metadata-directive REPLACE --cache-control max-age=31536000,immutable",
     "deploy3": "aws s3 cp build/index.html s3://quizz-front --metadata-directive REPLACE --cache-control no-cache",
     "prod": "npm run build && npm run deploy",
+    "dev": "npm run build && npm run deploy-dev",
     "start": "craco start",
     "build": "craco build",
     "eject": "craco eject",
