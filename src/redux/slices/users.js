@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "../../utils/axios";
+import {db} from "../../database";
 
 const initialState = {
   loading: false,
   error: false,
   users: [],
   user: {},
+  logged: {}
 };
 
 const slice = createSlice({
@@ -30,6 +32,11 @@ const slice = createSlice({
     getUserSuccess(state, action) {
       state.loading = false;
       state.user = action.payload;
+      state.error = false;
+    },
+    getLoggedUserSuccess(state, action) {
+      state.loading = false;
+      state.logged = action.payload;
       state.error = false;
     },
     clearDataSuccess(state) {
@@ -169,6 +176,31 @@ export function getProfile() {
     try {
       const response = await axios.get(`/api/user/profile`);
       dispatch(slice.actions.getUserSuccess(response.data));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+export function getLoggedUser() {
+  return async (dispatch, getState) => {
+    dispatch(slice.actions.startLoading)
+    try {
+      if (getState().onlinestatus.isOnline) {
+        const response = await axios.get(`/api/user`);
+        dispatch(slice.actions.getLoggedUserSuccess(response.data));
+        return Promise.resolve(response.data);
+      } else {
+        db.user
+          .toArray()
+          .then((data) => {
+            dispatch(slice.actions.getLoggedUserSuccess(data));
+            return Promise.resolve(data);
+          })
+          .catch((error) => {
+            console.error("Error al obtener el primer registro:", error);
+          });
+      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

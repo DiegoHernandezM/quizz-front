@@ -21,6 +21,7 @@ import createEmotionCache from "./utils/createEmotionCache";
 import { AuthProvider } from "./contexts/JWTContext";
 import Progress from "./pages/components/Progress";
 import { PersistGate } from "redux-persist/integration/react";
+import CheckConnection from "./components/check-offline/CheckConnection";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -44,20 +45,22 @@ function App({ emotionCache = clientSideEmotionCache }) {
   }, [dispatch]);
 
   return (
-    <CacheProvider value={emotionCache}>
-      <HelmetProvider>
-        <Helmet titleTemplate="%s | App" defaultTitle="App - Aviación" />
-        <PersistGate loading={<Progress />} persistor={persistor}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <MuiThemeProvider theme={createTheme(theme)}>
-              <AuthProvider>
-                {isInitialized ? <Router /> : <Progress />}
-              </AuthProvider>
-            </MuiThemeProvider>
-          </LocalizationProvider>
-        </PersistGate>
-      </HelmetProvider>
-    </CacheProvider>
+    <CheckConnection>
+      <CacheProvider value={emotionCache}>
+        <HelmetProvider>
+          <Helmet titleTemplate="%s | App" defaultTitle="App - Aviación" />
+          <PersistGate loading={<Progress />} persistor={persistor}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <MuiThemeProvider theme={createTheme(theme)}>
+                <AuthProvider>
+                  {isInitialized ? <Router /> : <Progress />}
+                </AuthProvider>
+              </MuiThemeProvider>
+            </LocalizationProvider>
+          </PersistGate>
+        </HelmetProvider>
+      </CacheProvider>
+    </CheckConnection>
   );
 }
 

@@ -40,11 +40,12 @@ import { useTheme } from "@emotion/react";
 import { db } from "../../database";
 import { useLiveQuery } from "dexie-react-hooks";
 import { getQuestionsPreload } from "../../redux/slices/questions";
+import { getLoggedUser } from "../../redux/slices/users";
 
 function Tests() {
   const questions = useLiveQuery(() => db.questions.toArray());
   const dispatch = useDispatch();
-  const { user } = useAuth();
+  const { logged } = useSelector((state) => state.users);
   const [open, setOpen] = React.useState(false);
   const [explainOpen, setExplainOpen] = React.useState(false);
   const [answered, setAnswered] = React.useState(false);
@@ -77,6 +78,7 @@ function Tests() {
   const [dataArray, setDataArray] = useState([]);
 
   useEffect(() => {
+    dispatch(getLoggedUser());
     if (testId > 0) {
       dispatch(setTestFromId(testId));
     } else {
@@ -278,7 +280,7 @@ function Tests() {
               }}
             >
               {`Test de ${subject.name ?? ""}`}{" "}
-              {userTest.completed && user?.id == userTest.user_id ? (
+              {userTest.completed && logged?.id == userTest.user_id ? (
                 <Button
                   variant="outlined"
                   size="small"

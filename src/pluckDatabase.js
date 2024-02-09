@@ -4,11 +4,10 @@ import { getDataStudent } from "./redux/slices/dashboard";
 import { getSubjects } from "./redux/slices/subjects";
 import { getUserTests } from "./redux/slices/usertests";
 import { getQuestionsPreload } from "./redux/slices/questions";
+import { getLoggedUser } from "./redux/slices/users";
 import { db } from "./database";
-import useAuth from "./hooks/useAuth";
 
 function useBulkData() {
-  const { user } = useAuth();
   const dispatch = useDispatch();
   const { isOnline } = useSelector((state) => state.onlinestatus);
 
@@ -19,7 +18,9 @@ function useBulkData() {
       });
       dispatch(getSubjects(false)).then((data) => {
         preloadSubjects(data);
-        preloadUser(user);
+      });
+      dispatch(getLoggedUser(false)).then((data) => {
+        preloadUser(data);
       });
       dispatch(getQuestionsPreload()).then((data) => {
         preloadQuestions(data.data);
