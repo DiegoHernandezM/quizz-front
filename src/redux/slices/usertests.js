@@ -58,7 +58,23 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-async function reformUserTest(subject_id = null, getState) {
+async function getTest(test_id) {
+  const test = await db.infotest.where("id").equals(parseInt(test_id)).first();
+  const questionIds = test.parsed.map((item) => parseInt(Object.keys(item)[0]));
+  const questions = await getQuestions(questionIds);
+  const subject =
+    test.subject_id > 0
+      ? await db.subjects
+          .where("id")
+          .equals(parseInt(test.subject_id))
+          .toArray()
+      : [{ name: "Simulacro" }];
+  const payload = { userTest: test, questions, subject: subject[0] };
+  console.log(payload);
+  return Promise.resolve(payload);
+}
+
+async function reformUserTest(subject_id = null, test_id = null, getState) {
   const test = await db.infotest
     .where({
       subject_id: subject_id ? parseInt(subject_id) : 0,
@@ -245,10 +261,15 @@ export function getUserTests() {
 }
 
 export function setTestFromId(id) {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     try {
-      const response = await axios.get(`/api/usertest/find/${id}`);
-      dispatch(slice.actions.showUserTest(response.data));
+      if (getState().onlinestatus.isOnline) {
+        const response = await axios.get(`/api/usertest/find/${id}`);
+        dispatch(slice.actions.showUserTest(response.data));
+      } else {
+        const payload = await getTest(id);
+        dispatch(slice.actions.showUserTest(payload));
+      }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -265,6 +286,7 @@ export function saveAnswer(data) {
           completed: 0,
         })
         .toArray();
+      console.log(test);
       let dataFind = test[0].parsed;
 
       let answered = 0;

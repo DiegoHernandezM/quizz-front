@@ -82,9 +82,10 @@ export default function Results() {
         <strong style={{ overflow: "visible" }}>{p.colDef.headerName}</strong>
       ),
       renderCell: (params) => {
-        const result = ((params.row.grade * 100) / params.row.points).toFixed(
-          2
-        );
+        const result = (
+          (parseInt(params.row.grade) * 100) /
+          parseInt(params.row.points)
+        ).toFixed(2);
         let color = "";
         if (result < 70) {
           color = "rgb(255, 140, 140, 0.5)";
