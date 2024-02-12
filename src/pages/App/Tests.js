@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Navigation from "./Navigation";
 import Question from "./Question";
-import useBulkData from "../../pluckDatabase";
 
 import {
   getUserTest,
@@ -51,7 +50,6 @@ function Tests() {
   const [explainOpen, setExplainOpen] = React.useState(false);
   const [answered, setAnswered] = React.useState(false);
   const [activeStep, setActiveStep] = React.useState(0);
-  const bulk = useBulkData();
   const theme = useTheme();
   const { testQuestions, userTest, subject } = useSelector(
     (state) => state.usertests
