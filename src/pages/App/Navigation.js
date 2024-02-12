@@ -138,9 +138,7 @@ const NavbarSimple = ({ onDrawerToggle }) => {
         <BottomNavigationAction
           label="Test Simulacro"
           icon={<QuizIcon />}
-          onClick={() => {
-            navigate("/dashboardapp/test");
-          }}
+          onClick={() => navigate("/dashboardapp/test")}
         />
         <BottomNavigationAction
           label="Progreso y Resultados"
