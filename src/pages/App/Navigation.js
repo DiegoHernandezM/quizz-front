@@ -20,12 +20,12 @@ const NavbarSimple = ({ onDrawerToggle }) => {
 
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (event) => {
-      console.log('entro al primer window', event);
+      console.log("entro al primer window", event);
       window.deferredPrompt = event;
       setIsReadyForInstall(true);
     });
     if (deferredInstallPrompt === null) {
-      window.addEventListener('beforeinstallprompt', (e) => {
+      window.addEventListener("beforeinstallprompt", (e) => {
         // Previene a la mini barra de información que aparezca en smartphones
         e.preventDefault();
         // Guarda el evento para que se dispare más tarde
@@ -36,7 +36,6 @@ const NavbarSimple = ({ onDrawerToggle }) => {
         console.log(`'beforeinstallprompt' event was fired.`);
       });
     }
-
   }, []);
 
   async function downloadApp() {
@@ -53,68 +52,65 @@ const NavbarSimple = ({ onDrawerToggle }) => {
     setIsReadyForInstall(false);
   }
 
-const press = (e) => {
-  console.log('deferredinstall',deferredInstallPrompt);
-  console.log('isReady',isReadyForInstall);
-  // saveBeforeInstallPromptEvent(e);
-  installPWA(e);
-}
+  const press = (e) => {
+    console.log("deferredinstall", deferredInstallPrompt);
+    console.log("isReady", isReadyForInstall);
+    // saveBeforeInstallPromptEvent(e);
+    installPWA(e);
+  };
 
-// CODELAB: Add event listener for beforeinstallprompt event
-// window.addEventListener('beforeinstallprompt', saveBeforeInstallPromptEvent);
+  // CODELAB: Add event listener for beforeinstallprompt event
+  // window.addEventListener('beforeinstallprompt', saveBeforeInstallPromptEvent);
 
-/**
- * Event handler for beforeinstallprompt event.
- *   Saves the event & shows install button.
- *
- * @param {Event} evt
- */
-function saveBeforeInstallPromptEvent(evt) {
-  console.log("ahoy")
-  // CODELAB: Add code to save event & show the install button.
-  deferredInstallPrompt = evt;
-  console.log("HERE");
-}
+  /**
+   * Event handler for beforeinstallprompt event.
+   *   Saves the event & shows install button.
+   *
+   * @param {Event} evt
+   */
+  function saveBeforeInstallPromptEvent(evt) {
+    console.log("ahoy");
+    // CODELAB: Add code to save event & show the install button.
+    deferredInstallPrompt = evt;
+    console.log("HERE");
+  }
 
-
-/**
- * Event handler for butInstall - Does the PWA installation.
- *
- * @param {Event} evt
- */
-function installPWA(evt) {
-  // CODELAB: Add code show install prompt & hide the install button.
-  console.log("Clicked");
-  console.log(deferredInstallPrompt);
-  deferredInstallPrompt.prompt();  //LINE 50 HERE**
-  // Hide the install button, it can't be called twice.
-  // evt.srcElement.setAttribute('hidden', true);
-  // CODELAB: Log user response to prompt.
-  deferredInstallPrompt.userChoice
-    .then((choice) => {
-      if (choice.outcome === 'accepted') {
-        console.log('User accepted the A2HS prompt', choice);
+  /**
+   * Event handler for butInstall - Does the PWA installation.
+   *
+   * @param {Event} evt
+   */
+  function installPWA(evt) {
+    // CODELAB: Add code show install prompt & hide the install button.
+    console.log("Clicked");
+    console.log(deferredInstallPrompt);
+    deferredInstallPrompt.prompt(); //LINE 50 HERE**
+    // Hide the install button, it can't be called twice.
+    // evt.srcElement.setAttribute('hidden', true);
+    // CODELAB: Log user response to prompt.
+    deferredInstallPrompt.userChoice.then((choice) => {
+      if (choice.outcome === "accepted") {
+        console.log("User accepted the A2HS prompt", choice);
       } else {
-        console.log('User dismissed the A2HS prompt', choice);
+        console.log("User dismissed the A2HS prompt", choice);
       }
       // setDeferredInstallPrompt = null;
     });
-}
+  }
 
-// CODELAB: Add event listener for appinstalled event
+  // CODELAB: Add event listener for appinstalled event
 
-/**
- * Event handler for appinstalled event.
- *   Log the installation to analytics or save the event somehow.
- *
- * @param {Event} evt
- */
-function logAppInstalled(evt) {
-  // CODELAB: Add code to log the event
-  window.addEventListener('appinstalled', logAppInstalled);
-  console.log('Weather App was installed.', evt);
-}
-
+  /**
+   * Event handler for appinstalled event.
+   *   Log the installation to analytics or save the event somehow.
+   *
+   * @param {Event} evt
+   */
+  function logAppInstalled(evt) {
+    // CODELAB: Add code to log the event
+    window.addEventListener("appinstalled", logAppInstalled);
+    console.log("Weather App was installed.", evt);
+  }
 
   return (
     <Box
@@ -144,7 +140,6 @@ function logAppInstalled(evt) {
           icon={<QuizIcon />}
           onClick={() => {
             navigate("/dashboardapp/test");
-            window.location.reload();
           }}
         />
         <BottomNavigationAction
