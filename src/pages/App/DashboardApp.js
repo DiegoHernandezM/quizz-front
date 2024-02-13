@@ -28,7 +28,7 @@ import checkImage from "../../vendor/checklist.png";
 import workingImage from "../../vendor/working.png";
 import subjectImage from "../../vendor/subject.png";
 import useAuth from "../../hooks/useAuth";
-import { spacing } from "@mui/system";
+import {spacing, width} from "@mui/system";
 import Stats from "../dashboards/Administrators/Stats";
 import BarChart from "../dashboards/Administrators/BarChart";
 import useBulkData from "../../pluckDatabase";
@@ -245,6 +245,7 @@ function DashboardApp() {
             style={{ marginTop: "10px" }}
           >
             <Button
+              sx={{ width: 190 }}
               variant="contained"
               autoFocus
               onClick={() => setOpenAndroid(true)}
@@ -260,6 +261,7 @@ function DashboardApp() {
             style={{ marginTop: "10px" }}
           >
             <Button
+              sx={{ width: 190 }}
               variant="contained"
               autoFocus
               onClick={() => setOpenIos(true)}
@@ -275,6 +277,7 @@ function DashboardApp() {
             style={{ marginTop: "10px" }}
           >
             <Button
+              sx={{ width: 190 }}
               variant="contained"
               autoFocus
               onClick={() => setOpenOffline(true)}
@@ -290,12 +293,13 @@ function DashboardApp() {
             style={{ marginTop: "10px" }}
           >
             <Button
+              sx={{ width: 190 }}
               variant="contained"
+              size="large"
               autoFocus
               onClick={() => setOpen(false)}
-              size="large"
             >
-              Comenzar
+              COMENZAR
             </Button>
           </Box>
         </DialogContent>
