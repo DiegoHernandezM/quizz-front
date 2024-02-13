@@ -23,6 +23,7 @@ import {
 import backgroundJpe from "../../vendor/avatar.gif";
 import installAndroid from "../../vendor/android-install.gif";
 import installIos from "../../vendor/ios-install.gif";
+import workOffline from "../../vendor/work-offline.gif";
 import checkImage from "../../vendor/checklist.png";
 import workingImage from "../../vendor/working.png";
 import subjectImage from "../../vendor/subject.png";
@@ -84,6 +85,7 @@ function DashboardApp() {
   const [open, setOpen] = useState(localStorage.getItem("dashone") === "true");
   const [openIos, setOpenIos] = useState(false);
   const [openAndroid, setOpenAndroid] = useState(false);
+  const [openOffline, setOpenOffline] = useState(false);
   const bulk = useBulkData();
 
   useEffect(() => {
@@ -275,6 +277,21 @@ function DashboardApp() {
             <Button
               variant="contained"
               autoFocus
+              onClick={() => setOpenOffline(true)}
+              size="large"
+            >
+              TRABAJAR OFFLINE
+            </Button>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            style={{ marginTop: "10px" }}
+          >
+            <Button
+              variant="contained"
+              autoFocus
               onClick={() => setOpen(false)}
               size="large"
             >
@@ -326,6 +343,33 @@ function DashboardApp() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenIos(false)} autoFocus>
+            Aceptar
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={openOffline}
+        onClose={() => {
+          setOpenOffline(false);
+        }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Trabajar App de modo offline"}
+        </DialogTitle>
+        <DialogContent>
+          <Box display="flex" justifyContent="center" alignItems="center">
+            <ImageInstall alt="App de aviacion" src={workOffline} />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenOffline(false);
+            }}
+            autoFocus
+          >
             Aceptar
           </Button>
         </DialogActions>
