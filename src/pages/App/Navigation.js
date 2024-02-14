@@ -17,6 +17,7 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   const [isReadyForInstall, setIsReadyForInstall] = useState(false);
   const location = useLocation();
   const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
+  const [open, setOpen] = useState(localStorage.getItem("dashone") === "true");
 
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (event) => {
@@ -36,6 +37,17 @@ const NavbarSimple = ({ onDrawerToggle }) => {
         console.log(`'beforeinstallprompt' event was fired.`);
       });
     }
+  }, []);
+
+  useEffect(() => {
+    if (open) {
+      navigate("/dashboardapp");
+      navigate("/dashboardapp/app");
+      navigate("/dashboardapp/test");
+      navigate("/dashboardapp/results");
+      navigate("/dashboardapp");
+    }
+    setOpen(false);
   }, []);
 
   async function downloadApp() {
