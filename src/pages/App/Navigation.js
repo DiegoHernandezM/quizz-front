@@ -157,32 +157,6 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   }
 
   return (
-    localStorage.getItem("dashone") === "true" ?
-      <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        aria-describedby="alert-dialog-slide-description"
-        style={{ background: "white" }}
-        fullScreen
-      >
-      <DialogContent>
-        <AppBar sx={{ position: "relative" }}>
-          <Toolbar>
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <div className={classes.root}>
-              <CircularProgress />
-              </div>
-            </Box>
-          </Toolbar>
-        </AppBar>
-      </DialogContent>
-      </Dialog>
-      :
     <Box
       sx={{
         position: "fixed",
@@ -216,6 +190,30 @@ const NavbarSimple = ({ onDrawerToggle }) => {
           onClick={() => navigate("/dashboardapp/results")}
         />
       </BottomNavigation>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+        style={{ background: "white" }}
+        fullScreen
+      >
+        <DialogContent>
+          <AppBar sx={{ position: "relative" }}>
+            <Toolbar>
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+              >
+                <div className={classes.root}>
+                  <CircularProgress />
+                </div>
+              </Box>
+            </Toolbar>
+          </AppBar>
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };
