@@ -157,6 +157,7 @@ function AuthProvider({ children }) {
     localStorage.setItem("user", user.displayName);
     localStorage.setItem("usertype", user.type_id);
     localStorage.setItem("dashone", true);
+    localStorage.setItem("record", "no");
     dispatch({
       type: "SIGN_IN",
       payload: {

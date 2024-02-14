@@ -40,6 +40,7 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   const [isReadyForInstall, setIsReadyForInstall] = useState(false);
   const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
   const [open, setOpen] = useState(localStorage.getItem("dashone") === "true");
+  const [isDashboard, setIsDashboard] = useState(localStorage.getItem("record"));
 
   const [currentRouteIndex, setCurrentRouteIndex] = useState(0);
   const routesToNavigate = ['/dashboardapp/app', '/dashboardapp/test', '/dashboardapp/results', '/dashboardapp'];
@@ -67,20 +68,22 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   }, []);
 
   useEffect(() => {
-    if (open === true && currentPath === '/dashboardapp') {
+    if (open === true && isDashboard !== 'dashboardapp') {
       const interval = setInterval(() => {
         if (currentRouteIndex < routesToNavigate.length) {
           console.log(routesToNavigate[currentRouteIndex]);
-          //navigate(routesToNavigate[currentRouteIndex]);
+          navigate(routesToNavigate[currentRouteIndex]);
           setCurrentRouteIndex(currentRouteIndex + 1);
         } else {
           clearInterval(interval);
           navigate('/dashboardapp');
+          localStorage.setItem("record", 'dashboardapp');
           setOpen(false);
         }
       }, delayBetweenRoutes);
       return () => clearInterval(interval);
     }
+    localStorage.setItem("record", 'dashboardapp');
     setOpen(false);
   }, [currentRouteIndex, navigate, routesToNavigate.length, open]);
 
