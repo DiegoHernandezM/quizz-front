@@ -44,6 +44,7 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   const [currentRouteIndex, setCurrentRouteIndex] = useState(0);
   const routesToNavigate = ['/dashboardapp/app', '/dashboardapp/test', '/dashboardapp/results', '/dashboardapp'];
   const delayBetweenRoutes = 200;
+  const currentPath = window.location.pathname;
 
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (event) => {
@@ -66,10 +67,11 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   }, []);
 
   useEffect(() => {
-    if (open) {
+    if (open === true && currentPath === '/dashboardapp') {
       const interval = setInterval(() => {
         if (currentRouteIndex < routesToNavigate.length) {
-          navigate(routesToNavigate[currentRouteIndex]);
+          console.log(routesToNavigate[currentRouteIndex]);
+          //navigate(routesToNavigate[currentRouteIndex]);
           setCurrentRouteIndex(currentRouteIndex + 1);
         } else {
           clearInterval(interval);

@@ -296,7 +296,10 @@ function DashboardApp() {
               variant="contained"
               size="large"
               autoFocus
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setOpen(false);
+                localStorage.setItem("dashone", false);
+              }}
             >
               COMENZAR
             </Button>
