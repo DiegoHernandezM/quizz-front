@@ -42,10 +42,15 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   useEffect(() => {
     if (open) {
       navigate("/dashboardapp");
+      console.log("inicia");
       navigate("/dashboardapp/app");
+      console.log("uno");
       navigate("/dashboardapp/test");
+      console.log("dos");
       navigate("/dashboardapp/results");
+      console.log("tres");
       navigate("/dashboardapp");
+      console.log("fin");
     }
     setOpen(false);
   }, []);
