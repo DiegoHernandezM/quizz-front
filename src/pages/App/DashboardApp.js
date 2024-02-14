@@ -87,7 +87,6 @@ function DashboardApp() {
   const [openAndroid, setOpenAndroid] = useState(false);
   const [openOffline, setOpenOffline] = useState(false);
   const bulk = useBulkData();
-  console.log("dash");
   useEffect(() => {
     dispatch(getDataStudent());
   }, [dispatch]);

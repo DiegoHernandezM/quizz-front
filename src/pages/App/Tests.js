@@ -76,7 +76,6 @@ function Tests() {
     "#E5E8E8",
   ];
   const [dataArray, setDataArray] = useState([]);
-  console.log("test nagivate");
   useEffect(() => {
     dispatch(getLoggedUser());
     if (testId > 0) {
@@ -471,7 +470,7 @@ function Tests() {
             alignItems="center"
             style={{ marginTop: "15%" }}
           >
-            <Typography variant="h1" component={"span"}>
+            <Typography color={getColor} variant="h1" component={"span"}>
               {"¡Test completado!"}
             </Typography>
           </Box>
@@ -489,7 +488,7 @@ function Tests() {
                   Tu puntaje fue de {userTest.grade} / {userTest.points} (
                   {((userTest.grade * 100) / userTest.points).toFixed(2)}%)
                 </Typography> :
-                <Typography variant="h2" style={{ textAlign: 'center' }} component={"span"}>
+                <Typography variant="h2" color={getColor} style={{ textAlign: 'center' }} component={"span"}>
                   Conectate de nuevo a Internet para conocer tus resultados
                 </Typography>
               }

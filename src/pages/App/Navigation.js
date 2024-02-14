@@ -1,22 +1,43 @@
 import React, { useState, useEffect } from "react";
 import { withTheme } from "@emotion/react";
 
-import { BottomNavigation, BottomNavigationAction, Box } from "@mui/material";
+import {
+  AppBar,
+  BottomNavigation,
+  BottomNavigationAction,
+  Box,
+  Slide,
+  Toolbar,
+  DialogContent,
+  Dialog,
+  CircularProgress
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 import {
   Quiz as QuizIcon,
   Subject as SubjectIcon,
   Checklist as CheckListIcon,
-  Home as HomeIcon,
-  Launch as LaunchIcon,
+  Home as HomeIcon
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router";
-import {timeout} from "workbox-core/_private";
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+  },
+}));
 
 const NavbarSimple = ({ onDrawerToggle }) => {
+  const classes = useStyles();
   const navigate = useNavigate();
   const [isReadyForInstall, setIsReadyForInstall] = useState(false);
-  const location = useLocation();
   const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
   const [open, setOpen] = useState(localStorage.getItem("dashone") === "true");
 
@@ -53,12 +74,13 @@ const NavbarSimple = ({ onDrawerToggle }) => {
         } else {
           clearInterval(interval);
           navigate('/dashboardapp');
+          setOpen(false);
         }
       }, delayBetweenRoutes);
       return () => clearInterval(interval);
     }
     setOpen(false);
-  }, [currentRouteIndex, navigate, routesToNavigate.length]);
+  }, [currentRouteIndex, navigate, routesToNavigate.length, open]);
 
   async function downloadApp() {
     console.log("👍", "butInstall-clicked");
@@ -135,6 +157,32 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   }
 
   return (
+    localStorage.getItem("dashone") === "true" ?
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-describedby="alert-dialog-slide-description"
+        style={{ background: "white" }}
+        fullScreen
+      >
+      <DialogContent>
+        <AppBar sx={{ position: "relative" }}>
+          <Toolbar>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <div className={classes.root}>
+              <CircularProgress />
+              </div>
+            </Box>
+          </Toolbar>
+        </AppBar>
+      </DialogContent>
+      </Dialog>
+      :
     <Box
       sx={{
         position: "fixed",

@@ -15,7 +15,6 @@ export default function Results() {
   const navigate = useNavigate();
   const { userTests } = useSelector((state) => state.usertests);
   const theme = useTheme();
-  console.log("result navigate");
   useEffect(() => {
     dispatch(getUserTests());
   }, []);
