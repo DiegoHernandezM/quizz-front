@@ -27,7 +27,7 @@ export default function SubjectCard({
 }) {
   const navigate = useNavigate();
   const theme = useTheme();
-
+  console.log("materias navigare");
   const handleStartTest = (subjectId = null) => {
     if (subjectId == null) {
       navigate(`/dashboardapp/test`);

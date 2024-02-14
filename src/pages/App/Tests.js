@@ -76,7 +76,7 @@ function Tests() {
     "#E5E8E8",
   ];
   const [dataArray, setDataArray] = useState([]);
-
+  console.log("test nagivate");
   useEffect(() => {
     dispatch(getLoggedUser());
     if (testId > 0) {

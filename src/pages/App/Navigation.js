@@ -11,6 +11,7 @@ import {
   Launch as LaunchIcon,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router";
+import {timeout} from "workbox-core/_private";
 
 const NavbarSimple = ({ onDrawerToggle }) => {
   const navigate = useNavigate();
@@ -18,6 +19,10 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   const location = useLocation();
   const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
   const [open, setOpen] = useState(localStorage.getItem("dashone") === "true");
+
+  const [currentRouteIndex, setCurrentRouteIndex] = useState(0);
+  const routesToNavigate = ['/dashboardapp/app', '/dashboardapp/test', '/dashboardapp/results', '/dashboardapp'];
+  const delayBetweenRoutes = 200;
 
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (event) => {
@@ -41,19 +46,19 @@ const NavbarSimple = ({ onDrawerToggle }) => {
 
   useEffect(() => {
     if (open) {
-      navigate("/dashboardapp");
-      console.log("inicia");
-      navigate("/dashboardapp/app");
-      console.log("uno");
-      navigate("/dashboardapp/test");
-      console.log("dos");
-      navigate("/dashboardapp/results");
-      console.log("tres");
-      navigate("/dashboardapp");
-      console.log("fin");
+      const interval = setInterval(() => {
+        if (currentRouteIndex < routesToNavigate.length) {
+          navigate(routesToNavigate[currentRouteIndex]);
+          setCurrentRouteIndex(currentRouteIndex + 1);
+        } else {
+          clearInterval(interval);
+          navigate('/dashboardapp');
+        }
+      }, delayBetweenRoutes);
+      return () => clearInterval(interval);
     }
     setOpen(false);
-  }, []);
+  }, [currentRouteIndex, navigate, routesToNavigate.length]);
 
   async function downloadApp() {
     console.log("👍", "butInstall-clicked");
