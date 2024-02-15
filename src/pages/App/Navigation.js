@@ -11,7 +11,7 @@ import {
   Toolbar,
   DialogContent,
   Dialog,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import { db } from "../../database";
 import {
@@ -25,7 +25,7 @@ import {
   Quiz as QuizIcon,
   Subject as SubjectIcon,
   Checklist as CheckListIcon,
-  Home as HomeIcon
+  Home as HomeIcon,
 } from "@mui/icons-material";
 import { useNavigate, useLocation } from "react-router";
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -34,10 +34,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   },
 }));
 
@@ -47,10 +47,17 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   const [isReadyForInstall, setIsReadyForInstall] = useState(false);
   const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
   const [open, setOpen] = useState(localStorage.getItem("dashone") === "true");
-  const [isDashboard, setIsDashboard] = useState(localStorage.getItem("record"));
+  const [isDashboard, setIsDashboard] = useState(
+    localStorage.getItem("record")
+  );
 
   const [currentRouteIndex, setCurrentRouteIndex] = useState(0);
-  const routesToNavigate = ['/dashboardapp/app', '/dashboardapp/test', '/dashboardapp/results', '/dashboardapp'];
+  const routesToNavigate = [
+    "/dashboardapp/app",
+    "/dashboardapp/test",
+    "/dashboardapp/results",
+    "/dashboardapp",
+  ];
   const delayBetweenRoutes = 200;
   const currentPath = window.location.pathname;
   const { isOnline } = useSelector((state) => state.onlinestatus);
@@ -77,7 +84,7 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   }, []);
 
   useEffect(() => {
-    if (open === true && isDashboard !== 'dashboardapp') {
+    if (open === true && isDashboard !== "dashboardapp") {
       const interval = setInterval(() => {
         if (currentRouteIndex < routesToNavigate.length) {
           console.log(routesToNavigate[currentRouteIndex]);
@@ -85,14 +92,14 @@ const NavbarSimple = ({ onDrawerToggle }) => {
           setCurrentRouteIndex(currentRouteIndex + 1);
         } else {
           clearInterval(interval);
-          navigate('/dashboardapp');
-          localStorage.setItem("record", 'dashboardapp');
+          navigate("/dashboardapp");
+          localStorage.setItem("record", "dashboardapp");
           setOpen(false);
         }
       }, delayBetweenRoutes);
       return () => clearInterval(interval);
     }
-    localStorage.setItem("record", 'dashboardapp');
+    localStorage.setItem("record", "dashboardapp");
     setOpen(false);
   }, [currentRouteIndex, navigate, routesToNavigate.length, open]);
 
@@ -242,7 +249,6 @@ const NavbarSimple = ({ onDrawerToggle }) => {
       </BottomNavigation>
       <Dialog
         open={open}
-        TransitionComponent={Transition}
         keepMounted
         aria-describedby="alert-dialog-slide-description"
         style={{ background: "white" }}
@@ -251,11 +257,7 @@ const NavbarSimple = ({ onDrawerToggle }) => {
         <DialogContent>
           <AppBar sx={{ position: "relative" }}>
             <Toolbar>
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
+              <Box display="flex" justifyContent="center" alignItems="center">
                 <div className={classes.root}>
                   <CircularProgress />
                 </div>

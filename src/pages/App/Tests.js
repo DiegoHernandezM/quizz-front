@@ -10,7 +10,7 @@ import {
   saveAnswer,
   resetTest,
   setTestFromId,
-  endTest
+  endTest,
 } from "../../redux/slices/usertests";
 import { useFormik } from "formik";
 import {
@@ -201,10 +201,10 @@ function Tests() {
     return percent > 80
       ? "green"
       : percent > 70
-        ? "#f4bb00"
-        : percent < 70
-          ? "red"
-          : "red";
+      ? "#f4bb00"
+      : percent < 70
+      ? "red"
+      : "red";
   };
 
   return (
@@ -332,7 +332,7 @@ function Tests() {
           </Box>
           <br />
           {testQuestions[activeStep] &&
-            testQuestions[activeStep].explanation ? (
+          testQuestions[activeStep].explanation ? (
             <Button
               size="small"
               variant="outlined"
@@ -443,40 +443,34 @@ function Tests() {
               alignItems="center"
               component={"span"}
             >
-              {isOnline ?
-                <Typography variant="h2" color={getColor} component={"span"}>
-                  Tu puntaje fue de {userTest.grade} / {userTest.points} (
-                  {((userTest.grade * 100) / userTest.points).toFixed(2)}%)
-                </Typography> :
-                <Typography variant="h2" color={getColor} style={{ textAlign: 'center' }} component={"span"}>
-                  Conectate de nuevo a Internet para conocer tus resultados
-                </Typography>
-              }
+              <Typography variant="h2" color={getColor} component={"span"}>
+                Tu puntaje fue de {userTest.grade} / {userTest.points} (
+                {((userTest.grade * 100) / userTest.points).toFixed(2)}%)
+              </Typography>
             </Box>
-            {isOnline ?
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                style={{ marginTop: "20px" }}
-                component={"span"}
-              >
-                {(userTest.grade * 100) / userTest.points > 80 ? (
-                  <Typography variant="h3" color={getColor} component={"span"}>
-                    Excelente trabajo capitán
-                  </Typography>
-                ) : (userTest.grade * 100) / userTest.points > 70 ? (
-                  <Typography variant="h3" color={getColor} component={"span"}>
-                    Sigue practicando para emprender el vuelo. Estas cerca del
-                    éxito
-                  </Typography>
-                ) : (userTest.grade * 100) / userTest.points < 70 ? (
-                  <Typography variant="h3" color={getColor} component={"span"}>
-                    Hay que reforzar conceptos, aún estas a tiempo. Ánimo capitán
-                  </Typography>
-                ) : null}
-              </Box>
-              : ''}
+
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ marginTop: "20px" }}
+              component={"span"}
+            >
+              {(userTest.grade * 100) / userTest.points > 80 ? (
+                <Typography variant="h3" color={getColor} component={"span"}>
+                  Excelente trabajo capitán
+                </Typography>
+              ) : (userTest.grade * 100) / userTest.points > 70 ? (
+                <Typography variant="h3" color={getColor} component={"span"}>
+                  Sigue practicando para emprender el vuelo. Estas cerca del
+                  éxito
+                </Typography>
+              ) : (userTest.grade * 100) / userTest.points < 70 ? (
+                <Typography variant="h3" color={getColor} component={"span"}>
+                  Hay que reforzar conceptos, aún estas a tiempo. Ánimo capitán
+                </Typography>
+              ) : null}
+            </Box>
           </DialogContentText>
           <Box
             display="flex"
@@ -488,38 +482,38 @@ function Tests() {
               ¿Qué deseas hacer?
             </Typography>
           </Box>
-          {isOnline ?
-            <>
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                style={{ marginTop: "20px" }}
+
+          <>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ marginTop: "20px" }}
+            >
+              <Button
+                variant="contained"
+                onClick={() => setOpen(false)}
+                color="primary"
               >
-                <Button
-                  variant="contained"
-                  onClick={() => setOpen(false)}
-                  color="primary"
-                >
-                  Revisar mis respuestas
-                </Button>
-              </Box>
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                style={{ marginTop: "20px" }}
+                Revisar mis respuestas
+              </Button>
+            </Box>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ marginTop: "20px" }}
+            >
+              <Button
+                variant="contained"
+                onClick={handleResetTest}
+                color="primary"
               >
-                <Button
-                  variant="contained"
-                  onClick={handleResetTest}
-                  color="primary"
-                >
-                  Reintentar
-                </Button>
-              </Box>
-            </>
-            : ''}
+                Reintentar
+              </Button>
+            </Box>
+          </>
+
           <Box
             display="flex"
             justifyContent="center"

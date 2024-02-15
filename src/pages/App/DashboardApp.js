@@ -28,7 +28,7 @@ import checkImage from "../../vendor/checklist.png";
 import workingImage from "../../vendor/working.png";
 import subjectImage from "../../vendor/subject.png";
 import useAuth from "../../hooks/useAuth";
-import {spacing, width} from "@mui/system";
+import { spacing, width } from "@mui/system";
 import Stats from "../dashboards/Administrators/Stats";
 import BarChart from "../dashboards/Administrators/BarChart";
 import useBulkData from "../../pluckDatabase";
@@ -199,13 +199,17 @@ function DashboardApp() {
             alignItems="center"
             style={{ marginTop: "10px" }}
           >
-            <Typography variant="h2" component={'span'}>Bienvenido a</Typography>
+            <Typography variant="h2" component={"span"}>
+              Bienvenido a
+            </Typography>
           </Box>
           <Box display="flex" justifyContent="center" alignItems="center">
             <Image alt="App de aviacion" src={backgroundJpe} />
           </Box>
           <Box display="flex" justifyContent="center" alignItems="center">
-            <Typography variant="h2" component={'span'}>{"Aviation In Sight"}</Typography>
+            <Typography variant="h2" component={"span"}>
+              {"Aviation In Sight"}
+            </Typography>
           </Box>
           <Box
             display="flex"
@@ -275,7 +279,7 @@ function DashboardApp() {
             alignItems="center"
             style={{ marginTop: "10px" }}
           >
-            <Button
+            {/* <Button
               sx={{ width: 190 }}
               variant="contained"
               autoFocus
@@ -283,7 +287,7 @@ function DashboardApp() {
               size="large"
             >
               TRABAJAR OFFLINE
-            </Button>
+            </Button> */}
           </Box>
           <Box
             display="flex"
