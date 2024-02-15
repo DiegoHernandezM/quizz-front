@@ -10,10 +10,7 @@ import {
   saveAnswer,
   resetTest,
   setTestFromId,
-  endTest,
-  saveAnswerOffline,
-  endTestOffline,
-  saveFullTestOffline,
+  endTest
 } from "../../redux/slices/usertests";
 import { useFormik } from "formik";
 import {
@@ -124,43 +121,6 @@ function Tests() {
       setActiveStep(step);
     }
   }, [userTest]);
-
-  useEffect(() => {
-    if (isOnline) {
-      const sendRequestsWhenOnline = async () => {
-        const records = await db.table("saveanswers").toArray();
-        const recordsEndTest = await db.table("endtest").toArray();
-        const fulltests = await db.infotest
-          .where("user_id")
-          .equals(0)
-          .toArray();
-        if (fulltests.length > 0) {
-          dispatch(saveFullTestOffline(fulltests));
-        }
-        if (records.length > 0) {
-          dispatch(saveAnswerOffline(records[0].params));
-        }
-        if (recordsEndTest.length > 0) {
-          dispatch(saveAnswerOffline(recordsEndTest[0].subject_id));
-          dispatch(endTestOffline(recordsEndTest));
-        }
-      };
-      sendRequestsWhenOnline();
-
-      const deleteTable = async () => {
-        if ((await db.table("saveanswers").count()) > 0) {
-          await db.table("saveanswers").clear();
-        }
-        if ((await db.table("endtest").count()) > 0) {
-          await db.table("endtest").clear();
-        }
-        if ((await db.infotest.where("user_id").equals(0).count()) > 0) {
-          await db.infotest.where("user_id").equals(0).delete();
-        }
-      };
-      deleteTable();
-    }
-  }, [isOnline]);
 
   const createOrUpdateRecord = async (data) => {
     const isFirstTime = (await db.table("saveanswers").count()) === 0;

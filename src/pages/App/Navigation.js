@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { withTheme } from "@emotion/react";
+import { useDispatch, useSelector } from "react-redux";
 
 import {
   AppBar,
@@ -12,6 +13,12 @@ import {
   Dialog,
   CircularProgress
 } from "@mui/material";
+import { db } from "../../database";
+import {
+  saveAnswerOffline,
+  endTestOffline,
+  saveFullTestOffline,
+} from "../../redux/slices/usertests";
 import { makeStyles } from "@mui/styles";
 
 import {
@@ -46,6 +53,8 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   const routesToNavigate = ['/dashboardapp/app', '/dashboardapp/test', '/dashboardapp/results', '/dashboardapp'];
   const delayBetweenRoutes = 200;
   const currentPath = window.location.pathname;
+  const { isOnline } = useSelector((state) => state.onlinestatus);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (event) => {
@@ -86,6 +95,42 @@ const NavbarSimple = ({ onDrawerToggle }) => {
     localStorage.setItem("record", 'dashboardapp');
     setOpen(false);
   }, [currentRouteIndex, navigate, routesToNavigate.length, open]);
+
+  useEffect(() => {
+    if (isOnline) {
+      const sendRequestsWhenOnline = async () => {
+        const records = await db.table("saveanswers").toArray();
+        const recordsEndTest = await db.table("endtest").toArray();
+        const fulltests = await db.infotest
+          .where("user_id")
+          .equals(0)
+          .toArray();
+        if (fulltests.length > 0) {
+          dispatch(saveFullTestOffline(fulltests));
+        }
+        if (records.length > 0) {
+          dispatch(saveAnswerOffline(records[0].params));
+        }
+        if (recordsEndTest.length > 0) {
+          dispatch(endTestOffline(recordsEndTest));
+        }
+      };
+      sendRequestsWhenOnline();
+
+      const deleteTable = async () => {
+        if ((await db.table("saveanswers").count()) > 0) {
+          await db.table("saveanswers").clear();
+        }
+        if ((await db.table("endtest").count()) > 0) {
+          await db.table("endtest").clear();
+        }
+        if ((await db.infotest.where("user_id").equals(0).count()) > 0) {
+          await db.infotest.where("user_id").equals(0).delete();
+        }
+      };
+      deleteTable();
+    }
+  }, [isOnline]);
 
   async function downloadApp() {
     console.log("👍", "butInstall-clicked");
