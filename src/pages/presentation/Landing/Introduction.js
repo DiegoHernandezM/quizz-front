@@ -14,6 +14,7 @@ import { spacing } from "@mui/system";
 import { Visibility as VisibilityIcon } from "@mui/icons-material";
 import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
 import { ReactComponent as Logo } from "../../../vendor/logo.svg";
+import WhatsappButton from "./WhatsappButton";
 import backgroundJpe from "../../../vendor/jep2.jpg";
 
 const Typography = styled(MuiTypography)(spacing);
@@ -179,6 +180,13 @@ const VideoFrame = styled.div`
 
 function Introduction() {
   const [triggerAnimation, setTriggerAnimation] = useState(false);
+  const phoneNumber = '5531096343'; // Reemplaza esto con el número de teléfono deseado
+  const message = 'Hola, ¿cómo estás?'; // Opcional: reemplaza esto con el mensaje deseado
+
+  const handleWhatsappClick = () => {
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -286,6 +294,7 @@ function Introduction() {
           </Grid>
         </ImageWrapper>
       </Container>
+      <WhatsappButton />
     </Wrapper>
   );
 }

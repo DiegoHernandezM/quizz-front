@@ -12,8 +12,15 @@ import {
   Tooltip,
   Typography,
   Box,
-  Tab
+  Tab,
+  Dialog,
+  DialogActions,
+  DialogContentText,
+  TextField,
+  DialogContent,
+  DialogTitle
 } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -38,6 +45,8 @@ import UserForm from "../../../../src/components/user/UserForm";
 import SnackAlert from "../../components/general/SnackAlert";
 import DialogConfirm from "../../components/general/DialogConfirm";
 import QuickSearch from "../../tables/QuickSearch";
+import {DatePicker} from "@mui/x-date-pickers";
+import moment from "moment/moment";
 
 const filters = {
   pinter: {
@@ -53,8 +62,16 @@ function escapeRegExp(value) {
   return value.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
+const useStyles = makeStyles((theme) => ({
+  datePicker: {
+    width: '100%',
+    marginTop: '15px'
+  },
+}));
+
 function Users() {
   const dispatch = useDispatch();
+  const classes = useStyles();
   const { users, user, loading } = useSelector((state) => state.users);
   const [openForm, setOpenForm] = useState(false);
   const [pageSize, setPageSize] = useState(10);
@@ -66,8 +83,10 @@ function Users() {
   const [rows, setRows] = useState([]);
   const [userId, setUserId] = useState(0);
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [expirationDialog, setOpenExpirationDialog] = useState(false);
   const [modeRestore, setModeRestore] = useState(false);
   const [value, setValue] = useState('1');
+  const [valueExpires, setValueExpires] = useState(new Date(moment().subtract(1, "days")));
 
   const handleChange = (e, newValue) => {
     dispatch(getUsers(newValue === '1' ? false : true));
@@ -228,7 +247,7 @@ function Users() {
       dispatch(deleteU());
     } else {
       setOpenConfirm(false);
-      dispatch(restoreU());
+      setOpenExpirationDialog(true);
     }
   };
 
@@ -309,7 +328,7 @@ function Users() {
   function restoreU() {
     return (dispatch) =>
       new Promise((resolve) => {
-        resolve(dispatch(restoreUser(userId)));
+        resolve(dispatch(restoreUser(userId,  moment(valueExpires).format("YYYY-MM-DD"))));
       })
         .then((response) => {
           setMessage(
@@ -433,6 +452,51 @@ function Users() {
           }
           agree={handleCloseAccept}
         />
+        <Dialog
+          open={expirationDialog}
+          onClose={() => setOpenExpirationDialog(false)}
+          PaperProps={{
+            component: 'form',
+            onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
+              event.preventDefault();
+              setOpenExpirationDialog(false);
+              dispatch(restoreU());
+            },
+          }}
+        >
+          <DialogTitle>Restaurar usuario</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Ingresa la nueva fecha de expiracion para el usuario requerido
+            </DialogContentText>
+            <DatePicker
+              className={classes.datePicker}
+              fullWidth
+              label="Expira"
+              minDate={new Date(moment().subtract(1, "days"))}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  size="small"
+                  margin="dense"
+                  fullWidth
+                  variant="standard"
+                  sx={{ marginTop: '30px' }}
+                />
+              )}
+              id="expires_at"
+              name="expires_at"
+              value={ valueExpires }
+              onChange={(value) => {
+                setValueExpires(value);
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenExpirationDialog(false)}>Cancelar</Button>
+            <Button type="submit">Restaurar</Button>
+          </DialogActions>
+        </Dialog>
       </Page>
     </React.Fragment>
   );

@@ -128,13 +128,11 @@ export function deleteUser(id) {
   };
 }
 
-export function restoreUser(id) {
+export function restoreUser(id, expires) {
   return async (dispatch) => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.post(
-        `/api/user/restore/${id}`
-      );
+      const response = await axios.post(`/api/user/restore/${id}`, {expires});
       dispatch(slice.actions.endLoading());
       return Promise.resolve(response);
     } catch (error) {
