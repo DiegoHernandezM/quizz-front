@@ -34,6 +34,7 @@ UserForm.propTypes = {
   update: PropTypes.bool,
   updateUser: PropTypes.func,
   loading: PropTypes.bool,
+  resetDevices: PropTypes.func
 };
 
 const validationSchema = yup.object({
@@ -58,6 +59,7 @@ export default function UserForm({
   update,
   updateUser,
   loading,
+  resetDevices
 }) {
   const [hidden, setHidden] = useState(false);
   const formik = useFormik({
@@ -108,6 +110,11 @@ export default function UserForm({
   const handleOnClose = () => {
     close();
   };
+
+  const handleReset = () => {
+    console.log(user.id);
+    resetDevices(user.id);
+  }
 
   return (
     <Drawer anchor="right" open={open} onClose={handleOnClose}>
@@ -319,6 +326,34 @@ export default function UserForm({
                   </Typography>
                 </CardContent>
               </Card>
+            ) }
+          </Box>
+          <Box sx={{ m: 2 }}>
+            { user?.devices?.length > 0 ? (
+              <>
+                <Typography gutterBottom variant="h3">
+                  DISPOSITIVOS VINCULADOS:  { user.devices.length }
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="button"
+                  style={{
+                    borderRadius: 30,
+                    height: "30px",
+                    marginTop: "20px",
+                    marginRight: "10px",
+                  }}
+                  size="small"
+                  onClick={handleReset}
+                >
+                  Resetear dispositivos
+                </Button>
+              </>
+            ) : (
+              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                SIN DISPOSITIVOS VINCULADOS
+              </Typography>
             ) }
           </Box>
         </Box>

@@ -5,6 +5,7 @@ import { HOST_API } from "../config";
 import axios from "../utils/axios";
 import { isValidToken, setSession } from "../utils/jwt";
 import { db } from "../database";
+import { v4 as uuidv4 } from 'uuid';
 // ----------------------------------------------------------------------
 
 const initialState = {
@@ -146,10 +147,12 @@ function AuthProvider({ children }) {
   };
 
   const signIn = async (email, password) => {
-    console.log(navigator.userAgent);
+    const deviceId = localStorage.getItem('deviceId') || uuidv4();
+    localStorage.setItem('deviceId', deviceId);
     const response = await axios.post(`${HOST_API}/api/login`, {
       username: email,
       password,
+      device_id: deviceId,
     });
     const { accessToken, user } = response.data;
 
@@ -186,6 +189,10 @@ function AuthProvider({ children }) {
 
   const signOut = async () => {
     setSession(null);
+    const  deviceId = window.localStorage.getItem("deviceId");
+    await axios.post(`${HOST_API}/api/logout`, {
+      device_id: deviceId,
+    });
     localStorage.setItem("user", null);
     localStorage.setItem("usertype", null);
     dispatch({ type: "LOGOUT" });
