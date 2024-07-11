@@ -226,4 +226,18 @@ export function changePassword(
   };
 }
 
+export function restoreDeviceUser(id) {
+  return async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.post(`/api/user/devices/${id}`);
+      dispatch(slice.actions.endLoading());
+      return Promise.resolve(response);
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+      return Promise.reject(error);
+    }
+  };
+}
+
 

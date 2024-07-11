@@ -23,7 +23,6 @@ import {
 import { makeStyles } from "@mui/styles";
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
 import { spacing } from "@mui/system";
 import { DataGrid, esES } from "@mui/x-data-grid";
 import { Add as AddIcon } from "@mui/icons-material";
@@ -39,6 +38,7 @@ import {
   deleteUser,
   restoreUser,
   clearDataUser,
+  restoreDeviceUser
 } from "../../../redux/slices/users";
 import Page from "../../components/Page";
 import UserForm from "../../../../src/components/user/UserForm";
@@ -74,7 +74,6 @@ function Users() {
   const classes = useStyles();
   const { users, user, loading } = useSelector((state) => state.users);
   const [openForm, setOpenForm] = useState(false);
-  const [pageSize, setPageSize] = useState(10);
   const [searchText, setSearchText] = useState("");
   const [openMessage, setOpenMessage] = useState(false);
   const [typeMessage, setTypeMessage] = useState("success");
@@ -259,6 +258,12 @@ function Users() {
     setOpenMessage(false);
   };
 
+  const handleReset = (id) => {
+    setModeUpdate(false);
+    setOpenForm(false);
+    dispatch(restoreD(id));
+  }
+
   function createU(values) {
     return (dispatch) =>
       new Promise((resolve) => {
@@ -341,6 +346,26 @@ function Users() {
           dispatch(getUsers());
           setUserId(0);
           setModeRestore(false);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
+
+  function restoreD(id) {
+    return (dispatch) =>
+      new Promise((resolve) => {
+        resolve(dispatch(restoreDeviceUser(id)));
+      })
+        .then((response) => {
+          setMessage(
+            response.status === 200
+              ? "Se han eliminado los dispositivos de usuario"
+              : "Ocurrio algun error"
+          );
+          setTypeMessage(response.status === 200 ? "success" : "error");
+          setOpenMessage(true);
+          dispatch(getUsers());
         })
         .catch((error) => {
           console.log(error);
@@ -437,6 +462,7 @@ function Users() {
             update={modeUpdate}
             updateUser={handleUpdate}
             loading={loading}
+            resetDevices={handleReset}
           />
         </Card>
         <DialogConfirm
