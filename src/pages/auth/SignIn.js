@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 
@@ -24,6 +24,18 @@ const BigAvatar = styled(Logo)`
   margin: 0 auto ${(props) => props.theme.spacing(5)};
 `;
 
+const ForgotPasswordLink = styled(Link)`
+  display: block;
+  margin-top: ${(props) => props.theme.spacing(3)};
+  text-align: center;
+  color: ${(props) => props.theme.palette.primary.main};
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 function SignIn() {
   const { token } = useParams();
   return (
@@ -31,7 +43,7 @@ function SignIn() {
       <Wrapper>
         <Helmet title="Iniciar sesión" />
         <Box align="center">
-          <BigAvatar alt="logo" src="/static/img/avatars/logoAviation.png" align="center"/>  
+          <BigAvatar alt="logo" src="/static/img/avatars/logoAviation.png" align="center"/>
         </Box>
 
         <Typography component="h1" variant="h4" align="center" gutterBottom>
@@ -42,6 +54,10 @@ function SignIn() {
         </Typography>
 
         <SignInComponent token={token}/>
+
+        <ForgotPasswordLink to="/auth/reset-password">
+          Olvidé mi contraseña
+        </ForgotPasswordLink>
       </Wrapper>
     </React.Fragment>
   );
