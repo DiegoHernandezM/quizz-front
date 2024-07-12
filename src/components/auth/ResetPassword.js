@@ -21,6 +21,10 @@ function ResetPassword() {
   const navigate = useNavigate();
   const { resetPassword } = useAuth();
 
+  const handleSignIn = () => {
+    navigate("/auth/sign-in");
+  };
+
   return (
     <Formik
       initialValues={{
@@ -29,16 +33,18 @@ function ResetPassword() {
       }}
       validationSchema={Yup.object().shape({
         email: Yup.string()
-          .email("Must be a valid email")
+          .email("Ingresa un correo valido")
           .max(255)
-          .required("Email is required"),
+          .required("El correo es requerido"),
       })}
+
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
-          resetPassword(values.email);
-          navigate("/auth/sign-in");
+          await resetPassword(values.email).then(() => {
+            handleSignIn();
+          });
         } catch (error) {
-          const message = error.message || "Something went wrong";
+          const message = error?.data?.message || "Algo salio mal";
 
           setStatus({ success: false });
           setErrors({ submit: message });
@@ -64,7 +70,7 @@ function ResetPassword() {
           <TextField
             type="email"
             name="email"
-            label="Email Address"
+            label="Correo"
             value={values.email}
             error={Boolean(touched.email && errors.email)}
             fullWidth
@@ -80,7 +86,7 @@ function ResetPassword() {
             color="primary"
             disabled={isSubmitting}
           >
-            Reset password
+            Solicitar nueva contraseña
           </Button>
         </form>
       )}

@@ -2,17 +2,10 @@ import React from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 
-import { Paper, Typography } from "@mui/material";
+import {Box, Paper, Typography} from "@mui/material";
 
 import { ReactComponent as Logo } from "../../vendor/logo.svg";
 import ResetPasswordComponent from "../../components/auth/ResetPassword";
-
-const Brand = styled(Logo)`
-  fill: ${(props) => props.theme.palette.primary.main};
-  width: 64px;
-  height: 64px;
-  margin-bottom: 32px;
-`;
 
 const Wrapper = styled(Paper)`
   padding: ${(props) => props.theme.spacing(6)};
@@ -22,18 +15,27 @@ const Wrapper = styled(Paper)`
   }
 `;
 
+const BigAvatar = styled(Logo)`
+  fill: ${(props) => props.theme.palette.primary.main};
+  width: 200px;
+  height: 200px;
+  text-align: center;
+  margin: 0 auto ${(props) => props.theme.spacing(5)};
+`;
+
 function ResetPassword() {
   return (
     <React.Fragment>
-      <Brand />
       <Wrapper>
         <Helmet title="Reset Password" />
-
+        <Box align="center">
+          <BigAvatar alt="logo" src="/static/img/avatars/logoAviation.png" align="center"/>
+        </Box>
         <Typography component="h1" variant="h4" align="center" gutterBottom>
-          Reset Password
+          Resetear Contraseña
         </Typography>
         <Typography component="h2" variant="body1" align="center">
-          Enter your email to reset your password
+          Ingresa tu correo para resetear tu contraseña
         </Typography>
 
         <ResetPasswordComponent />

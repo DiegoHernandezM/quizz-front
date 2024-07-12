@@ -58,6 +58,7 @@ const AuthContext = createContext({
   signIn: () => Promise.resolve(),
   signOut: () => Promise.resolve(),
   signUp: () => Promise.resolve(),
+  resetPassword: () => Promise.resolve()
 });
 
 AuthProvider.propTypes = {
@@ -198,7 +199,11 @@ function AuthProvider({ children }) {
     dispatch({ type: "LOGOUT" });
   };
 
-  const resetPassword = () => {};
+  const resetPassword = async (email) => {
+    await axios.post(`${HOST_API}/api/reset-password`, {
+      email
+    });
+  };
 
   const updateProfile = () => {};
 
