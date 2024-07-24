@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import { rgba } from "polished";
-
 import {
   Box,
   Button,
@@ -11,21 +9,12 @@ import {
   Typography as MuiTypography,
 } from "@mui/material";
 import { spacing } from "@mui/system";
-import { Visibility as VisibilityIcon } from "@mui/icons-material";
 import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
-import { ReactComponent as Logo } from "../../../vendor/logo.svg";
+import ThemedLogo from "../../../components/ThemeLogo";
 import WhatsappButton from "./WhatsappButton";
 import backgroundJpe from "../../../vendor/jep2.jpg";
 
 const Typography = styled(MuiTypography)(spacing);
-
-const BigAvatar = styled(Logo)`
-  fill: ${(props) => props.theme.palette.primary.main};
-  width: 200px;
-  height: 200px;
-  text-align: center;
-  margin: 0 auto ${(props) => props.theme.spacing(5)};
-`;
 
 const Wrapper = styled.div`
   padding-top: 3.5rem;
@@ -55,23 +44,6 @@ const Content = styled.div`
   line-height: 150%;
 `;
 
-const Image = styled.img`
-  max-width: 100%;
-  height: auto;
-  min-height: 33vh;
-  display: block;
-  box-shadow: 0 6px 18px 0 rgba(18, 38, 63, 0.075);
-  border-radius: 5px;
-  z-index: 0;
-  position: relative;
-  image-rendering: optimizequality;
-  image-rendering: -webkit-optimize-contrast;
-  margin-bottom: -100px;
-  margin-top: -35px;
-  ${(props) => props.theme.breakpoints.up("md")} {
-    margin-top: -40px;
-  }
-`;
 const ImageBack = styled.img`
   max-width: 100%;
   height: auto;
@@ -140,24 +112,8 @@ const BrandIcon = styled.img`
   height: auto;
 `;
 
-const Visibility = styled(VisibilityIcon)`
-  margin-right: ${(props) => props.theme.spacing(2)};
-`;
-
 const ArrowForward = styled(ArrowForwardIcon)`
   margin-left: ${(props) => props.theme.spacing(2)};
-`;
-
-const Version = styled(MuiTypography)`
-  color: ${(props) => props.theme.palette.primary.main};
-  font-weight: ${(props) => props.theme.typography.fontWeightBold};
-  background: ${(props) => rgba(props.theme.palette.primary.main, 0.1)};
-  box-shadow: 0 1px 1px
-    ${(props) => rgba(props.theme.palette.primary.main, 0.25)};
-  padding: 3px 8px;
-  border-radius: 4px;
-  margin-bottom: ${(props) => props.theme.spacing(3)};
-  display: inline-block;
 `;
 
 const ContainerFrame = styled.div`
@@ -223,11 +179,7 @@ function Introduction() {
             <Grid item xs={12} sm={6} md={6} lg={6}>
               <Content>
                 <Box align="center">
-                  <BigAvatar
-                    alt="logo"
-                    src="/static/img/avatars/logoAviation.png"
-                    align="center"
-                  />
+                  <ThemedLogo alt="logo" align="center"/>
                 </Box>
                 <Title variant="h1" gutterBottom>
                   Aviation In Sight{" "}

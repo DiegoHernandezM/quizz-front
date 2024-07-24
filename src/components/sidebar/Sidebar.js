@@ -2,11 +2,8 @@ import React from "react";
 import styled from "@emotion/styled";
 import { NavLink } from "react-router-dom";
 
-import { green } from "@mui/material/colors";
+import { Box, Drawer as MuiDrawer, ListItemButton } from "@mui/material";
 
-import { Box, Chip, Drawer as MuiDrawer, ListItemButton } from "@mui/material";
-
-import { ReactComponent as Logo } from "../../vendor/logo.svg";
 import SidebarNav from "./SidebarNav";
 
 const Drawer = styled(MuiDrawer)`
@@ -36,30 +33,6 @@ const Brand = styled(ListItemButton)`
 
   &:hover {
     background-color: ${(props) => props.theme.sidebar.header.background};
-  }
-`;
-
-const BrandIcon = styled(Logo)`
-  margin-right: ${(props) => props.theme.spacing(2)};
-  color: ${(props) => props.theme.sidebar.header.brand.color};
-  fill: ${(props) => props.theme.sidebar.header.brand.color};
-  width: 50px;
-  height: 40px;
-`;
-
-const BrandChip = styled(Chip)`
-  background-color: ${green[700]};
-  border-radius: 5px;
-  color: ${(props) => props.theme.palette.common.white};
-  font-size: 55%;
-  height: 18px;
-  margin-left: 2px;
-  margin-top: -16px;
-  padding: 3px 0;
-
-  span {
-    padding-left: ${(props) => props.theme.spacing(1.375)};
-    padding-right: ${(props) => props.theme.spacing(1.375)};
   }
 `;
 

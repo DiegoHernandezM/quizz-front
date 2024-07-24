@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import { Helmet } from "react-helmet-async";
 import {
@@ -8,13 +8,12 @@ import {
   StepLabel,
   Typography,
   StepContent,
-  Box,
-  Button,
+  Box
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { createUser, findUserByEmail } from "../../redux/slices/users";
 import { createPayment } from "../../redux/slices/paypal";
-import { ReactComponent as Logo } from "../../vendor/logo.svg";
+import ThemedLogo from "../../components/ThemeLogo";
 import SignUpComponent from "../../components/auth/SignUp";
 import DialogSignUpComponent from "../../components/auth/DialogSignUp";
 import { PayPalButtons } from "@paypal/react-paypal-js";
@@ -26,14 +25,6 @@ const Wrapper = styled(Paper)`
   ${(props) => props.theme.breakpoints.up("md")} {
     padding: ${(props) => props.theme.spacing(10)};
   }
-`;
-
-const BigAvatar = styled(Logo)`
-  fill: ${(props) => props.theme.palette.primary.main};
-  width: 150px;
-  height: 150px;
-  text-align: center;
-  margin: 0 auto ${(props) => props.theme.spacing(5)};
 `;
 
 function SignUp() {
@@ -93,7 +84,7 @@ function SignUp() {
       <Wrapper>
         <Helmet title="Registro" />
         <Box align="center">
-          <BigAvatar alt="logo" src="/static/img/avatars/logoAviation.png" align="center"/>  
+          <ThemedLogo alt="logo" align="center"/>
         </Box>
         <Typography component="h1" variant="h4" align="center" gutterBottom>
           Ingresa tus datos
