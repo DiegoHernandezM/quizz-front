@@ -45,6 +45,7 @@ function Tests() {
   const { logged } = useSelector((state) => state.users);
   const [open, setOpen] = React.useState(false);
   const [explainOpen, setExplainOpen] = React.useState(false);
+  const [imageOpen, setImageOpen] = React.useState(false);
   const [answered, setAnswered] = React.useState(false);
   const [activeStep, setActiveStep] = React.useState(0);
   const theme = useTheme();
@@ -106,7 +107,6 @@ function Tests() {
     }
 
     if (userTest.parsed) {
-      console.log(userTest);
       let pre = userTest.parsed;
       let a = Object.keys(pre);
       let step = a.find((k) => Object.values(pre[k])[0] === "");
@@ -341,7 +341,17 @@ function Tests() {
               Mostrar explicación
             </Button>
           ) : null}
-
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          {testQuestions[activeStep] && testQuestions[activeStep].image ? (
+            <Button
+              size="small"
+              variant="outlined"
+              color="warning"
+              onClick={() => setImageOpen(true)}
+            >
+              Mostrar imagen
+            </Button>
+          ) : null}
           {answered && userTest.completed === 0 ? (
             <Button
               size="small"
@@ -356,7 +366,8 @@ function Tests() {
         </Box>
       </Box>
       <Navigation />
-      {testQuestions.length > 0 ? (
+      {testQuestions.length > 0 &&
+      Object.values(userTest.parsed[activeStep])[0] !== "" ? (
         <Drawer
           PaperProps={{
             sx: {
@@ -399,6 +410,53 @@ function Tests() {
           </Typography>
         </Drawer>
       ) : null}
+      {testQuestions.length > 0 ? (
+        <Drawer
+          PaperProps={{
+            sx: {
+              height: `calc(90% - 60px)`,
+              backgroundColor: "GainsBoro",
+              padding: "10px",
+            },
+          }}
+          anchor="bottom"
+          open={imageOpen}
+          onClose={() => setImageOpen(false)}
+        >
+          <Typography
+            variant="h5"
+            sx={{ margin: "0 auto", marginTop: "20px" }}
+            component={"span"}
+          >
+            <Divider
+              sx={{
+                backgroundColor: "gold",
+                padding: "2px",
+                marginBottom: "4px",
+              }}
+            />
+            <Divider
+              sx={{
+                backgroundColor: "gold",
+                padding: "2px",
+                marginBottom: "4px",
+              }}
+            />
+            <Divider
+              sx={{
+                backgroundColor: "gold",
+                padding: "2px",
+                marginBottom: "15px",
+              }}
+            />
+            <img
+              width="100%"
+              src={`https://aviationimages.s3.amazonaws.com/${testQuestions[activeStep]?.image}`}
+              alt=""
+            />
+          </Typography>
+        </Drawer>
+      ) : null}
       <Dialog
         open={open}
         onClose={() => setOpen(false)}
@@ -428,7 +486,7 @@ function Tests() {
             display="flex"
             justifyContent="center"
             alignItems="center"
-            style={{ marginTop: "15%" }}
+            style={{ marginTop: "5%" }}
           >
             <Typography color={getColor} variant="h1" component={"span"}>
               {"¡Test completado!"}
@@ -457,18 +515,11 @@ function Tests() {
               component={"span"}
             >
               {(userTest.grade * 100) / userTest.points > 80 ? (
-                <Typography variant="h3" color={getColor} component={"span"}>
-                  Excelente trabajo capitán
-                </Typography>
+                <img src="/static/img/avatars/good-result.gif" alt="bad-result" style={{ width: '100%', maxWidth: '400px' }} />
               ) : (userTest.grade * 100) / userTest.points > 70 ? (
-                <Typography variant="h3" color={getColor} component={"span"}>
-                  Sigue practicando para emprender el vuelo. Estas cerca del
-                  éxito
-                </Typography>
+                <img src="/static/img/avatars/regular-result.gif" alt="regular-result" style={{ width: '100%', maxWidth: '400px' }} />
               ) : (userTest.grade * 100) / userTest.points < 70 ? (
-                <Typography variant="h3" color={getColor} component={"span"}>
-                  Hay que reforzar conceptos, aún estas a tiempo. Ánimo capitán
-                </Typography>
+                <img src="/static/img/avatars/bad-result.gif" alt="bad-result" style={{ width: '100%', maxWidth: '400px' }} />
               ) : null}
             </Box>
           </DialogContentText>
