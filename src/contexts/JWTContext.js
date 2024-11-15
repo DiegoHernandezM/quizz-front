@@ -67,11 +67,24 @@ AuthProvider.propTypes = {
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const CACHE_EXPIRATION_DAYS = 10;
 
   useEffect(() => {
     const initialize = async () => {
       try {
+
+        const lastCacheClear = localStorage.getItem('last_cache_clear');
+        const now = new Date().getTime();
+        if (!lastCacheClear || (now - lastCacheClear) > CACHE_EXPIRATION_DAYS * 24 * 60 * 60 * 1000) {
+          // Si no hay registro de la última limpieza o han pasado más de 10 días, limpiar la caché
+          signOut();
+          clearCache();
+          localStorage.setItem('last_cache_clear', now); // Actualizar el último tiempo de limpieza
+        }
+
         const accessToken = window.localStorage.getItem("accessToken");
+
+        
 
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
@@ -132,6 +145,20 @@ function AuthProvider({ children }) {
 
     initialize();
   }, []);
+
+  const clearCache = () => {
+    // Limpiar localStorage
+    localStorage.clear();
+
+    // Limpiar los caches del navegador
+    caches.keys().then((cacheNames) => {
+      cacheNames.forEach((cacheName) => {
+        caches.delete(cacheName);
+      });
+    });
+
+    console.log("Cache limpiado correctamente.");
+  };
 
   const preloadUser = (user) => {
     if (user) {
