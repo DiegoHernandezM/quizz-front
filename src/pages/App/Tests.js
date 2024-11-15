@@ -38,6 +38,9 @@ import { db } from "../../database";
 import { useLiveQuery } from "dexie-react-hooks";
 import { getQuestionsPreload } from "../../redux/slices/questions";
 import { getLoggedUser } from "../../redux/slices/users";
+import PaperPlane from "./PaperPlane";
+import CustomButtons from "./CustomButtons";
+
 
 function Tests() {
   const questions = useLiveQuery(() => db.questions.toArray());
@@ -514,71 +517,14 @@ function Tests() {
               style={{ marginTop: "20px" }}
               component={"span"}
             >
-              {(userTest.grade * 100) / userTest.points > 80 ? (
-                <img src="/static/img/avatars/good-result.gif" alt="bad-result" style={{ width: '100%', maxWidth: '400px' }} />
-              ) : (userTest.grade * 100) / userTest.points > 70 ? (
-                <img src="/static/img/avatars/regular-result.gif" alt="regular-result" style={{ width: '100%', maxWidth: '400px' }} />
-              ) : (userTest.grade * 100) / userTest.points < 70 ? (
-                <img src="/static/img/avatars/bad-result.gif" alt="bad-result" style={{ width: '100%', maxWidth: '400px' }} />
-              ) : null}
+              <PaperPlane
+                grade={userTest.grade}
+                points={userTest.points}
+                color={getColor}
+              />
             </Box>
           </DialogContentText>
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            style={{ marginTop: "20px" }}
-          >
-            <Typography variant="h6" component={"span"}>
-              ¿Qué deseas hacer?
-            </Typography>
-          </Box>
-
-          <>
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              style={{ marginTop: "20px" }}
-            >
-              <Button
-                variant="contained"
-                onClick={() => setOpen(false)}
-                color="primary"
-              >
-                Revisar mis respuestas
-              </Button>
-            </Box>
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              style={{ marginTop: "20px" }}
-            >
-              <Button
-                variant="contained"
-                onClick={handleResetTest}
-                color="primary"
-              >
-                Reintentar
-              </Button>
-            </Box>
-          </>
-
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            style={{ marginTop: "20px" }}
-          >
-            <Button
-              variant="contained"
-              onClick={() => navigate("/dashboardapp")}
-              color="primary"
-            >
-              Ir al inicio
-            </Button>
-          </Box>
+          <CustomButtons reset={handleResetTest} close={() => setOpen(false)} />
         </DialogContent>
       </Dialog>
     </React.Fragment>
