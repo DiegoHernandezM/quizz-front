@@ -159,7 +159,7 @@ function AuthProvider({ children }) {
 
     console.log("Cache limpiado correctamente.");
   };
-  
+
   const preloadUser = (user) => {
     if (user) {
       db.user.where('id').equals(user.id).first()
