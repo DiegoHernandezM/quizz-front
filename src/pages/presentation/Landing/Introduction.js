@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
+import { rgba } from "polished";
 import {
   Box,
   Button,
@@ -13,7 +14,7 @@ import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
 import ThemedLogo from "../../../components/ThemeLogo";
 import WhatsappButton from "./WhatsappButton";
 import backgroundJpe from "../../../vendor/jep2.jpg";
-
+import PropTypes from "prop-types";
 const Typography = styled(MuiTypography)(spacing);
 
 const Wrapper = styled.div`
@@ -120,7 +121,7 @@ const ContainerFrame = styled.div`
   position: relative;
   width: 100%;
   overflow: hidden;
-  padding-top: 56.25%; 
+  padding-top: 56.25%;
 `;
 
 const VideoFrame = styled.div`
@@ -134,14 +135,20 @@ const VideoFrame = styled.div`
   border: none;
 `;
 
-function Introduction() {
+Introduction.propTypes = {
+  content: PropTypes.object,
+};
+
+export default function Introduction({ content }) {
   const [triggerAnimation, setTriggerAnimation] = useState(false);
-  const phoneNumber = '5531096343'; // Reemplaza esto con el número de teléfono deseado
-  const message = 'Hola, ¿cómo estás?'; // Opcional: reemplaza esto con el mensaje deseado
+  const phoneNumber = content.ws_number; // Reemplaza esto con el número de teléfono deseado
+  const message = "Hola, ¿cómo estás?"; // Opcional: reemplaza esto con el mensaje deseado
 
   const handleWhatsappClick = () => {
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   useEffect(() => {
@@ -167,7 +174,7 @@ function Introduction() {
                   <iframe
                     width="100%"
                     height="100%"
-                    src="https://www.youtube.com/embed/H6K9QtaJCWQ"
+                    src={content.link_video}
                     title="YouTube video player"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -179,20 +186,15 @@ function Introduction() {
             <Grid item xs={12} sm={6} md={6} lg={6}>
               <Content>
                 <Box align="center">
-                  <ThemedLogo alt="logo" align="center"/>
+                  <ThemedLogo alt="logo" align="center" />
                 </Box>
                 <Title variant="h1" gutterBottom>
-                  Aviation In Sight{" "}
+                  {content.subtitle}{" "}
                 </Title>
                 <Grid container justifyContent="center" spacing={4}>
                   <Grid item xs={12} lg={10}>
                     <Subtitle color="textSecondary">
-                      En Aviation In sight podrás prepárate de la mejor manera
-                      para el examen de titulación CIAAC. Tendrás la oportunidad
-                      de administrar tu estudio, seleccionando cuestionarios por
-                      materia o con simulacros tipo CIAAC. Podrás practicar las
-                      veces que quieras, desde cualquier dispositivo (pc,
-                      tableta o celular) en cualquier horario.
+                      {content.principal_text}
                     </Subtitle>
                   </Grid>
                 </Grid>
@@ -203,13 +205,13 @@ function Introduction() {
                     color="secondary"
                     size="large"
                   >
-                    Inscribete
+                    {content.subscribe_button}
                     <ArrowForward />
                   </Button>
                 </Box>
 
                 <Typography variant="body2" color="textSecondary">
-                  Compatible con:
+                  {content.compatible_text}
                 </Typography>
                 <div
                   className={`animate__animated ${
@@ -250,5 +252,3 @@ function Introduction() {
     </Wrapper>
   );
 }
-
-export default Introduction;

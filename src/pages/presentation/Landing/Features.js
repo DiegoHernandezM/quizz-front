@@ -1,34 +1,27 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { rgba } from "polished";
-import { NavLink } from "react-router-dom";
+import PropTypes from "prop-types";
 
-import { Button, Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import { spacing } from "@mui/system";
-import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
 
+import { ArrowForward as ArrowForwardIcon } from "@mui/icons-material";
 import {
-  Mail as MailIcon,
-  Code as CodeIcon,
-  Users as UsersIcon,
-  Figma as FigmaIcon,
-  BookOpen as BookOpenIcon,
   PlusCircle as PlusCircleIcon,
   Book,
   Search,
   List,
 } from "react-feather";
 
+Features.propTypes = {
+  content: PropTypes.object
+};
+
 const Wrapper = styled.div`
   ${spacing};
   background: ${(props) => props.theme.palette.background.paper};
   text-align: center;
-`;
-
-const TypographyOverline = styled(Typography)`
-  text-transform: uppercase;
-  color: ${(props) => props.theme.palette.primary.main};
-  font-weight: ${(props) => props.theme.typography.fontWeightMedium};
 `;
 
 const FeatureWrapper = styled.div`
@@ -48,10 +41,6 @@ const FeatureIcon = styled.div`
     padding: 10px;
     border-radius: 50%;
   }
-`;
-
-const ArrowForward = styled(ArrowForwardIcon)`
-  margin-left: ${(props) => props.theme.spacing(2)};
 `;
 
 const Feature = ({ Icon, title, description }) => {
@@ -74,33 +63,33 @@ const Feature = ({ Icon, title, description }) => {
   );
 };
 
-function Features() {
+export default function Features({content}) {
   return (
     <Wrapper py={20} style={{ backgroundColor:"#203764", color:"white" }}>
       <Container>
         <Typography variant="h2" component="h3" gutterBottom>
-          En Aviation In Sight podrás realizar lo siguiente:
+          {content.footer_title}
         </Typography>
         <Box mb={12} />
         <Grid container spacing={4}>
           <Feature
             Icon={Book}
-            title="Estudiar con cuestionarios por materia."
+            title={content.footer_text_1}
             description=""
           />
           <Feature
             Icon={PlusCircleIcon}
-            title="Identificar respuestas correctas."
+            title={content.footer_text_2}
             description=""
           />
           <Feature
             Icon={Search}
-            title="Revisar explicación de ciertos escenarios."
+            title={content.footer_text_3}
             description=""
           />
           <Feature
             Icon={List}
-            title="Visualizar resultado final y progreso."
+            title={content.footer_text_4}
             description=""
           />
         </Grid>
@@ -109,5 +98,3 @@ function Features() {
     </Wrapper>
   );
 }
-
-export default Features;

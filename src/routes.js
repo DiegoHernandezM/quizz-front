@@ -45,6 +45,7 @@ const Formik = async(() => import("./pages/forms/Formik"));
 
 // Icon components
 const Profile = async(() => import("./pages/dashboards/Users/Profile"));
+const CustomLanding = async(() => import("./pages/dashboards/Landing/CustomLanding"));
 
 //Users
 const Users = async(() => import("./pages/dashboards/Users"));
@@ -133,6 +134,10 @@ export default function Router() {
           path: "profile",
           element: <Profile />,
         },
+        {
+          path: "landing",
+          element: <CustomLanding />,
+        }
       ],
     },
     {
