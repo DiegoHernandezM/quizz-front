@@ -31,6 +31,11 @@ const pagesSection = [
     href: "/dashboard/users",
     icon: Users,
     title: "Usuarios",
+  },
+  {
+    href: "/dashboard/landing",
+    icon: Settings,
+    title: "Langing Page",
   }
 ];
 

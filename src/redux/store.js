@@ -10,6 +10,7 @@ import paypalReducer from "./slices/paypal";
 import usertestsReducer from "./slices/usertests";
 import dashboardReducer from "./slices/dashboard";
 import onlinestatusReducer from "./slices/onlinestatus";
+import landingReducer from "./slices/landing";
 
 const persistConfig = {
   key: "root",
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   usertests: usertestsReducer,
   dashboard: dashboardReducer,
   onlinestatus: onlinestatusReducer,
+  content: landingReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
