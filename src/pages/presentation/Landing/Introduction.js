@@ -15,6 +15,7 @@ import ThemedLogo from "../../../components/ThemeLogo";
 import WhatsappButton from "./WhatsappButton";
 import backgroundJpe from "../../../vendor/jep2.jpg";
 import PropTypes from "prop-types";
+import { HOST_API } from "../../../config";
 const Typography = styled(MuiTypography)(spacing);
 
 const Wrapper = styled.div`
@@ -170,17 +171,17 @@ export default function Introduction({ content }) {
           >
             <Grid item xs={12} sm={6} md={6} lg={6}>
               <ContainerFrame>
-                <VideoFrame>
-                  <iframe
-                    width="100%"
-                    height="100%"
-                    src={content.link_video}
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                  />
-                </VideoFrame>
+                {content.link_video !== undefined ? (
+                  <VideoFrame>
+                    <video autoPlay loop muted width="100%" height="100%">
+                      <source
+                        src={`${HOST_API}/images/${content.link_video}`} // Archivo guardado (URL en el servidor)
+                        type={"video/mp4"}
+                      />
+                      Tu navegador no soporta el elemento de video.
+                    </video>
+                  </VideoFrame>
+                ) : null}
               </ContainerFrame>
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={6}>

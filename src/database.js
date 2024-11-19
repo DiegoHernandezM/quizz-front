@@ -1,7 +1,7 @@
 import Dexie from "dexie";
 
 export const db = new Dexie("myDatabase");
-db.version(2).stores({
+db.version(3).stores({
   user:
     "++id, created_by_admin, created_at, deleted_at, email, email_verified_at, expires_at, name, school, stand_by," +
     "type_id, updated_at",
