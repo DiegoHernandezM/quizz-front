@@ -329,32 +329,26 @@ export default function UserForm({
             ) }
           </Box>
           <Box sx={{ m: 2 }}>
-            { user?.devices?.length > 0 ? (
-              <>
-                <Typography gutterBottom variant="h3">
-                  DISPOSITIVOS VINCULADOS:  { user.devices.length }
-                </Typography>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="button"
-                  style={{
-                    borderRadius: 30,
-                    height: "30px",
-                    marginTop: "20px",
-                    marginRight: "10px",
-                  }}
-                  size="small"
-                  onClick={handleReset}
-                >
-                  Resetear dispositivos
-                </Button>
-              </>
-            ) : (
-              <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                SIN DISPOSITIVOS VINCULADOS
+            <>
+              <Typography gutterBottom variant="h3">
+                DISPOSITIVOS VINCULADOS:  { user?.devices?.length }
               </Typography>
-            ) }
+              <Button
+                variant="contained"
+                color="primary"
+                type="button"
+                style={{
+                  borderRadius: 30,
+                  height: "30px",
+                  marginTop: "20px",
+                  marginRight: "10px",
+                }}
+                size="small"
+                onClick={handleReset}
+              >
+                Resetear dispositivos
+              </Button>
+            </>
           </Box>
         </Box>
       </LocalizationProvider>
