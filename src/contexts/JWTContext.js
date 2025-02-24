@@ -183,6 +183,8 @@ function AuthProvider({ children }) {
       device_id: deviceId,
     });
     const { accessToken, user } = response.data;
+    // Guardar session_id en el localStorage
+    localStorage.setItem("session_id", user.session_id);  // Asegúrate de devolver el session_id en la respuesta
 
     setSession(accessToken);
     localStorage.setItem("user", user.displayName);
@@ -218,11 +220,14 @@ function AuthProvider({ children }) {
   const signOut = async () => {
     setSession(null);
     const  deviceId = window.localStorage.getItem("deviceId");
+    const  sessionId = window.localStorage.getItem("session_id");
     await axios.post(`${HOST_API}/api/logout`, {
       device_id: deviceId,
+      session_id: sessionId
     });
     localStorage.setItem("user", null);
     localStorage.setItem("usertype", null);
+    localStorage.setItem("session_id", null);
     dispatch({ type: "LOGOUT" });
   };
 
