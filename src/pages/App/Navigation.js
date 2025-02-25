@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { withTheme } from "@emotion/react";
 import { useDispatch, useSelector } from "react-redux";
+import useAuth from "../../hooks/useAuth";
+
+import { getLoggedUser } from "../../redux/slices/users";
 
 import {
   AppBar,
@@ -62,6 +65,8 @@ const NavbarSimple = ({ onDrawerToggle }) => {
   const currentPath = window.location.pathname;
   const { isOnline } = useSelector((state) => state.onlinestatus);
   const dispatch = useDispatch();
+  const { signOut } = useAuth();
+  const { logged } = useSelector((state) => state.users);
 
   useEffect(() => {
     window.addEventListener("beforeinstallprompt", (event) => {
@@ -82,6 +87,35 @@ const NavbarSimple = ({ onDrawerToggle }) => {
       });
     }
   }, []);
+
+  useEffect(() => {
+    console.log('entro a validacion');
+    handleNav();
+  }, [navigate]);
+
+  const handleNav = () => {
+    dispatch(checkValidateUser());
+  };
+
+  function checkValidateUser() {
+    console.log('llego a validacion en funcion');
+    const session = logged.session_id;
+    const localSession = window.localStorage.getItem("session_id");
+    return (dispatch) =>
+      new Promise((resolve) => {
+        resolve(dispatch(getLoggedUser()));
+      })
+        .then((response) => {
+          console.log('llego al response then',response.status);
+          if (session !== undefined && session !== localSession) {
+            signOut();
+          }
+        })
+        .catch((error) => {
+          console.log('errpr', error.status);
+          signOut();
+        });
+  }
 
   useEffect(() => {
     if (open === true && isDashboard !== "dashboardapp") {

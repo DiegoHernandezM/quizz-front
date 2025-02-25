@@ -219,7 +219,7 @@ function AuthProvider({ children }) {
 
   const signOut = async () => {
     setSession(null);
-    const  deviceId = window.localStorage.getItem("deviceId");
+    const deviceId = window.localStorage.getItem("deviceId");
     const  sessionId = window.localStorage.getItem("session_id");
     await axios.post(`${HOST_API}/api/logout`, {
       device_id: deviceId,
@@ -229,6 +229,8 @@ function AuthProvider({ children }) {
     localStorage.setItem("usertype", null);
     localStorage.setItem("session_id", null);
     dispatch({ type: "LOGOUT" });
+    window.location.reload();
+    window.location.href = '/';
   };
 
   const resetPassword = async (email) => {
