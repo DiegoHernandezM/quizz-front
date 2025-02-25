@@ -77,6 +77,8 @@ function Tests() {
     "#E5E8E8",
   ];
   const [dataArray, setDataArray] = useState([]);
+  const { signOut } = useAuth();
+
   useEffect(() => {
     dispatch(getLoggedUser());
     if (testId > 0) {
@@ -142,8 +144,33 @@ function Tests() {
       }
     }
   };
+  
+  const handleNav = () => {
+    dispatch(checkValidateUser());
+  };
+
+  function checkValidateUser() {
+      console.log('llego a validacion en funcion');
+      const session = logged.session_id;
+      const localSession = window.localStorage.getItem("session_id");
+      return (dispatch) =>
+        new Promise((resolve) => {
+          resolve(dispatch(getLoggedUser()));
+        })
+          .then((response) => {
+            console.log('llego al response then',response.status);
+            if (session !== undefined && session !== localSession) {
+              signOut();
+            }
+          })
+          .catch((error) => {
+            console.log('errpr', error.status);
+            signOut();
+          });
+    }
 
   const handleSaveAnswer = (event) => {
+    handleNav();
     const { name, value } = event.target;
     formik.setFieldValue(parseInt(name), value);
     if (isOnline) {
