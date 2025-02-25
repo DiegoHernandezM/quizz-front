@@ -201,6 +201,7 @@ export function getLoggedUser() {
       }
     } catch (error) {
       dispatch(slice.actions.hasError(error));
+      return Promise.reject(error);
     }
   };
 }
