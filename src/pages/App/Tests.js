@@ -397,6 +397,7 @@ function Tests() {
       </Box>
       <Navigation />
       {testQuestions.length > 0 &&
+      userTest?.parsed[activeStep] &&
       Object.values(userTest.parsed[activeStep])[0] !== "" ? (
         <Drawer
           PaperProps={{
